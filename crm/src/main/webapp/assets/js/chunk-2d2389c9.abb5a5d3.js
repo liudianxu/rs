@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d2389c9"],{ffb5:function(e,n,t){"use strict";t.r(n);var a=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",{staticClass:"product-detail"},[e._v("\n  发的方法发发\n    ")])},c=[],i={name:"TheDetailMain"},s=i,l=t("fc05"),u=Object(l["a"])(s,a,c,!1,null,"7214ef0f",null);n["default"]=u.exports}}]);
+//# sourceMappingURL=chunk-2d2389c9.abb5a5d3.js.map

@@ -1,0 +1,193 @@
+#@layout() #define main()
+
+<div class="layui-card-header">企业详情</div>
+<div class="layui-card-body">
+
+	<div class='layui-tab layui-tab-brief' lay-filter='TabBrief'>
+		<ul class="layui-tab-title">
+			<li class="layui-this">基本信息</li>
+			<li>投保订单</li>
+		</ul>
+		<div class='layui-tab-item layui-show'>
+		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">单位名称:</label>
+	     		<label class="layui-form-label left">#(company.name)</label>
+	   		</div>
+	   		</div>
+		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">投保地址:</label>
+	     		<label class="layui-form-label left">#(company.insured_address)</label>
+	   		</div>
+	   		</div>
+	   		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">证件类型:</label>
+	     		<label class="layui-form-label left">#(company.licenceTypeStr)</label>
+	   		</div>
+	   		</div>
+	   		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">证件号码:</label>
+	     		<label class="layui-form-label left">#(company.licence_num)</label>
+	   		</div>
+	   		</div>
+	   		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">行业类别:</label>
+	     		<label class="layui-form-label left">#(company.industry_category)</label>
+		</div>
+		</div>
+		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">主营业务:</label>
+	     		<label class="layui-form-label left">#(company.main_business)</label>
+	   		</div>
+	   		</div>
+	   		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">联系人:</label>
+	     		<label class="layui-form-label left">#(company.contacts)</label>
+	     		</div>
+	     		<div class='layui-form-item'>
+				<div class="layui-inline">
+	     		<label class="layui-form-label">联系电话:</label>
+	     		<label class="layui-form-label left">#(company.phone)</label>
+	     		</div>
+		</div>
+		</div>
+		</div>
+			<div class='layui-tab-item'>
+				<div class="bar">
+			</div>
+				<div class='line-block'>
+					<div class='line-inline'>
+					<div class="layui-form">
+						<table class="layui-table" id="personTable">
+							<colgroup>
+								<col width="5%">
+								<col width="8%">
+								<col width="8%">
+								<col width='8%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+								<col width='10%'>
+							</colgroup>
+							<thead>
+								<tr style='background: #009688; color: #fff'>
+									<th>状态</th>
+									<th>订单编号</th>
+									<th>单位名称</th>
+									<th>联系人</th>
+									<th>联系邮箱</th>
+									<th>联系电话</th>
+									<th>保单号</th>
+									<th>订单类型</th>
+									<th>保险公司</th>
+									<th>方案名称</th>
+									<th>险种类型</th>
+									<th>保单生效日期</th>
+									<th>保单终止日期</th>
+									<th>保费</th>
+									<th>备注</th>
+									<th>查看</th>
+								</tr>
+							</thead>
+							<tbody>
+							#for(order:orders)
+									<tr>
+									<td>#(order.statusStr)</td>
+									<td>#(order.order_sn)</td>
+									<td>#(company.name)</td>
+									<td>#(company.contacts)</td>
+									<td>#(company.email)</td>
+									<td>#(company.phone)</td>
+									<td>#(order.policy_num)</td>
+									<td>#(order.typeStr)</td>
+									<td>#(order.brandName)</td>
+									<td>#(order.plan_name)</td>
+									<td>#(order.insuranceTypeStr)</td>
+									<td>#(com.tsdegree.util.DateUtil::formatDate(order.policy_effective_date,'yyyy-MM-dd HH:mm:ss'))</td>
+									<td>#(com.tsdegree.util.DateUtil::formatDate(order.policy_effective_date,'yyyy-MM-dd HH:mm:ss'))</td>
+									<td>#(order.premium)</td>
+									<td>#(order.remark)</td>
+									<td><a class="layui-btn  layui-btn-xs" href="/admin/groupInsurance/view?id=#(order.id)">查看详情</a><a class="layui-btn  layui-btn-xs" href="/admin/groupInsurance/edit?id=#(order.id)" lay-event="view">修改</a></td>
+									</tr>
+							#end
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+				</div>	
+				
+	</div>
+	<div style='text-align: left'>
+			<a class="layui-btn layui-btn-primary"
+							onclick='history.back()'>返回</a>
+	</div>
+</div>
+<script type="text/javascript">
+layui.use(['table', 'element', 'form', 'laydate', 'layedit','upload' ],
+		function() {
+var table = layui.table
+var laydate = layui.laydate;
+			var element = layui.element, form = layui.form, layedit = layui.layedit, $ = layui.$;
+			//一些事件监听
+			element.on('tab(TabBrief)', function(data) {
+				$(".layui-tab-item").each(function(item) {
+					$(this).removeClass('layui-show');
+					if (item === data.index) {
+						$(this).addClass('layui-show');
+					}
+				});
+			});
+})
+</script>
+<style>
+.layui-form-label {
+	white-space: nowrap;
+	width: 93px
+}
+
+.layui-input-block {
+	margin-left: 123px
+}
+
+.layui-tab-content {
+	padding: 20px 10px 10px 0
+}
+
+.layui-form-item .layui-inline {
+	margin-bottom: 0
+}
+/*
+	.theme-required .layui-form-label:before{position: absolute;display: block;width: 5px;height:5px;border-radius: 50%;top:50%;left:0px;transform:translate3d(0,-50%,0);background-color: #c00;content:''}
+	*/
+.theme-required .layui-form-label:before {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 3px;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: #c00;
+	content: ''
+}
+
+.layui-elem-quote .layui-form-item:last-of-type {
+	margin-bottom: 0
+}
+.left{
+	text-align: left;
+}
+</style>
+#end

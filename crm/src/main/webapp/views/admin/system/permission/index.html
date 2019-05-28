@@ -1,0 +1,221 @@
+#@layout() 
+#define main()
+<div class="layui-card">
+	<div class="layui-card-header">
+		权限列表
+	</div>
+	<div class="layui-card-body">
+				<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='name' autocomplete='off' class='layui-input'
+						placeholder='名称' />
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+										<a class="layui-btn layui-icon layui-icon-refresh" onclick="refresh();"> 刷新</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+		    <table class="layui-hidden" id="treeTable" lay-filter="treeTable"></table>
+		</div>
+	</div>
+</div>
+
+<script>
+    var ptable=null,
+    	treeGrid=null,
+    	tableId='treeTable';
+    
+    layui.config({
+        base: '/assets/layui/treeGrid/'
+    }).extend({
+        treeGrid:'treeGrid'
+    }).use(['jquery','treeGrid','layer','form'], function(){
+        var $=layui.$;
+        treeGrid = layui.treeGrid;//很重要
+        layer=layui.layer;
+  	    form = layui.form;
+        ptable=treeGrid.render({
+            id:tableId
+            ,elem: '#'+tableId
+            ,idField:'id'
+            ,url:'/admin/system/permission/selectPermissionTree'
+            ,treeId:'id'//树形id字段名称
+            ,treeUpId:'pid'//树形父id字段名称
+            ,treeShowName:'name'//以树形式显示的字段
+            ,cols: [[
+                {field:'name', width:300, title: '权限名称'}
+                ,{field:'type',width:100, title: '类型', templet: function(obj) {
+                	  return obj.type == 1 ? '<span class="layui-badge layui-bg-green">菜单</span>' : 
+                		  '<span class="layui-badge layui-bg-cyan">功能</span>';
+                  	}}
+                ,{field:'url',width:300, title: 'URL'}
+                ,{field:'state', title: '状态', templet: function(obj) {
+              	  return obj.state == 1 ? '<span class="layui-badge layui-bg-blue">正常</span>' : 
+            		  '<span class="layui-badge layui-bg-gray">注销</span>';
+              	}}
+                ,{field:'description', title: '权限标识'}
+                ,{width:200,title: '操作', align:'center'/*toolbar: '#barDemo'*/
+                    ,templet: function(d){
+                    var html ='';
+                     html +='#if(nodeUrl??)#if(nodeUrl.contains("/admin/system/permission/add"))<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="add">添加</a>#end#end';
+                     html +='#if(nodeUrl??)#if(nodeUrl.contains("/admin/system/permission/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
+                     html +='#if(nodeUrl??)#if(nodeUrl.contains("/admin/system/permission/delete"))<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>#end#end';
+                    return html;
+                }
+                }
+            ]]
+            ,page:false
+        });
+
+        treeGrid.on('tool('+tableId+')',function (obj) {
+            if(obj.event === 'add'){//添加
+                add(obj.data);
+            }else if(obj.event==='edit'){//修改
+                edit(obj.data);
+            }
+            else if(obj.event === 'del'){
+    	      layer.confirm('真的要删除该条记录吗？', function(index){
+    	    	  $.get('/admin/system/permission/delete', {id: obj.data.id},
+    	  				function(res) {
+    	  					layer.msg(res.message);
+    	  		    		if(res.code == 1) {
+    	  		    			 setTimeout("location.href='/admin/system/permission'",500);
+    	  		    		}
+    	  				}, "json");
+    	      });
+    	    }
+        });
+        
+        //添加
+		function add(pObj) {
+        	layer.open({
+                title: '添加权限',
+                type: 1,
+                area: ['30%', '60%'], //宽高
+                closeBtn: 0,
+                btn: ['保存', '关闭'],
+                content: '<form class="layui-form" id="permissionForm" style="margin-top:20px;">' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">父级名称</label>' + 
+                	'<div class="layui-form-mid layui-word-aux">' + pObj.name + '</div>' + 
+                	'<input type="hidden" name="permission.pid" value="' + pObj.id + '"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">' + 
+                	'<span style="color: red">*</span>权限名称</label>' + 
+                	'<input type="text" name="permission.name" lay-verify="required" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">' + 
+                	'<span style="color: red">*</span>类型</label>' + 
+                	'<div class="layui-input-inline" style="width: 300px;">' +
+    				'<select name="permission.type" lay-verify="required">' + 
+    				'<option value="1">菜单</option><option value="0">权限</option></select></div></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">URL</label>' + 
+                	'<input type="text" name="permission.url" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">排序</label>' + 
+                	'<input type="text" name="permission.sort" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">状态</label>' + 
+        	  		'<div class="layui-input-inline" style="width: 300px;">' + 
+        			'<input type="checkbox" name="state" lay-skin="switch" lay-text="正常|注销" checked></div></div>' + 
+        			'<div class="layui-form-item"><label class="layui-form-label">描述</label>' + 
+                	'<input type="text" name="permission.description" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;"></div></form>',
+                shadeClose: false, //点击遮罩关闭
+                success: function (layero, index) {
+                	layui.form.render();
+                },
+    	  		yes: function(index, layero){
+    	  			$.post('/admin/system/permission/save', $("#permissionForm").serialize(),
+    					function(res) {
+    	  					parent.layer.close(index);
+    	  					parent.layer.msg(res.msg);
+    			    		if(res.state == 'ok') {
+    			    			refresh();
+    			    		}
+    					}, "json");
+                }
+            });
+        }
+        
+      	//修改
+      	function edit(pObj) {
+        	layer.open({
+                title: '添加权限',
+                type: 1,
+                area: ['30%', '60%'], //宽高
+                closeBtn: 0,
+                btn: ['保存', '关闭'],
+                content: '<form class="layui-form" id="permissionForm" style="margin-top:20px;">' + 
+                	'<input name="permission.id" style="display:none;" value="'+pObj.id+'"><div class="layui-form-item"><label class="layui-form-label">父级名称</label>' + 
+                	'<div class="layui-form-mid layui-word-aux">' + pObj.name + '</div>' + 
+                	'<input type="hidden" name="permission.pid" value="' + pObj.id + '"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">' + 
+                	'<span style="color: red">*</span>权限名称</label>' + 
+                	'<input type="text" name="permission.name" lay-verify="required" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;" value="' + pObj.name + '"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">' + 
+                	'<span style="color: red">*</span>类型</label>' + 
+                	'<div class="layui-input-inline" style="width: 300px;">' +
+    				'<select name="permission.type" lay-verify="required">' + 
+    				'<option value="1">菜单</option><option value="0">权限</option></select></div></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">URL</label>' + 
+                	'<input type="text" name="permission.url" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;" value="' + pObj.url + '"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">排序</label>' + 
+                	'<input type="text" name="permission.sort" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;" value="' + pObj.sort +'"></div>' + 
+                	'<div class="layui-form-item"><label class="layui-form-label">状态</label>' + 
+        	  		'<div class="layui-input-inline" style="width: 300px;">' + 
+        			'<input type="checkbox" name="state" lay-skin="switch" lay-text="正常|注销" checked></div></div>' + 
+        			'<div class="layui-form-item"><label class="layui-form-label">描述</label>' + 
+                	'<input type="text" name="permission.description" autocomplete="off" ' + 
+                	'class="layui-input" style="width: 300px;" value="' + pObj.description + '"></div></form>',
+                shadeClose: false, //点击遮罩关闭
+                success: function (layero, index) {
+                	layui.form.render();
+                },
+    	  		yes: function(index, layero){
+    	  			$.post('/admin/system/permission/save', $("#permissionForm").serialize(),
+    					function(res) {
+    	  					parent.layer.close(index);
+    	  					parent.layer.msg(res.msg);
+    			    		if(res.state == 'ok') {
+    			    			refresh();
+    			    		}
+    					}, "json");
+                }
+            });
+        }
+      	
+        form.render()
+  	  form.on('submit(submit)',function(data){
+  		 console.log(JSON.stringify(data.field))
+  		 treeGrid.reload('treeTable',{
+  			 page: {
+  				 curr: 1
+  			 },
+  			 where: data.field
+  		 })
+  	  })
+    });
+
+    function print() {
+        console.log(treeGrid.cache[tableId]);
+        var loadIndex=layer.msg("对象已打印，按F12，在控制台查看！", {
+            time:3000
+            ,offset: 'auto'//顶部
+            ,shade: 0
+        });
+    }
+    
+    function refresh() {
+    	treeGrid.reload(tableId);
+    }
+</script>
+#end

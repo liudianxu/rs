@@ -1,0 +1,88 @@
+#@layout() 
+#define main()	
+<div class="layui-card">
+	<div class="layui-card-header">
+		角色列表
+	</div>
+	<div class="layui-card-body">
+		<table class="layui-hide" id="roleTable" lay-filter="test"></table>
+	</div>
+</div>
+<script type="text/html" id="headBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/system/role/add"))
+	<div class="layui-btn-container">
+		<button class="layui-btn layui-btn-sm" lay-event="add">
+			<i class="layui-icon layui-icon-add-1"></i>添加
+		</button>
+	</div>
+#end#end
+</script>
+
+<script type="text/html" id="actionBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/system/role/edit"))
+	<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+#end#end
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/system/role/delete"))
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+#end#end
+</script>
+          
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+  
+  table.render({
+    elem: '#roleTable'
+    ,url:'/admin/system/role/selectByPage'
+    ,cellMinWidth: 80
+    ,toolbar: '#headBar'
+    ,defaultToolbar: ['filter','print','exports']
+    ,title: '角色信息表'
+    ,cols: [[
+      {field:'name', title:'角色名称'}
+      ,{field:'description', title:'描述'}
+      ,{field:'is_system', title:'是否内置', templet: function(obj) {
+    	  return obj.is_system == 1 ? '<span class="layui-badge layui-bg-blue">是</span>' : 
+    		  '<span class="layui-badge layui-bg-gray">否</span>';
+      }}
+      ,{field:'state', title:'状态', templet: function(obj) {
+    	  return obj.state == 1 ? '<span class="layui-badge layui-bg-blue">正常</span>' : 
+    		  '<span class="layui-badge layui-bg-gray">注销</span>';
+      }}
+      ,{field:'create_time', title:'创建时间'}
+      ,{fixed: 'right', title:'操作', toolbar: '#actionBar'}
+    ]]
+    ,page: true
+  });
+  
+  //头工具栏事件
+  table.on('toolbar(test)', function(obj){
+    switch(obj.event){
+      case 'add':
+    	  location.href = '/admin/system/role/add';
+      break;
+    };
+  });
+
+  //监听行工具事件
+ 	table.on('tool(test)', function(obj){
+  		var data = obj.data;
+  		if(obj.event === 'edit'){
+  			location.href = '/admin/system/role/edit?id=' + data.id;
+  		}
+  		else if(obj.event === 'del'){
+ 	      layer.confirm('真的要删除该条记录吗？', function(index){
+ 	    	  $.get('/admin/system/role/delete', {id: data.id},
+ 	  				function(res) {
+ 	  					layer.msg(res.message);
+ 	  		    		if(res.code == 1) {
+ 	 		    			 setTimeout("location.href='/admin/system/role'",500);
+ 	  		    		}
+ 	  				}, "json");
+ 	      });
+ 	    }
+	});
+  
+});
+</script>
+#end

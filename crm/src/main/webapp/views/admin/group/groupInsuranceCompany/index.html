@@ -1,0 +1,95 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="layui-card-header">企业列表</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='policy_num' autocomplete='off' class='layui-input'
+						placeholder='保单号' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='company_name' autocomplete='off' class='layui-input'
+						placeholder='单位名称' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='email' autocomplete='off' class='layui-input'
+						placeholder='联系邮箱' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='phone' autocomplete='off' class='layui-input'
+						placeholder='联系电话' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='licence_num' autocomplete='off' class='layui-input'
+						placeholder='证件号码' />
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
+	</div>
+</div>
+
+
+<script type="text/html" id="actionBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsuranceCompany/view"))
+        <a class="layui-btn  layui-btn-xs" lay-event="view">查看详情</a>
+#end#end
+		</script>
+<script>
+	layui.use(['table','layedit','laydate','form'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	 var branchTable =  table.render({
+	    elem: '#branchTable'
+	    ,url:'/admin/groupInsuranceCompany/selectByPage'
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,defaultToolbar: ['filter','print','exports']
+	    ,title: ''
+	    ,cols: [[
+		  // {field:'status', title:'状态'},
+	      {field:'name', title:'单位名称'}
+	      ,{field:'licence_num', title:'证件号码'}
+	      ,{field:'contacts', title:'联系人'}
+	      ,{field:'phone', title:'联系电话'}
+	      ,{field:'email', title:'联系邮箱'}
+	      ,{field:'username', title:'管理员账号'}
+	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
+	    ]]
+	    ,page: true
+	  });
+	  
+
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'view'){
+	    	console.log('view')
+			  location.href="/admin/groupInsuranceCompany/view?id="+data.id;
+	    }
+	  });
+	  form.render();
+	  form.on('submit(submit)',function(data){
+		  
+		  branchTable.reload({
+			  page:{
+				  curr: 1
+			  },
+			  where: data.field
+		  })
+		  console.log(data.field)
+	  })
+	});
+	</script>
+#end

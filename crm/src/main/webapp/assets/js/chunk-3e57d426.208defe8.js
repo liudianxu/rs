@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-3e57d426"],{"7f40":function(e,n,t){"use strict";t.r(n);var a=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",{staticClass:"forget-container"},[t("router-view")],1)},c=[],r={name:"forgetPassword"},s=r,o=(t("e09a"),t("17cc")),i=Object(o["a"])(s,a,c,!1,null,"511d436a",null);n["default"]=i.exports},e09a:function(e,n,t){"use strict";var a=t("ef01"),c=t.n(a);c.a},ef01:function(e,n,t){}}]);
-//# sourceMappingURL=chunk-3e57d426.208defe8.js.map

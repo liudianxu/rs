@@ -6,10 +6,10 @@ import com.crm.service.system.PermissionService;
 import com.crm.service.system.RoleService;
 import com.crm.service.system.impl.PermissionServiceImpl;
 import com.crm.service.system.impl.RoleServiceImpl;
+import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
-import com.util.Constant;
 
 import cn.hutool.core.date.DateUtil;
 
@@ -78,8 +78,10 @@ public class RoleController extends BaseController<Role> {
 //	}
 	
 	//@Before(RoleSaveValidator.class)
-	public void save(Role role,String state) {
+	public void save() {
 		BaseResponse response = new BaseResponse();
+		Role role = getModel(Role.class);
+		String state = getPara("state");
 		String[] permissions = getParaValues("ids[]");
 		//判断添加或者编辑
 		role.set("state", StrKit.equals(state, "on") ? 1 : 0);
@@ -133,8 +135,10 @@ public class RoleController extends BaseController<Role> {
 	/**
 	 * 删除
 	 */
-	public void delete(Long id) {
+	public void delete() {
+		
 		BaseResponse response = new BaseResponse();
+		Long id = getParaToLong("id");
         try {
 		Role.dao.deleteById(id);
 		response.setCode(Constant.RESPONSE_CODE_SUCCESS);

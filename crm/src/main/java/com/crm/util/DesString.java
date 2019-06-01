@@ -1,4 +1,4 @@
-package com.util;
+package com.crm.util;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

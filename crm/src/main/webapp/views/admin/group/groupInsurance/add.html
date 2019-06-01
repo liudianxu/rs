@@ -1,12 +1,12 @@
 #@layout() #define main()
-<div class="layui-card-header">添加订单</div>
+<div class="layui-card-header">添加合同</div>
 <div class="layui-card-body">
 
 	<div class='layui-tab layui-tab-brief' lay-filter='TabBrief'>
 		<ul class="layui-tab-title">
 			<li class="layui-this">基本信息</li>
 			<li>保障方案</li>
-			<li>理赔测算</li>
+			<!-- <li>理赔测算</li> -->
 			<li>产品保障说明</li>
 			<li>人员信息</li>
 			<li>服务信息</li>
@@ -288,7 +288,7 @@
 				</table>
 			</form>
 		</div>
-		<div class='layui-tab-item'>
+		<!-- <div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form  layui-form-claim"
 				action="/admin/groupInsurance/saveClaim">
 				<input type="hidden" id="hiddenOrderIdForClaim" name="hiddenOrderIdForClaim" value="" />
@@ -314,7 +314,7 @@
 					</tbody>
 				</table>
 			</form>
-		</div>
+		</div> -->
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form3"
 				action="/admin/groupInsurance/saveGuaranteeDesc">

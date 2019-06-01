@@ -7,11 +7,11 @@ import com.crm.model.system.Permission;
 import com.crm.model.system.User;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.PermissionService;
+import com.crm.util.Constant;
 import com.jfinal.aop.Inject;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
-import com.util.Constant;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.http.HttpUtil;

@@ -2,11 +2,11 @@ package com.crm.interceptor;
 
 import com.crm.model.system.User;
 import com.crm.service.system.AdminAuthService;
+import com.crm.util.Constant;
 import com.jfinal.aop.Inject;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.StrKit;
-import com.util.Constant;
 
 public class AdminAuthInterceptor implements Interceptor {
 	

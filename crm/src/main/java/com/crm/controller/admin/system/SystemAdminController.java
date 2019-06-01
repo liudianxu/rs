@@ -9,9 +9,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.system.User;
 import com.crm.service.system.UserService;
+import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
-import com.util.Constant;
 
 /**
  * 
@@ -55,7 +55,9 @@ public class SystemAdminController extends BaseController<User>{
 	 * @param id
 	 *        管理员id
 	 */
-	public void edit(Long id) {
+	public void edit() {
+		Long id = getParaToLong("id");
+
 		if(id==null) {
 			render("index.html");
 			return;
@@ -67,7 +69,8 @@ public class SystemAdminController extends BaseController<User>{
 	/**
 	 * 保存
 	 */
-	public void save(User admin) {
+	public void save() {
+		User admin = getModel(User.class);
 		BaseResponse response = new BaseResponse();
 		admin.set("password", DigestUtils.md5Hex(admin.get("password").toString()));
         if(admin.get("status")==null) {
@@ -106,7 +109,8 @@ public class SystemAdminController extends BaseController<User>{
 	/**
 	 * 删除
 	 */
-	public void delete(Long id) {
+	public void delete() {
+		Long id = getParaToLong("id");
 		BaseResponse response = new BaseResponse();
         try {
 		User.dao.deleteById(id);

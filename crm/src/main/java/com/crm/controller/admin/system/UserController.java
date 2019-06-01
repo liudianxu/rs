@@ -40,7 +40,10 @@ public class UserController extends BaseController<User> {
 		renderJson(service.selectPage(params, getPage()));
 	}
 	
-	public void save(User user, String status,String roleIds) {
+	public void save() {
+		User user = getModel(User.class);
+		String status = getPara("status");
+		String roleIds = getPara("roleIds");
 		Long[] roles = getParaValuesToLong("roleIds[]");
 		//User cacheUser = getAttr(Constant.CACHE_NAME_LOGIN_ADMIN);
 		user.set("status", StrKit.equals(status, "on") ? 1 : 0);
@@ -66,7 +69,9 @@ public class UserController extends BaseController<User> {
 		render("add.html");
 	}
 
-	public void edit(Long id) {
+	public void edit() {
+		Long id = getParaToLong("id");
+
 		if(id == null) {
 			return;
 		}
@@ -87,7 +92,9 @@ public class UserController extends BaseController<User> {
 		render("edit.html");
 	}
 	
-	public void resetPwd(Long id) {
+	public void resetPwd() {
+		Long id = getParaToLong("id");
+
 		if(id == null) {
 			return;
 		}

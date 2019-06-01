@@ -1,4 +1,4 @@
-package com.util;
+package com.crm.util;
 
 import java.security.Key;
 import java.security.Security;

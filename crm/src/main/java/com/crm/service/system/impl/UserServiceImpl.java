@@ -13,12 +13,12 @@ import com.crm.component.DataGrid;
 import com.crm.model.system.User;
 import com.crm.model.system.UserRole;
 import com.crm.service.system.UserService;
+import com.crm.util.Constant;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
-import com.util.Constant;
 
 public class UserServiceImpl implements UserService {
 

@@ -1,4 +1,4 @@
-package com.util;
+package com.crm.util;
 
 public class Constant {
 
@@ -32,7 +32,18 @@ public class Constant {
 
 	//Token生存时间(60分钟)
 	public static final long TOKEN_LIVE =   60 * 60;
+	//性別（女）
+	public static final int FEMALE= 0;
+
+	//性別（男）
+	public static final int MALE = 1;
 	
+	public static final int ENABLED = 1;
+	
+	public static final int DISABLED = 0 ;
+	
+	// 保障方案名称前缀
+	public static final String GUARANTEE_PLAN_NAME_PREFIX = "方案";
 	
 	/**
 	 * 提交方式

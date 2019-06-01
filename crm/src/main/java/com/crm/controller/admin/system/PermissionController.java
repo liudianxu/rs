@@ -8,10 +8,11 @@ import java.util.Map;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.system.Permission;
 import com.crm.service.system.PermissionService;
+import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.StrKit;
-import com.util.Constant;
+
 import cn.hutool.core.date.DateUtil;
 
 public class PermissionController extends BaseController<Permission> {
@@ -33,12 +34,15 @@ public class PermissionController extends BaseController<Permission> {
 	/**
 	 * 查询授权树
 	 */
-	public void selectAuthTree(Long roleId) {
+	public void selectAuthTree() {
+		Long roleId = getParaToLong("roleId");
 		renderJson(service.selectAuthTree(roleId));
 	}
 	
    //	@Before(PermissionSaveValidator.class)
-	public void save(Permission permission, String state) {
+	public void save() {
+		String state = getPara("state");
+		Permission permission = getModel(Permission.class);
 		permission.set("state", StrKit.equals(state, "on") ? 1 : 0);
 		if(permission.getLong("id")==null) {
 		permission.set("create_time", DateUtil.now());
@@ -55,9 +59,9 @@ public class PermissionController extends BaseController<Permission> {
 	 * 删除
 	 * @param id
 	 */
-	public void delete(Long id) {
+	public void delete() {
 		BaseResponse response = new BaseResponse();
-		
+		Long id = getParaToLong("id");
 		if(id == null) {
 			response.setCode(Constant.RESPONSE_CODE_FAIL);
 			response.setMessage("删除失败！");

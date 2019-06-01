@@ -1,6 +1,6 @@
 package com.crm.web.bean;
 
-import com.util.Constant;
+import com.crm.util.Constant;
 
 /**
  * 

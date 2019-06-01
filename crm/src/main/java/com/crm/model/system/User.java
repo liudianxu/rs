@@ -1,7 +1,7 @@
 package com.crm.model.system;
 
+import com.crm.util.Constant;
 import com.jfinal.plugin.activerecord.Model;
-import com.util.Constant;
 
 public class User extends Model<User> {
 

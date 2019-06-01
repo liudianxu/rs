@@ -7,6 +7,7 @@ import com.crm.model.system.Session;
 import com.crm.model.system.User;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.PermissionService;
+import com.crm.util.Constant;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.Ret;
@@ -14,7 +15,6 @@ import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
-import com.util.Constant;
 
 import cn.hutool.core.date.DateUtil;
 

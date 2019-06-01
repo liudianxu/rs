@@ -1,4 +1,4 @@
-package com.util;
+package com.crm.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

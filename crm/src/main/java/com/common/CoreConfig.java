@@ -4,6 +4,12 @@ import java.sql.Connection;
 
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
+import com.crm.interceptor.EchacheInterceptor;
+import com.crm.router.AdminRoutes;
+import com.crm.router.CommonRouters;
+import com.crm.util.Constant;
+import com.crm.util.DateUtil;
+import com.crm.util.DesString;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -18,10 +24,6 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
-import com.router.AdminRoutes;
-import com.util.Constant;
-import com.util.DateUtil;
-import com.util.DesString;
 
 
 public class CoreConfig extends JFinalConfig {
@@ -60,6 +62,8 @@ public class CoreConfig extends JFinalConfig {
 	@Override
 	public void configRoute(Routes me) {
 		me.add(new AdminRoutes());
+		me.add(new CommonRouters());
+
 	}
 
 	@Override
@@ -89,7 +93,7 @@ public class CoreConfig extends JFinalConfig {
 	
 	@Override
 	public void configInterceptor(Interceptors me) {
-		
+		me.add(new EchacheInterceptor());
 	}
 
 	@Override

@@ -1,9 +1,13 @@
 package com.common;
 
+import com.crm.model.group.GroupInsuranceGuarantee;
+import com.crm.model.group.GroupInsuranceOrder;
+import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.system.Permission;
 import com.crm.model.system.Role;
 import com.crm.model.system.RolePermission;
 import com.crm.model.system.Session;
+import com.crm.model.system.Setting;
 import com.crm.model.system.SysParameter;
 import com.crm.model.system.User;
 import com.crm.model.system.UserRole;
@@ -19,6 +23,12 @@ public class MappingKit {
 		arp.addMapping("sys_permission", Permission.class);
 		arp.addMapping("sys_role_permission", RolePermission.class);
 		arp.addMapping("sys_user_role", UserRole.class);
+		
+		arp.addMapping("crm_setting", Setting.class);
+		
+		arp.addMapping("crm_group_insurance_guarantee", GroupInsuranceGuarantee.class);
+		arp.addMapping("crm_group_insurance_orders", GroupInsuranceOrder.class);
+		arp.addMapping("crm_group_insurance_person", GroupInsurancePerson.class);
 	}
 	
 }

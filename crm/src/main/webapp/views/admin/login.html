@@ -100,7 +100,8 @@ opacity:1;
 	
 	<div class="layui-card-body form-wrapper">
 		<div class="layui-card-header">
-			CRM后台管理系统
+		<img src="#(setting.logo)">
+			#(setting.siteName)
 		</div>
 		<form class="layui-form" action="/admin/login/doLogin" >
 		  <div class="layui-form-item">
@@ -123,11 +124,12 @@ opacity:1;
 		    </div>
 		  </div>
 		  <div class="layui-form-item">
-		   
 		      <button class="layui-btn login-btn " lay-submit lay-filter="formDemo">登录</button>
-		    
 		  </div>
 		</form>
+		 <div class="layui-form-item" style="width: 340px;">
+		  #(setting.certtext)
+		   </div>
 	</div>
 
 

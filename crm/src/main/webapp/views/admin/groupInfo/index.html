@@ -1,0 +1,126 @@
+#@layout() 
+#define main()
+<div class="layui-card">
+	<div class="layui-card-header">保险公司列表</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='name' autocomplete='off' class='layui-input'
+						placeholder='保险公司名称' />
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="layui-hide" id="brandTable" lay-filter="test"></table>
+	</div>
+</div>
+<script type="text/html" id="headBar">
+	<div class="layui-btn-container">
+        #if(nodeUrl??)
+        #if(nodeUrl.contains("/admin/brand/add"))
+    	<button class="layui-btn layui-btn-sm" lay-event='add'>
+			<i class="layui-icon layui-icon-add-1"></i>添加
+		</button>
+       #end
+       #end
+  	</div>
+</script>
+
+<script>
+	layui.use(['table','form','laydate','layer'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,laydate = layui.laydate
+	  ,layer = layui.layer
+	  ,$ = layui.$;
+	  
+	  
+	  table.render({
+	    elem: '#brandTable'
+	    ,url:'/admin/brand/list'
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,title: '保险公司'
+	    ,cols: [[
+	        {field:'sn', title:'序号',type:'numbers'}
+		   ,{field:'code', title:'编号'}
+	      ,{field:'name', title:'公司名称'}
+	      ,{field:'logo', title:'logo'}
+	     /*  ,{field:'is_on_sale', title:'状态'} */
+	      ,{field:'short_name', title:'公司简称'}
+	      ,{field:'create_time', title:'创建日期'}
+	      ,{fixed: 'right', title:'操作',templet: function(d){
+	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
+	    	 /*  var html;
+	    	  if(d.is_on_sale==0){
+	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-info layui-btn-xs" lay-event="put">上架</a>#end#end';
+	    	  }
+	    	  if(d.is_on_sale==1){
+	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="put">下架</a>#end#end';
+	    	  } */
+	         /*  return editBtn+html; */
+	    	  return editBtn;
+	      }
+	      }
+	    ]]
+	  ,done: function(res, page, count){
+			$("[data-field='is_on_sale']").children().each(function(){
+					if($(this).text()=='0'){
+					   $(this).html("<span style='color:red;'>下架<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span style='color:green;'>上架<span>");
+					}
+			}),
+			$("[data-field='logo']").children().each(function(){
+				console.log($(this).text());
+				if($(this).text()!="logo"){
+				$(this).html("<img src='"+$(this).text()+"'><img>");
+				}
+		})
+	 }
+	    ,page: true
+	  });
+	  
+	  //头工具栏事件
+	  table.on('toolbar(test)',function(obj){
+		  if(obj.event == 'add'){
+			  location.href="/admin/brand/add";
+		  }
+	  })
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'put'){
+	    	  $.get('/admin/brand/put', {id: data.id},
+	  				function(res) {
+	  					layer.msg(res.message);
+	  		    		if(res.code == 1) {
+	  		    			 setTimeout("location.href='/admin/brand/index'",500);
+	  		    		}
+	  				}, "json");
+	    } else if(obj.event === 'edit'){
+	    	location.href="/admin/brand/edit?id="+data.id;
+	    	//siMenu("product/brand/edit",{id: data.id});
+	    }
+	  });
+	  form.render()
+	  form.on('submit(submit)',function(data){
+		 console.log(JSON.stringify(data.field))
+		 table.reload('brandTable',{
+			 page: {
+				 curr: 1
+			 },
+			 where: data.field
+		 })
+	  })
+	})
+	  
+</script>
+#end

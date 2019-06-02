@@ -1,0 +1,136 @@
+package com.crm.controller.admin.customerinfo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.crm.controller.admin.BaseController;
+import com.crm.model.cuntomerinfo.CustomerInfo;
+import com.crm.model.system.User;
+import com.crm.service.customerinfo.CustomerInfoService;
+import com.crm.service.system.AdminLoginService;
+import com.crm.util.Constant;
+import com.crm.web.bean.BaseResponse;
+import com.jfinal.aop.Inject;
+import com.jfinal.kit.StrKit;
+/**
+ * 客户信息控制类
+ * @author chenglongw
+ *
+ */
+public class CustomerInfoController extends BaseController<CustomerInfo> {
+	
+	@Inject
+	private CustomerInfoService service;
+    @Inject
+    private AdminLoginService adminLoginService;
+    
+     /**
+      * 列表获取
+     */
+	public void list() {
+		Map<String, String> params = new HashMap<>();
+		//查询参数
+		params.put("customerName", getPara("customerName"));
+		
+		renderJson(service.selectPage(params, getPage()));
+	}
+	
+	/**
+	 * 去添加页面
+	 */
+	public void add() {
+		render("add.html");
+	}
+	
+	/**
+	 * 去编辑页面
+	 */
+	public void edit() {
+		Long id = getParaToLong("id");
+		if(id==null) {
+			render("index.html");
+			return;
+		}
+		CustomerInfo customerInfo = CustomerInfo.dao.findById(id);
+		if(customerInfo==null) {
+			render("index.html");
+			return;
+		}
+			setAttr("CustomerInfo", customerInfo);
+			render("edit.html");
+	}
+	
+	/**
+	 * 保存客户信息
+	 * @param CustomerInfo
+	 */
+	  public void save(){
+		 CustomerInfo customerInfo = getModel(CustomerInfo.class);
+		 BaseResponse response = new BaseResponse();
+  		
+  		if(StrKit.isBlank(customerInfo.getStr("customer_name"))) {
+  			response.setCode(Constant.RESPONSE_CODE_FAIL);
+  			response.setMessage("保存失败！客户名称不能为空");
+  			renderJson(response);
+  			return;
+  		}
+  		//新增操作
+  		if(customerInfo.getLong("id") == null) {
+  			User admin = adminLoginService.getLoginAdminWithSessionId(getCookie(Constant.COOKIE_SESSION_ID_NAME));
+  			if(admin==null) {
+  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+  				response.setMessage("添加失败！");
+  				renderJson(response);
+  			}
+  			customerInfo.set("creator", admin.get("name"));
+  			if(service.add(customerInfo) == null) {
+  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+  				response.setMessage("添加失败！");
+  			} else {
+  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+  				response.setMessage("添加成功！");
+  			}
+  		}
+  		//编辑操作
+  		else {
+  			if(service.update(customerInfo) == null) {
+  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+  				response.setMessage("编辑失败！");
+  			} else {
+  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+  				response.setMessage("编辑成功！");
+  			}
+  		}
+  		
+  		renderJson(response);
+	}
+	
+	  
+	  /**
+	   * 删除客户信息
+	   * @param id
+	   */
+	  public void delete() {
+			BaseResponse response = new BaseResponse();
+			Long id = getParaToLong("id");
+			if(id == null) {
+				response.setCode(Constant.RESPONSE_CODE_FAIL);
+				response.setMessage("删除失败！");
+				renderJson(response);
+				return;
+			}
+			
+			if(!service.delete(id)) {
+				response.setCode(Constant.RESPONSE_CODE_FAIL);
+				response.setMessage("删除失败！");
+			} else {
+				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+				response.setMessage("已删除！");
+			}
+			
+			renderJson(response);
+		}
+	  
+	  
+	  
+}

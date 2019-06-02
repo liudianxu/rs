@@ -3,7 +3,9 @@ package com.crm.router;
 import com.crm.controller.admin.AdminController;
 import com.crm.controller.admin.AdminLoginController;
 import com.crm.controller.admin.brand.BrandController;
+import com.crm.controller.admin.customerinfo.CustomerInfoController;
 import com.crm.controller.admin.group.GroupInsuranceController;
+import com.crm.controller.admin.groupinfo.GroupInfoController;
 import com.crm.controller.admin.system.PermissionController;
 import com.crm.controller.admin.system.RoleController;
 import com.crm.controller.admin.system.SettingController;
@@ -33,6 +35,8 @@ public class AdminRoutes extends Routes {
 		add("admin/setting", SettingController.class, "/setting");
 		add("admin/groupInsurance", GroupInsuranceController.class, "/group/groupInsurance");
 		add("admin/brand", BrandController.class, "/brand");
+		add("admin/customerInfo", CustomerInfoController.class, "/customerInfo");
+		add("admin/groupInfo", GroupInfoController.class, "/groupInfo");
 	}
 
 }

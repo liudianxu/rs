@@ -41,7 +41,7 @@ public class UserController extends BaseController<User> {
 	}
 	
 	public void save() {
-		User user = getModel(User.class);
+		User user = getModel(User.class,true);
 		String status = getPara("status");
 		String roleIds = getPara("roleIds");
 		Long[] roles = getParaValuesToLong("roleIds[]");

@@ -56,7 +56,7 @@
 					<div class='layui-inline'>
 						<div class='layui-form-label'>角色</div>
 						#for(role:allRoles)
-					<label><input type="checkbox"  lay-filter="conf" name="roleIds" #for(role2:roles)#if(role.id==role2.id)checked='checked'#end#end value="#(role.id)" />#(role.name)</label>
+					<input type="checkbox"  lay-filter="conf" name="roleIds" #for(role2:roles)#if(role.id==role2.id)checked='checked'#end#end value="#(role.id)" />#(role.name)
 						#end
 					</div>
 				</div>
@@ -123,20 +123,30 @@
 }
 </style>
 <script type="text/javascript">
-
+var listVal = [];
+$("input[name=roleIds]").each(function() {
+	$(this).attr("checked", true);
+	if($(this).prop("checked")){
+		listVal.push($(this).val()); 
+	}
+	});
 layui.use(['form','layer','layedit'], function(){
     	var form = layui.form,
     		layer = layui.layer,
     		layedit = layui.layedit,
     		$ = layui.$;
     	  form.render();
-    	  var listVal = [];
+    	  
     	  form.on('checkbox(conf)',function (data) { 
+    		  console.log("哈哈")
     		  if (data.elem.checked) 
-    		  { listVal.push(data.value); }
+    		  { listVal.push(data.value); 
+    		  }
     		  else { 
     			  var removeIndex = listVal.indexOf(data.value);
-    			  listVal.splice(removeIndex,1); } })
+    			  listVal.splice(removeIndex,1); 
+    			  } 
+    		  })
     	//监听提交
     	form.on('submit(save)', function(data){
     		data.field.roleIds = listVal;

@@ -29,7 +29,12 @@ public class Constant {
 	// 返回code值-请求成功
 	public static final int RESPONSE_CODE_SUCCESS = 1;
 	
+	//上架状态
+	public static final int ON_SALE= 1;
 
+	//下架状态
+	public static final int NOT_ON_SALE = 0;
+	
 	//Token生存时间(60分钟)
 	public static final long TOKEN_LIVE =   60 * 60;
 	//性別（女）

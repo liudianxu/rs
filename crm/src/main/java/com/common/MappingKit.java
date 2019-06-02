@@ -1,5 +1,6 @@
 package com.common;
 
+import com.crm.model.brand.Brand;
 import com.crm.model.group.GroupInsuranceGuarantee;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
@@ -25,6 +26,8 @@ public class MappingKit {
 		arp.addMapping("sys_user_role", UserRole.class);
 		
 		arp.addMapping("crm_setting", Setting.class);
+		
+		arp.addMapping("crm_brand", Brand.class);
 		
 		arp.addMapping("crm_group_insurance_guarantee", GroupInsuranceGuarantee.class);
 		arp.addMapping("crm_group_insurance_orders", GroupInsuranceOrder.class);

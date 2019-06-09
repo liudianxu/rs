@@ -5,56 +5,61 @@
 	添加集团
 </div>
 <div class="layui-card-body">
-	<form class="layui-form" action="/admin/brand/save">
+	<form class="layui-form" action="/admin/groupInfo/save">
+	<input type="text" name="groupInfo.id" value="#(groupInfo.id)" style="display:none;">
 		<div class="sttl">主要信息</div>
 		<div class="layui-form-item">
 			<div class="layui-inline theme-required">
 				<label class="layui-form-label">客户名称</label>
-				<input type="text" name="brand.code" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
+				<input type="text" name="groupInfo.group_name" value="#(groupInfo.group_name)" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
 			</div>
 
 			<div class="layui-inline">
 				<label class="layui-form-label">客户行业</label>
 				<div class="layui-input-inline">
-					<select name="interest" lay-filter="aihao">
+					<select name="groupInfo.group_industry" lay-filter="groupIndustry">
 						<option value=""></option>
-						<option value="0">写作</option>
-						<option value="1" selected="">阅读</option>
-						<option value="2">游戏</option>
-						<option value="3">音乐</option>
-						<option value="4">旅行</option>
+						<option value="1" #if(groupInfo.group_industry=="1")selected#end>金融业</option>
+						<option value="2" #if(groupInfo.group_industry=="2")selected#end>房地产</option>
+						<option value="3" #if(groupInfo.group_industry=="3")selected#end>商业服务</option>
+						<option value="4" #if(groupInfo.group_industry=="4")selected#end>贸易</option>
+						<option value="5" #if(groupInfo.group_industry=="5")selected#end>生产</option>
+						<option value="6" #if(groupInfo.group_industry=="6")selected#end>运输/物流</option>
+						<option value="7" #if(groupInfo.group_industry=="7")selected#end>服务业</option>
+						<option value="8" #if(groupInfo.group_industry=="8")selected#end>文化传媒</option>
+						<option value="9" #if(groupInfo.group_industry=="9")selected#end>政府</option>
+						<option value="10" #if(groupInfo.group_industry=="10")selected#end>其他</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">客户证件类型</label>
 				<div class="layui-input-inline">
-					<select name="interest" lay-filter="aihao">
+					<select name="groupInfo.cert_type" lay-filter="certType">
 						<option value=""></option>
-						<option value="0">写作</option>
-						<option value="1" selected="">阅读</option>
-						<option value="2">游戏</option>
-						<option value="3">音乐</option>
-						<option value="4">旅行</option>
+						<option value="1" #if(groupInfo.cert_type=="1")selected#end>有限责任公司</option>
+						<option value="2" #if(groupInfo.cert_type=="2")selected#end>股份有限责任公司</option>
+						<option value="3" #if(groupInfo.cert_type=="3")selected#end>个人独资企业</option>
+						<option value="4" #if(groupInfo.cert_type=="4")selected#end>合伙企业</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">公司性质</label>
 				<div class="layui-input-inline">
-					<input name="brandType" value="合资" title="合资" type="radio">
-					<input name="brandType" value="国企" title="国企" type="radio">
-					<input name="brandType" value="民营" title="民营" type="radio">
+					<input name="groupInfo.company_nature" #if(groupInfo.company_nature=="合资")checked=checked#end value="合资" title="合资" type="radio">
+					<input name="groupInfo.company_nature" #if(groupInfo.company_nature=="国企")checked=checked#end value="国企" title="国企" type="radio">
+					<input name="groupInfo.company_nature" #if(groupInfo.company_nature=="民营")checked=checked#end value="民营" title="民营" type="radio">
 				</div>
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">证件号码</label>
-				<input type="text" name="brand.code" autocomplete="off" class="layui-input" style="width: 250px;">
+				<input type="text" name="groupInfo.cert_no"  value="#(groupInfo.cert_no)" autocomplete="off" class="layui-input" style="width: 250px;">
 			</div>
-			<div class="layui-inline">
+			<!-- <div class="layui-inline">
 				<label class="layui-form-label">年营业额</label>
 				<div class="layui-input-inline">
-					<select name="interest" lay-filter="NYYE">
+					<select name="groupInfo" lay-filter="NYYE">
 						<option value=""></option>
 						<option value="0">写作</option>
 						<option value="1" selected="">阅读</option>
@@ -71,41 +76,31 @@
 					<input name="star" value="二星" title="二星" type="radio">
 					<input name="star" value="三星" title="三星" type="radio">
 				</div>
-			</div>
+			</div> -->
 			<div class="layui-block">
 				<label class="layui-form-label">客户地址</label>
 				<div class="layui-input-inline">
-					<select name="provance" lay-filter="PROV">
-						<option value=""></option>
-						<option value="0">写作</option>
-						<option value="1" selected="">阅读</option>
-						<option value="2">游戏</option>
-						<option value="3">音乐</option>
-						<option value="4">旅行</option>
+					<select name="provinceId" lay-filter="province">
+						<option value="">请选择</option>
+                      #for(root:roots)
+                      <option value="#(root.id)" #if(province.id==root.id)selected#end >#(root.name)</option>
+                      #end
 					</select>
 				</div>
 				<div class="layui-input-inline">
-					<select name="city" lay-filter="CITY">
-						<option value=""></option>
-						<option value="0">写作</option>
-						<option value="1" selected="">阅读</option>
-						<option value="2">游戏</option>
-						<option value="3">音乐</option>
-						<option value="4">旅行</option>
-					</select>
+					<select name="cityId" lay-filter="city">
+                      <option></option>
+                      <option value="#(city.id)" #if(city.id!=null)selected#end >#(city.name)</option>
+                   </select>
 				</div>
 				<div class="layui-input-inline">
-					<select name="county" lay-filter="COUN">
-						<option value=""></option>
-						<option value="0">写作</option>
-						<option value="1" selected="">阅读</option>
-						<option value="2">游戏</option>
-						<option value="3">音乐</option>
-						<option value="4">旅行</option>
-					</select>
+					 <select name="areaId" lay-filter="area">
+                      <option></option>
+                      <option value="#(area.id)" #if(area.id!=null)selected#end >#(area.name)</option>
+                   </select>
 				</div>
 				<div class="layui-input-inline">
-					<input type="text" name="road" autocomplete="off" placeholder="详细街道" class="layui-input">
+					<input type="text" name="groupInfo.stress" value="#(groupInfo.stress)" autocomplete="off" placeholder="详细街道" class="layui-input">
 				</div>
 			</div>
 		</div>
@@ -113,7 +108,7 @@
 		<div class="layui-form-item layui-form-text">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block" style="margin-left: 118px;">
-				<textarea name='remark' placeholder="请输入内容" class="layui-textarea"></textarea>
+				<textarea name='groupInfo.remark' placeholder="请输入内容" class="layui-textarea">#(groupInfo.remark)</textarea>
 			</div>
 		</div>
 		<div>
@@ -142,15 +137,67 @@
 				function(res) {
 					layer.msg(res.message);
 					if (res.code == 1) {
-						setTimeout("location.href='/admin/brand/index'", 500);
+						setTimeout("location.href='/admin/groupInfo/index'", 500);
 					}
 				}, "json");
 
 			return false;
 		});
+		form.on('select(province)', function(data){
+			if(data.value != ""){
+				  $.ajax({
+		              type: "get",
+		              url: '/common/area/query',
+		              async:false,//同步提交。不设置则默认异步，异步的话，最后执行ajax
+		              data: {
+		            	  parentId: data.value,
+		              },
+		              success: function(result) {
+		            	  $("select[name='cityId']").val("");
+		            	  $("select[name='areaId']").val("");
+		            	  //$("#areaId").val(data.value);
+		            	  var options="<option value="+">请选择<option>"
+		            	  for(var i=0;i<result.length;i++){
+		            		  options +="<option value="+result[i].value+">"+result[i].name+"<option>";
+		            	  }
+		            	  $("select[name='cityId']").html(options);
+		            	  form.render();
+		              }
+		          });
+			}
+		});
+		
+		form.on('select(city)', function(data){
+			if(data.value != ""){
+				  $.ajax({
+		              type: "get",
+		              url: '/common/area/query',
+		              async:false,//同步提交。不设置则默认异步，异步的话，最后执行ajax
+		              data: {
+		            	  parentId: data.value,
+		              },
+		              success: function(result) {
+		            	  //$("#areaId").val(data.value);
+		            	  var options="<option value="+">请选择<option>"
+		            	  for(var i=0;i<result.length;i++){
+		            		  options +="<option value="+result[i].value+">"+result[i].name+"<option>";
+		            	  }
+		            	  $("select[name='areaId']").html(options);
+		            	  form.render();
+		              }
+		          });
+			}
+		});
+		
+		
+		form.on('select(area)', function(data){
+			if(data.value != ""){
+		        //$("#areaId").val(data.value);
+			}
+		});
 		//监听返回
 		$('#backBtn').on('click', function(data) {
-			location.href = "/admin/brand/index";
+			location.href = "/admin/groupInfo/index";
 			return false;
 		});
 

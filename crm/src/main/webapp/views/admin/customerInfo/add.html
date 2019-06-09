@@ -1,10 +1,10 @@
 #@layout()
 #define main()
 <div class="layui-card-header">
-	添加保险公司
+	添加客户
 </div>
 <div class="layui-card-body">
-	<form class="layui-form" action="/admin/brand/save">
+	<form class="layui-form" action="/admin/customerInfo/save">
 		<div class="sttl">主要信息</div>
 		<div class="layui-form-item">
 			<div class="layui-inline theme-required">
@@ -14,10 +14,10 @@
 			<div class="layui-inline">
 				<label class="layui-form-label">集团名称</label>
 				<div class="layui-input-inline">
-					<select name="customerInfo.group_id" lay-filter="aihao">
+					<select name="customerInfo.group_id" lay-filter="groupId">
 						<option value=''>请选择</option>
 						#for(group:groups)
-						<option value='#(group.id)' #if(rank.is_default==true)selected #end>#(group.group_name)</option>
+						<option value='#(group.id)'>#(group.group_name)</option>
 						#end
 					</select>
 				</div>
@@ -25,7 +25,7 @@
 			<div class="layui-inline">
 				<label class="layui-form-label">客户行业</label>
 				<div class="layui-input-inline">
-					<select name="customerInfo.customer_industry" lay-filter="aihao">
+					<select name="customerInfo.customer_industry" lay-filter="customerIndustry">
 						<option value=""></option>
 						<option value="1">金融业</option>
 						<option value="2">房地产</option>
@@ -43,7 +43,7 @@
 			<div class="layui-inline">
 				<label class="layui-form-label">客户证件类型</label>
 				<div class="layui-input-inline">
-					<select name="customerInfo.cert_type" lay-filter="aihao">
+					<select name="customerInfo.cert_type" lay-filter="certType">
 						<option value=""></option>
 						<option value="1">有限责任公司</option>
 						<option value="2">股份有限责任公司</option>
@@ -115,7 +115,7 @@
 		<div class="layui-form-item layui-form-text">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block" style="margin-left: 118px;">
-				<textarea name='remark' placeholder="请输入内容" class="layui-textarea"></textarea>
+				<textarea name='customerInfo.remark' placeholder="请输入内容" class="layui-textarea"></textarea>
 			</div>
 		</div>
 		<div>
@@ -144,13 +144,36 @@
 				function(res) {
 					layer.msg(res.message);
 					if (res.code == 1) {
-						setTimeout("location.href='/admin/brand/index'", 500);
+						setTimeout("location.href='/admin/customerInfo/index'", 500);
 
 					}
 				}, "json");
 
 			return false;
 		});
+		/* form.on('select(groupId)', function(data){
+			if(data.value != ""){
+				  $.ajax({
+		              type: "get",
+		              url: '/common/area/query',
+		              async:false,//同步提交。不设置则默认异步，异步的话，最后执行ajax
+		              data: {
+		            	  parentId: data.value,
+		              },
+		              success: function(result) {
+		            	  $("select[name='C1']").val("");
+		            	  $("select[name='A1']").val("");
+		            	  $("#areaId").val(data.value);
+		            	  var options="<option>请选择<option>"
+		            	  for(var i=0;i<result.length;i++){
+		            		  options +="<option value="+result[i].value+">"+result[i].name+"<option>";
+		            	  }
+		            	  $("select[name='C1']").html(options);
+		            	  form.render();
+		              }
+		          });
+			}
+		}); */
 		form.on('select(province)', function(data){
 			if(data.value != ""){
 				  $.ajax({
@@ -205,7 +228,7 @@
 		});
 		//监听返回
 		$('#backBtn').on('click', function(data) {
-			location.href = "/admin/brand/index";
+			location.href = "/admin/customerInfo/index";
 			return false;
 		});
 

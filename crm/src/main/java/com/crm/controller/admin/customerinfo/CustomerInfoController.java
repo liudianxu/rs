@@ -7,10 +7,12 @@ import java.util.Map;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.groupinfo.GroupInfo;
+import com.crm.model.system.Area;
 import com.crm.model.system.User;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
+import com.crm.service.system.AreaService;
 import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
@@ -28,6 +30,8 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	private GroupInfoService groupInfoService;
     @Inject
     private AdminLoginService adminLoginService;
+    @Inject
+	private AreaService areaService;
     
      /**
       * 列表获取
@@ -47,6 +51,8 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	public void add() {
 		List<GroupInfo> groups = groupInfoService.selectList();
 		setAttr("groups", groups);
+		List<Area> roots = areaService.findRoots();
+		setAttr("roots", roots);
 		render("add.html");
 	}
 	
@@ -64,8 +70,27 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 			render("index.html");
 			return;
 		}
-			setAttr("CustomerInfo", customerInfo);
-			render("edit.html");
+		Area area = Area.dao.findById(customerInfo.get("address").toString());
+		Area city = new Area();
+		Area province = new Area();
+		if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("2")){
+			city = Area.dao.findById(area.get("parent_id").toString());
+		}else{
+			city=area;
+			area = new Area(); 
+		}
+		if(city.get("grade").toString()!=null&&city.get("grade").toString().equals("1")){
+			province = Area.dao.findById(city.get("parent_id").toString());
+		}
+		List<Area> roots = areaService.findRoots();
+		List<GroupInfo> groups = groupInfoService.selectList();
+		setAttr("groups", groups);
+		setAttr("roots", roots);
+		setAttr("province", province);
+		setAttr("city", city);
+		setAttr("area", area);
+		setAttr("customerInfo", customerInfo);
+		render("edit.html");
 	}
 	
 	/**
@@ -101,13 +126,37 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   		}
   		//编辑操作
   		else {
-  			if(customerInfoService.update(customerInfo) == null) {
-  				response.setCode(Constant.RESPONSE_CODE_FAIL);
-  				response.setMessage("编辑失败！");
-  			} else {
-  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
-  				response.setMessage("编辑成功！");
-  			}
+  			if(getPara("areaId")!=null&&!getPara("areaId").equals("")) {
+  				customerInfo.set("address", getPara("areaId"));
+  				if(customerInfoService.update(customerInfo) == null) {
+  	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+  	  				response.setMessage("编辑失败！");
+  	  			} else {
+  	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+  	  				response.setMessage("编辑成功！");
+  	  			}
+  				renderJson(response);
+  	  		}else if(getPara("cityId")!=null&&!getPara("cityId").equals("")){
+  	  		customerInfo.set("address", getPara("cityId"));
+  	  		    if(customerInfoService.update(customerInfo) == null) {
+	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+	  				response.setMessage("编辑失败！");
+	  			} else {
+	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+	  				response.setMessage("编辑成功！");
+	  			}
+				renderJson(response);
+  	  		}else if(getPara("provinceId")!=null&&!getPara("provinceId").equals("")){
+  	  		customerInfo.set("address", getPara("provinceId"));
+  	  		    if(customerInfoService.update(customerInfo) == null) {
+	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+	  				response.setMessage("编辑失败！");
+	  			} else {
+	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+	  				response.setMessage("编辑成功！");
+	  			}
+				renderJson(response);
+  	  		}
   		}
   		
   		renderJson(response);

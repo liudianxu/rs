@@ -50,7 +50,7 @@ public class Area extends Model<Area>{
 	 */
 	public List<Area> getCitys(){
 		Area area= Area.dao.findById(this.getParentIds()[0].longValue());
-		return  Area.dao.find("select * from duc_area  where parent_id =? order by orders asc ",area.getLong("id"));
+		return  Area.dao.find("select * from crm_area  where parent_id =? order by orders asc ",area.getLong("id"));
 	}
 	/**
 	 * 获取本级地区
@@ -58,6 +58,6 @@ public class Area extends Model<Area>{
 	 */
 	public List<Area> getZones(){
 		Area area= Area.dao.findById(this.getParentIds()[1].longValue());
-		return  Area.dao.find("select * from duc_area  where parent_id =? order by orders asc ",area.getLong("id"));
+		return  Area.dao.find("select * from crm_area  where parent_id =? order by orders asc ",area.getLong("id"));
 	}
 }

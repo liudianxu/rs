@@ -1,13 +1,17 @@
 #@layout() 
 #define main()
 <div class="layui-card">
-	<div class="layui-card-header">保险公司列表</div>
+	<div class="layui-card-header">集团列表</div>
 	<div class="layui-card-body">
 		<div class='layui-form' lay-filter='form_pro'>
 			<div class='layui-row layui-col-space5'>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-					<input name='name' autocomplete='off' class='layui-input'
-						placeholder='保险公司名称' />
+					<input name='group_name' autocomplete='off' class='layui-input'
+						placeholder='集团名称' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='cert_no' autocomplete='off' class='layui-input'
+						placeholder='证件号码' />
 				</div>
 				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
 					<div class="layui-btn-container">
@@ -18,13 +22,13 @@
 				</div>
 			</div>
 		</div>
-		<table class="layui-hide" id="brandTable" lay-filter="test"></table>
+		<table class="layui-hide" id="groupInfoTable" lay-filter="test"></table>
 	</div>
 </div>
 <script type="text/html" id="headBar">
 	<div class="layui-btn-container">
         #if(nodeUrl??)
-        #if(nodeUrl.contains("/admin/brand/add"))
+        #if(nodeUrl.contains("/admin/groupInfo/add"))
     	<button class="layui-btn layui-btn-sm" lay-event='add'>
 			<i class="layui-icon layui-icon-add-1"></i>添加
 		</button>
@@ -43,27 +47,25 @@
 	  
 	  
 	  table.render({
-	    elem: '#brandTable'
-	    ,url:'/admin/brand/list'
+	    elem: '#groupInfoTable'
+	    ,url:'/admin/groupInfo/list'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,title: '保险公司'
 	    ,cols: [[
-	        {field:'sn', title:'序号',type:'numbers'}
-		   ,{field:'code', title:'编号'}
-	      ,{field:'name', title:'公司名称'}
-	      ,{field:'logo', title:'logo'}
-	     /*  ,{field:'is_on_sale', title:'状态'} */
-	      ,{field:'short_name', title:'公司简称'}
-	      ,{field:'create_time', title:'创建日期'}
+	        {field:'group_name', title:'集团名称'}
+		   ,{field:'cert_no', title:'证件号码'}
+	      ,{field:'create_time', title:'创建时间'}
+	      ,{field:'update_time', title:'修改时间'}
+	      ,{field:'creator', title:'创建人'}
 	      ,{fixed: 'right', title:'操作',templet: function(d){
-	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
+	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInfo/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
 	    	 /*  var html;
 	    	  if(d.is_on_sale==0){
-	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-info layui-btn-xs" lay-event="put">上架</a>#end#end';
+	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInfo/put"))<a class="layui-btn layui-btn-info layui-btn-xs" lay-event="put">上架</a>#end#end';
 	    	  }
 	    	  if(d.is_on_sale==1){
-	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="put">下架</a>#end#end';
+	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInfo/put"))<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="put">下架</a>#end#end';
 	    	  } */
 	         /*  return editBtn+html; */
 	    	  return editBtn;
@@ -91,29 +93,29 @@
 	  //头工具栏事件
 	  table.on('toolbar(test)',function(obj){
 		  if(obj.event == 'add'){
-			  location.href="/admin/brand/add";
+			  location.href="/admin/groupInfo/add";
 		  }
 	  })
 	  //监听行工具事件
 	  table.on('tool(test)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'put'){
-	    	  $.get('/admin/brand/put', {id: data.id},
+	    	  $.get('/admin/groupInfo/put', {id: data.id},
 	  				function(res) {
 	  					layer.msg(res.message);
 	  		    		if(res.code == 1) {
-	  		    			 setTimeout("location.href='/admin/brand/index'",500);
+	  		    			 setTimeout("location.href='/admin/groupInfo/index'",500);
 	  		    		}
 	  				}, "json");
 	    } else if(obj.event === 'edit'){
-	    	location.href="/admin/brand/edit?id="+data.id;
-	    	//siMenu("product/brand/edit",{id: data.id});
+	    	location.href="/admin/groupInfo/edit?id="+data.id;
+	    	//siMenu("product/groupInfo/edit",{id: data.id});
 	    }
 	  });
 	  form.render()
 	  form.on('submit(submit)',function(data){
 		 console.log(JSON.stringify(data.field))
-		 table.reload('brandTable',{
+		 table.reload('groupInfoTable',{
 			 page: {
 				 curr: 1
 			 },

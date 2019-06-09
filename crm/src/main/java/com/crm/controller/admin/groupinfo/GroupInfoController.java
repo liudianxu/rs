@@ -1,13 +1,16 @@
 package com.crm.controller.admin.groupinfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.crm.controller.admin.BaseController;
 import com.crm.model.groupinfo.GroupInfo;
+import com.crm.model.system.Area;
 import com.crm.model.system.User;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
+import com.crm.service.system.AreaService;
 import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
@@ -23,6 +26,8 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 	private GroupInfoService service;
     @Inject
     private AdminLoginService adminLoginService;
+    @Inject
+	private AreaService areaService;
     
      /**
       * 列表获取
@@ -40,6 +45,8 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 	 * 去添加页面
 	 */
 	public void add() {
+		List<Area> roots = areaService.findRoots();
+		setAttr("roots", roots);
 		render("add.html");
 	}
 	
@@ -57,8 +64,25 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 			render("index.html");
 			return;
 		}
-			setAttr("groupInfo", groupInfo);
-			render("edit.html");
+		Area area = Area.dao.findById(groupInfo.get("address").toString());
+		Area city = new Area();
+		Area province = new Area();
+		if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("2")){
+			city = Area.dao.findById(area.get("parent_id").toString());
+		}else{
+			city=area;
+			area = new Area(); 
+		}
+		if(city.get("grade").toString()!=null&&city.get("grade").toString().equals("1")){
+			province = Area.dao.findById(city.get("parent_id").toString());
+		}
+		List<Area> roots = areaService.findRoots();
+		setAttr("roots", roots);
+		setAttr("groupInfo", groupInfo);
+		setAttr("province", province);
+		setAttr("city", city);
+		setAttr("area", area);
+		render("edit.html");
 	}
 	
 	/**
@@ -94,16 +118,39 @@ public class GroupInfoController extends BaseController<GroupInfo> {
   		}
   		//编辑操作
   		else {
-  			if(service.update(groupInfo) == null) {
-  				response.setCode(Constant.RESPONSE_CODE_FAIL);
-  				response.setMessage("编辑失败！");
-  			} else {
-  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
-  				response.setMessage("编辑成功！");
-  			}
+  			if(getPara("areaId")!=null&&!getPara("areaId").equals("")) {
+  				groupInfo.set("address", getPara("areaId"));
+  				if(service.update(groupInfo) == null) {
+  	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+  	  				response.setMessage("编辑失败！");
+  	  			} else {
+  	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+  	  				response.setMessage("编辑成功！");
+  	  			}
+  				renderJson(response);
+  	  		}else if(getPara("cityId")!=null&&!getPara("cityId").equals("")){
+  	  		    groupInfo.set("address", getPara("cityId"));
+  	  		    if(service.update(groupInfo) == null) {
+	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+	  				response.setMessage("编辑失败！");
+	  			} else {
+	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+	  				response.setMessage("编辑成功！");
+	  			}
+				renderJson(response);
+  	  		}else if(getPara("provinceId")!=null&&!getPara("provinceId").equals("")){
+  	  		    groupInfo.set("address", getPara("provinceId"));
+  	  		    if(service.update(groupInfo) == null) {
+	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+	  				response.setMessage("编辑失败！");
+	  			} else {
+	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+	  				response.setMessage("编辑成功！");
+	  			}
+				renderJson(response);
+  	  		}
   		}
   		
-  		renderJson(response);
 	}
 	
 	  

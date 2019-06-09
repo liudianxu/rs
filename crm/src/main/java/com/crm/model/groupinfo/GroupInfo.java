@@ -50,7 +50,6 @@ public class GroupInfo extends Model<GroupInfo> {
 	 */
 	private String scoreStr;
 	
-
 	public String getCertTypeStr() {
 		if(this.get("cert_type")!=null) {
 		switch (this.get("cert_type").toString()) {

@@ -20,12 +20,12 @@ public class AreaServiceImpl implements AreaService{
 
 	@Override
 	public List<Area> findRoots() {
-		return Area.dao.find("select * from duc_area  where parent_id is null order by orders asc ");
+		return Area.dao.find("select * from crm_area  where parent_id is null order by orders asc ");
 	}
 
 	@Override
 	public List<Area> getChildren(Long id) {
-		return Area.dao.find("select * from duc_area  where parent_id =? order by orders asc ",id);
+		return Area.dao.find("select * from crm_area  where parent_id =? order by orders asc ",id);
 	}
 
 }

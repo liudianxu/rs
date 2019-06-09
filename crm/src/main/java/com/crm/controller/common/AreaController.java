@@ -17,7 +17,8 @@ public class AreaController extends BaseController<Area>{
 	/**
 	 * 地区
 	 */
-	public void query(Long parentId) {
+	public void query() {
+		Long parentId = getParaToLong("parentId");
 		List<Map<String, Object>> data = new ArrayList<>();
 		Area parent = Area.dao.findById(parentId);
 		Collection<Area> areas  = new ArrayList<>();

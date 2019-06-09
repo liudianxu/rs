@@ -29,6 +29,9 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
 		if(StringUtils.isNotBlank(params.get("customerName"))){
 			sql.append(" and customer_name like '%").append(params.get("customerName")).append("%' ");
 		}
+		if(StringUtils.isNotBlank(params.get("certNo"))){
+			sql.append(" and cert_no ="+params.get("certNo"));
+		}
 		sql.append("order by create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());

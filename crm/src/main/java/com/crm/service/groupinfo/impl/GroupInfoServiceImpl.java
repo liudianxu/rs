@@ -29,6 +29,9 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		if(StringUtils.isNotBlank(params.get("groupName"))){
 			sql.append(" and group_name like '%").append(params.get("groupName")).append("%' ");
 		}
+		if(StringUtils.isNotBlank(params.get("certNo"))){
+			sql.append(" and cert_no ="+params.get("certNo"));
+		}
 		sql.append("order by create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());

@@ -23,7 +23,7 @@ import com.jfinal.kit.StrKit;
 public class CustomerInfoController extends BaseController<CustomerInfo> {
 	
 	@Inject
-	private CustomerInfoService service;
+	private CustomerInfoService customerInfoService;
 	@Inject
 	private GroupInfoService groupInfoService;
     @Inject
@@ -36,8 +36,9 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		Map<String, String> params = new HashMap<>();
 		//查询参数
 		params.put("customerName", getPara("customerName"));
+		params.put("certNo", getPara("certNo"));
 		
-		renderJson(service.selectPage(params, getPage()));
+		renderJson(customerInfoService.selectPage(params, getPage()));
 	}
 	
 	/**
@@ -90,7 +91,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   				renderJson(response);
   			}
   			customerInfo.set("creator", admin.get("name"));
-  			if(service.add(customerInfo) == null) {
+  			if(customerInfoService.add(customerInfo) == null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");
   			} else {
@@ -100,7 +101,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   		}
   		//编辑操作
   		else {
-  			if(service.update(customerInfo) == null) {
+  			if(customerInfoService.update(customerInfo) == null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("编辑失败！");
   			} else {
@@ -127,7 +128,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 				return;
 			}
 			
-			if(!service.delete(id)) {
+			if(!customerInfoService.delete(id)) {
 				response.setCode(Constant.RESPONSE_CODE_FAIL);
 				response.setMessage("删除失败！");
 			} else {

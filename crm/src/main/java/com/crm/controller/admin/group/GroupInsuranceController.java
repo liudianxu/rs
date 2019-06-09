@@ -801,7 +801,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
 		.set("policy_num", person.get("policy_num"))
 		.set("status", 0)
-		.set("name", person.get("namename"))
+		.set("name", person.get("name"))
 		.set("change",person.get("premium"))
 		.set("policy_effective_date", person.getDate("policy_effective_date"))
 		.set("create_time", new Date()).save();
@@ -831,7 +831,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
 		.set("policy_num", person.get("policy_num"))
 		.set("status", 2)
-		.set("name", person.get("namename"))
+		.set("name", person.get("name"))
 		.set("change",person.get("premium"))
 		.set("policy_effective_date", person.getDate("policy_effective_date"))
 		.set("create_time", new Date()).save();

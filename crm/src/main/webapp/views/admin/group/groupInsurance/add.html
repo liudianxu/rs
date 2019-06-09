@@ -448,7 +448,7 @@
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form3"
 				action="/admin/groupInsurance/saveGuaranteeDesc">
-				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="82" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="" />
 				<div class="layui-form-item layui-form-text">
  			   <label class="layui-form-label">产品保障说明</label>
    				 <div class="layui-input-block">
@@ -497,7 +497,7 @@
 				</form>
 				</div>
 			<div class='layui-tab-item'>
-			<input type="hidden" name="hiddenOrderIdForGuarantee3" value="82" />
+			<input type="hidden" name="hiddenOrderIdForGuarantee3" value="" />
 				<div class="bar">
 				<div class="buttonGroup">
 					<button class="layui-btn layui-btn-sm" id='addPersonBtn'>
@@ -960,12 +960,12 @@ var parameterss;
 						form.on('submit(submit4)',
 						function(data) {
 						if($('input[name=hiddenOrderIdForGuarantee4]').val() == null || $('input[name=hiddenOrderIdForGuarantee4]').val() == "") {
-							//if ($('input[name=hiddenOrderIdForService]').val() == null
-							//	|| $('input[name=hiddenOrderIdForService]')
-								//		.val() == "") {
-							//layer.msg("请先保存保障方案！");
-							//return false;
-						//}
+							if ($('input[name=hiddenOrderIdForService]').val() == null
+								|| $('input[name=hiddenOrderIdForService]')
+									.val() == "") {
+							layer.msg("请先保存保障方案！");
+							return false;
+						}
 						}
 						$.post($(".layui-form4").attr('action'),$(".layui-form4").serialize(),
 						function(res) {
@@ -981,12 +981,12 @@ var parameterss;
 					
 						form.on('submit(submit5)',
 						function(data) {
-							if ($('input[name=hiddenOrderIdForGuarantee]').val() == null
+							 if ($('input[name=hiddenOrderIdForGuarantee]').val() == null
 									|| $('input[name=hiddenOrderIdForGuarantee]')
 											.val() == "") {
 								layer.msg("请先保存基本信息！");
 								return false;
-							}
+							} 
 						$.post($(".layui-form5").attr('action'),$(".layui-form5").serialize(),
 						function(res) {
 							layer.msg(res.msg);
@@ -1041,12 +1041,12 @@ var parameterss;
 
 	//新增保障方案
 	$("#addGuaranteeBtn").click(function() {
-						/*  if ($('input[name=hiddenOrderIdForGuarantee]').val() == null
+						  if ($('input[name=hiddenOrderIdForGuarantee]').val() == null
 								|| $('input[name=hiddenOrderIdForGuarantee]')
 										.val() == "") {
 							layer.msg("请先保存基本信息！");
 							return false;
-						}  */
+						}  
 						guaranteeIndex = $guaranteeTable.children("tr").length;
 						$(
 								'<tr class="guaranteeClass">'
@@ -1095,15 +1095,15 @@ var parameterss;
 	$("#addPersonBtn").click(function() {
 		//判断是否已保存产品保障说明
 		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
-		/* if(hiddenOrderId == undefined || hiddenOrderId == null || hiddenOrderId == "") {
+		 if(hiddenOrderId == undefined || hiddenOrderId == null || hiddenOrderId == "") {
 			layer.msg("请先保存产品保障说明！");
 			return false;
-		} */
+		} 
 		//查询保障方案
 		$.ajax({
 	        type: 'GET',
 	        url: "findGuaranteeSchemes",
-	        data: {orderId: 83},
+	        data: {orderId: hiddenOrderId},
 	        dataType: "json",
 	        success: function(data) {
 	        	var selectHtml = '<select name="groupInsurancePerson.guarantee_id" class="layui-input"><option value="">选择</option>';
@@ -1272,6 +1272,9 @@ var parameterss;
 		var occupationCategory = $(this).attr("data-occupation_category");
 		var plan = $(this).attr("data-guarantee_id");
 		var remark = $(this).attr("data-remark");
+		var policy_effective_date = $(this).attr("data-policy_effective_date");
+		var policy_expiration_date = $(this).attr("data-policy_expiration_date");
+		var policy_num = $(this).attr("data-policy_num");
 		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
 		$.ajax({
 	        type: 'GET',
@@ -1402,11 +1405,32 @@ var parameterss;
 								'</th>';
 							}
 						   html +='</tr>'+
+						   '<tr>'+
+							'<th>'+
+								'<span style="color:red">*</span>生效日期'+
+							'</th>'+
+							'<td><input type="text" name="groupInsurancePerson.policy_effective_date" value="'+policy_effective_date+'"   class="layui-input person_policy_effective_date" maxlength="200" />'+
+							'</td>'+
+							'<th>'+
+								'<span style="color:red">*</span>终止日期'+
+							'</th>'+
+							'<th>'+
+								'<input type="text" name="groupInsurancePerson.policy_expiration_date" value="'+policy_expiration_date+'"   class="layui-input person_policy_expiration_date" maxlength="200" />'+
+							'</th>'+
+						'</tr>'+
+						'<tr>'+
+						'<th>'+
+							'保单号'+
+						'</th>'+
+						'<th>'+
+							'<input type="text" name="groupInsurancePerson.policy_num" class="layui-input" value="'+policy_num+'" maxlength="200" />'+
+						'</th>'+
+					'</tr>'+
 					'</table>'+
 				'</form>';
 	        	layer.open({
 	        		  title: '修改人员'
-	        	      ,area: ['660px', '300px']
+	        	      ,area: ['660px', '400px']
 	        	      ,btn: ['确定', '取消']
 	        		  ,content: html
 	        		  ,yes: function(index, layero){
@@ -1423,9 +1447,50 @@ var parameterss;
 	        	    	  layer.close(index);
      			  }
 	        		});     
+	        	form.render(); 
+        		
+                laydate.render({
+                    elem : '.person_policy_effective_date',
+                    trigger : 'click'
+                });
+                laydate.render({
+                    elem : '.person_policy_expiration_date',
+                    trigger : 'click'
+                });
 	        }
 		});
 	})
+	
+	//退保
+	$("#personTable").on("click","#cancelPersonBtn",function(){
+		var personId = $(this).attr("data-id");
+		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
+		$.post("cancelPerson", {
+			personId:personId
+		},
+				function(res) {
+					layer.msg(res.msg); 
+		    		if(res.code == 1) {
+		    			    reloadPersonTable(hiddenOrderId);
+		    		}
+				}, "json");
+	})
+	
+	//进保
+	$("#personTable").on("click","#comePersonBtn",function(){
+		var personId = $(this).attr("data-id");
+		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
+		$.post("comePerson", {
+			personId:personId
+		},
+				function(res) {
+					layer.msg(res.msg); 
+		    		if(res.code == 1) {
+		    			    reloadPersonTable(hiddenOrderId);
+		    		}
+				}, "json");
+	})
+	
 	
 	   //删除方案
 		$("#guaranteeTable").on("click","#removeGuarantee",function(){
@@ -1462,8 +1527,6 @@ var parameterss;
 	        	}
 	        	}
 	        })
-		
-		
 	});
 	
 	
@@ -1475,7 +1538,7 @@ var parameterss;
 			$.ajax({
 		        type: 'GET',
 		        url: "queryPersonByOrderId",
-		        data: {orderId: 82},
+		        data: {orderId: orderId},
 		        dataType: "json",
 		        success: function(data) {
 		        	if(data.code==1){
@@ -1534,7 +1597,15 @@ var parameterss;
 		        		        	 html +='<td>已失效</td>';} 
 		        			      html +='<td><button class="layui-btn layui-btn-sm" data-name="'+data[i].name+'" data-gender="'+data[i].gender+'"'+
 		        			      'data-id_type="'+data[i].id_type+'" data-id_num="'+data[i].id_num+'" data-phone="'+data[i].phone+'" data-occupation_category="'+data[i].occupation_category+'" data-guarantee_id="'+data[i].guarantee_id+'" data-remark="'+data[i].remark+'"'+
-		        			      'data-id="'+data[i].id+'" id="editPersonBtn"><i class="layui-icon"></i>修改</button></td></tr>';
+		        			      'data-policy_effective_date="'+data[i].policy_effective_date+'" data-policy_expiration_date="'+data[i].policy_expiration_date+'" data-policy_num="'+data[i].policy_num+'"'+
+		        			      'data-id="'+data[i].id+'" id="editPersonBtn"><i class="layui-icon"></i>修改</button>';
+		        			      if(data[i].status==0||data[i].status==1){
+		        			      html +='<button class="layui-btn layui-btn-sm" data-id="'+data[i].id+'" id="cancelPersonBtn"><i class="layui-icon"></i>退保</button>';
+		        			      }
+		        			      if(data[i].status==2){
+		        			    	  html +='<button class="layui-btn layui-btn-sm" data-id="'+data[i].id+'" id="comePersonBtn"><i class="layui-icon"></i>进保</button>';
+		        		}
+		        			        html +='</td></tr>';
 		        		}
 		        		var tbody = $personTable.find("tbody")
 		        		tbody.html(html);

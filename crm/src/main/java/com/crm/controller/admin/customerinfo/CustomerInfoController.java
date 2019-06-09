@@ -1,12 +1,15 @@
 package com.crm.controller.admin.customerinfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.crm.controller.admin.BaseController;
 import com.crm.model.cuntomerinfo.CustomerInfo;
+import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.User;
 import com.crm.service.customerinfo.CustomerInfoService;
+import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
@@ -21,6 +24,8 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	
 	@Inject
 	private CustomerInfoService service;
+	@Inject
+	private GroupInfoService groupInfoService;
     @Inject
     private AdminLoginService adminLoginService;
     
@@ -39,6 +44,8 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	 * 去添加页面
 	 */
 	public void add() {
+		List<GroupInfo> groups = groupInfoService.selectList();
+		setAttr("groups", groups);
 		render("add.html");
 	}
 	

@@ -82,7 +82,7 @@ public class BrandServiceImpl implements BrandService {
 	 */
 	@Override
 	public List<Brand> selectList() {
-		return Brand.dao.find("select * from crm_brand where is_on_sale=1 ");
+		return Brand.dao.find("select * from crm_brand  ");
 	}
 
 }

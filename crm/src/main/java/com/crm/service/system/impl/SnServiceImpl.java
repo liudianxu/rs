@@ -110,7 +110,7 @@ public class SnServiceImpl  implements SnService{
 	 */
 	private long getLastValue(Sn.Type type) {
 		String sql = "";
-			sql =  "select * from duc_sn  where type = "+type.ordinal()+" ";
+			sql =  "select * from crm_sn  where type = "+type.ordinal()+" ";
 		Sn sn= Sn.dao.findFirst(sql);
 		long lastValue;
 		if(sn!=null) {

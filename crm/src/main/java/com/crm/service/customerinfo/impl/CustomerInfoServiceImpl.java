@@ -80,4 +80,9 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
 		return CustomerInfo.dao.find("select * from crm_customer_info");
 	}
 
+	@Override
+	public List<CustomerInfo> findByGroupId(Long id) {
+		return CustomerInfo.dao.find("select * from crm_customer_info where group_id = ?",id);
+	}
+
 }

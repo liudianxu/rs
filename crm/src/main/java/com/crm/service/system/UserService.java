@@ -1,6 +1,7 @@
 package com.crm.service.system;
 
 
+import java.util.List;
 import java.util.Map;
 
 import com.crm.component.DataGrid;
@@ -33,4 +34,6 @@ public interface UserService {
 	Ret add(User user, Long[] roles);
 
 	Ret update(User user, Long[] roles);
+
+	List<User> selectList();
 }

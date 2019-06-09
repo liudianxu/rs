@@ -35,18 +35,15 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		DataGrid<GroupInsuranceOrder> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select o.*,c.name as companyName,b.name as BrandName,c.contacts as contacts,c.email as email,c.phone as phone from crm_group_insurance_orders o ");
-		sql.append("left join crm_group_insurance_company c on c.id=o.company_id ");
+		sql.append("select o.*,b.name as BrandName,c.customer_name as customerName from crm_group_insurance_orders o ");
 		sql.append("left join crm_brand b on b.id=o.brand_id ");
+		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
 		sql.append("where 1=1 ");
 		if(StringUtils.isNotBlank(map.get("order_sn"))){
 			sql.append(" and o.order_sn like '%").append(map.get("order_sn")).append("%' ");
 		}
 		if(StringUtils.isNotBlank(map.get("brand_id"))){
 			sql.append(" and o.brand_id = "+map.get("brand_id"));
-		}
-		if(StringUtils.isNotBlank(map.get("company_name"))){
-			sql.append(" and c.name like '%").append(map.get("company_name")).append("%' ");
 		}
 		if(StringUtils.isNotBlank(map.get("status"))){
 			sql.append(" and o.status = "+map.get("status"));

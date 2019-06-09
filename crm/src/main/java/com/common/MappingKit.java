@@ -11,6 +11,7 @@ import com.crm.model.system.Role;
 import com.crm.model.system.RolePermission;
 import com.crm.model.system.Session;
 import com.crm.model.system.Setting;
+import com.crm.model.system.Sn;
 import com.crm.model.system.SysParameter;
 import com.crm.model.system.User;
 import com.crm.model.system.UserRole;
@@ -30,6 +31,7 @@ public class MappingKit {
 		arp.addMapping("crm_setting", Setting.class);
 		
 		arp.addMapping("crm_brand", Brand.class);
+		arp.addMapping("crm_sn", Sn.class);
 		
 		arp.addMapping("crm_group_insurance_guarantee", GroupInsuranceGuarantee.class);
 		arp.addMapping("crm_group_insurance_orders", GroupInsuranceOrder.class);

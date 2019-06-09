@@ -48,4 +48,11 @@ public interface CustomerInfoService {
 	 * @return
 	 */
 	List<CustomerInfo> selectList();
+
+	/**
+	 * 根据集团id获取单位
+	 * @param id
+	 * @return
+	 */
+	List<CustomerInfo> findByGroupId(Long id);
 }

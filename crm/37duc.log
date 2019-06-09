@@ -1,38 +1,39 @@
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
-2019-05-29 21:02:51
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 [WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
 
 2019-06-02 18:09:05
@@ -583,3 +584,345 @@ java.lang.IllegalStateException: UT010006: Cannot call getWriter(), getOutputStr
 
 2019-06-02 22:29:13
 [WARN]-[Thread: XNIO-4 task-40]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /admin/admin/customerInfo
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:07:33
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:08:08
+[WARN]-[Thread: XNIO-1 task-1]-[com.jfinal.plugin.ehcache.CacheKit.getOrAddCache()]: Could not find cache config [setting], using default.
+
+2019-06-04 21:08:30
+[ERROR]-[Thread: XNIO-1 task-1]-[com.alibaba.druid.pool.DruidPooledStatement.errorCheck()]: CommunicationsException, druid version 1.1.10, jdbcUrl : jdbc:mysql://39.96.10.209:3306/crm?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&serverTimezone=Asia/Shanghai&useSSL=true, testWhileIdle true, idle millis 57060, minIdle 10, poolingCount 9, timeBetweenEvictionRunsMillis 60000, lastValidIdleMillis 57060, driver com.mysql.cj.jdbc.Driver, exceptionSorter com.alibaba.druid.pool.vendor.MySqlExceptionSorter
+
+2019-06-04 21:08:30
+[ERROR]-[Thread: XNIO-1 task-1]-[com.alibaba.druid.pool.DruidDataSource.handleFatalError()]: discard connection
+com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 57,055 milliseconds ago.  The last packet sent successfully to the server was 21,570 milliseconds ago.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:590)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:57)
+	at com.mysql.cj.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:1983)
+	at com.mysql.cj.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1826)
+	at com.mysql.cj.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:1923)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:3188)
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:3185)
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_executeQuery(WallFilter.java:640)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:3185)
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:181)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:228)
+	at com.jfinal.plugin.activerecord.Model.find(Model.java:643)
+	at com.jfinal.plugin.activerecord.Model.find(Model.java:660)
+	at com.jfinal.plugin.activerecord.Model.findByIdLoadColumns(Model.java:746)
+	at com.jfinal.plugin.activerecord.Model.findById(Model.java:703)
+	at com.crm.interceptor.EchacheInterceptor.intercept(EchacheInterceptor.java:25)
+	at com.jfinal.aop.Invocation.invoke(Invocation.java:69)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:81)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:86)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)
+	at io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)
+	at io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)
+	at io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)
+	at io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)
+	at io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)
+	at io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)
+	at io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)
+	at io.undertow.server.Connectors.executeRootHandler(Connectors.java:360)
+	at io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.cj.core.exceptions.CJCommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 57,055 milliseconds ago.  The last packet sent successfully to the server was 21,570 milliseconds ago.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createException(ExceptionFactory.java:54)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createException(ExceptionFactory.java:93)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createException(ExceptionFactory.java:133)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:149)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.readPacket(MysqlaProtocol.java:527)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.checkErrorPacket(MysqlaProtocol.java:723)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.sendCommand(MysqlaProtocol.java:662)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.sqlQueryDirect(MysqlaProtocol.java:950)
+	at com.mysql.cj.mysqla.MysqlaSession.sqlQueryDirect(MysqlaSession.java:431)
+	at com.mysql.cj.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:1978)
+	... 47 more
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at com.mysql.cj.core.io.ReadAheadInputStream.fill(ReadAheadInputStream.java:101)
+	at com.mysql.cj.core.io.ReadAheadInputStream.readFromUnderlyingStreamIfNecessary(ReadAheadInputStream.java:144)
+	at com.mysql.cj.core.io.ReadAheadInputStream.read(ReadAheadInputStream.java:174)
+	at java.io.FilterInputStream.read(Unknown Source)
+	at com.mysql.cj.core.io.FullReadInputStream.readFully(FullReadInputStream.java:58)
+	at com.mysql.cj.mysqla.io.SimplePacketReader.readHeader(SimplePacketReader.java:60)
+	at com.mysql.cj.mysqla.io.TimeTrackingPacketReader.readHeader(TimeTrackingPacketReader.java:48)
+	at com.mysql.cj.mysqla.io.MultiPacketReader.readHeader(MultiPacketReader.java:51)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.readPacket(MysqlaProtocol.java:521)
+	... 52 more
+
+2019-06-04 21:08:30
+[ERROR]-[Thread: XNIO-1 task-1]-[com.jfinal.core.ActionHandler.handle()]: /admin
+com.jfinal.plugin.activerecord.ActiveRecordException: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 57,055 milliseconds ago.  The last packet sent successfully to the server was 21,570 milliseconds ago.
+	at com.jfinal.plugin.activerecord.Model.find(Model.java:662)
+	at com.jfinal.plugin.activerecord.Model.findByIdLoadColumns(Model.java:746)
+	at com.jfinal.plugin.activerecord.Model.findById(Model.java:703)
+	at com.crm.interceptor.EchacheInterceptor.intercept(EchacheInterceptor.java:25)
+	at com.jfinal.aop.Invocation.invoke(Invocation.java:69)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:81)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:86)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:61)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)
+	at io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:132)
+	at io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)
+	at io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)
+	at io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:292)
+	at io.undertow.servlet.handlers.ServletInitialHandler.access$100(ServletInitialHandler.java:81)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:138)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:272)
+	at io.undertow.servlet.handlers.ServletInitialHandler.access$000(ServletInitialHandler.java:81)
+	at io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:104)
+	at io.undertow.server.Connectors.executeRootHandler(Connectors.java:360)
+	at io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:830)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 57,055 milliseconds ago.  The last packet sent successfully to the server was 21,570 milliseconds ago.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createCommunicationsException(SQLError.java:590)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:57)
+	at com.mysql.cj.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:1983)
+	at com.mysql.cj.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1826)
+	at com.mysql.cj.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:1923)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:3188)
+	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_executeQuery(FilterEventAdapter.java:465)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:3185)
+	at com.alibaba.druid.wall.WallFilter.preparedStatement_executeQuery(WallFilter.java:640)
+	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_executeQuery(FilterChainImpl.java:3185)
+	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.executeQuery(PreparedStatementProxyImpl.java:181)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:228)
+	at com.jfinal.plugin.activerecord.Model.find(Model.java:643)
+	at com.jfinal.plugin.activerecord.Model.find(Model.java:660)
+	... 36 more
+Caused by: com.mysql.cj.core.exceptions.CJCommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 57,055 milliseconds ago.  The last packet sent successfully to the server was 21,570 milliseconds ago.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createException(ExceptionFactory.java:54)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createException(ExceptionFactory.java:93)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createException(ExceptionFactory.java:133)
+	at com.mysql.cj.core.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:149)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.readPacket(MysqlaProtocol.java:527)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.checkErrorPacket(MysqlaProtocol.java:723)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.sendCommand(MysqlaProtocol.java:662)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.sqlQueryDirect(MysqlaProtocol.java:950)
+	at com.mysql.cj.mysqla.MysqlaSession.sqlQueryDirect(MysqlaSession.java:431)
+	at com.mysql.cj.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:1978)
+	... 47 more
+Caused by: java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at com.mysql.cj.core.io.ReadAheadInputStream.fill(ReadAheadInputStream.java:101)
+	at com.mysql.cj.core.io.ReadAheadInputStream.readFromUnderlyingStreamIfNecessary(ReadAheadInputStream.java:144)
+	at com.mysql.cj.core.io.ReadAheadInputStream.read(ReadAheadInputStream.java:174)
+	at java.io.FilterInputStream.read(Unknown Source)
+	at com.mysql.cj.core.io.FullReadInputStream.readFully(FullReadInputStream.java:58)
+	at com.mysql.cj.mysqla.io.SimplePacketReader.readHeader(SimplePacketReader.java:60)
+	at com.mysql.cj.mysqla.io.TimeTrackingPacketReader.readHeader(TimeTrackingPacketReader.java:48)
+	at com.mysql.cj.mysqla.io.MultiPacketReader.readHeader(MultiPacketReader.java:51)
+	at com.mysql.cj.mysqla.io.MysqlaProtocol.readPacket(MysqlaProtocol.java:521)
+	... 52 more
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:10
+[WARN]-[Thread: main]-[com.jfinal.core.paragetter.ParaProcessorBuilder.createParaGetter()]: you should add compiler flag -parameters to support parameter auto binding
+
+2019-06-04 21:10:20
+[WARN]-[Thread: XNIO-1 task-1]-[com.jfinal.plugin.ehcache.CacheKit.getOrAddCache()]: Could not find cache config [setting], using default.
+
+2019-06-04 21:10:29
+[WARN]-[Thread: XNIO-1 task-11]-[com.jfinal.plugin.ehcache.CacheKit.getOrAddCache()]: Could not find cache config [loginAdmin], using default.
+
+2019-06-04 21:15:28
+[WARN]-[Thread: XNIO-1 task-5]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /common/config/configSelect
+
+2019-06-04 21:15:32
+[WARN]-[Thread: XNIO-1 task-8]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /common/config/configSelect
+
+2019-06-04 21:22:42
+[WARN]-[Thread: XNIO-1 task-32]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /common/config/configSelect

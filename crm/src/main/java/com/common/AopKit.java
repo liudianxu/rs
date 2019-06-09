@@ -17,12 +17,14 @@ import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.OperateLogService;
 import com.crm.service.system.PermissionService;
 import com.crm.service.system.RoleService;
+import com.crm.service.system.SnService;
 import com.crm.service.system.UserService;
 import com.crm.service.system.impl.AdminAuthServiceImpl;
 import com.crm.service.system.impl.AdminLoginServiceImpl;
 import com.crm.service.system.impl.OperateLogServiceImpl;
 import com.crm.service.system.impl.PermissionServiceImpl;
 import com.crm.service.system.impl.RoleServiceImpl;
+import com.crm.service.system.impl.SnServiceImpl;
 import com.crm.service.system.impl.UserServiceImpl;
 import com.jfinal.aop.Aop;
 
@@ -40,6 +42,8 @@ public class AopKit {
 		Aop.addMapping(BrandService.class, BrandServiceImpl.class);
 		Aop.addMapping(CustomerInfoService.class, CustomerInfoServiceImpl.class);
 		Aop.addMapping(GroupInfoService.class, GroupInfoServiceImpl.class);
+		
+		Aop.addMapping(SnService.class, SnServiceImpl.class);
 		
 		Aop.addMapping(GroupInsuranceGuaranteeService.class, GroupInsuranceGuaranteeServiceImpl.class);
 		Aop.addMapping(GroupInsuranceOrderService.class, GroupInsuranceOrderServiceImpl.class);

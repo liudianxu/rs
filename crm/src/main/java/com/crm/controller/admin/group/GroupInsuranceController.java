@@ -17,20 +17,23 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crm.controller.admin.BaseController;
-import com.crm.model.group.GroupInsuranceCompany;
+import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceGuarantee;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.group.Guarantee;
 import com.crm.poi.ImportExcelUtil;
+import com.crm.service.brand.BrandService;
+import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.group.GroupInsuranceGuaranteeService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
+import com.crm.service.groupinfo.GroupInfoService;
+import com.crm.service.system.UserService;
 import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
 import com.crm.util.DateUtil;
 import com.crm.util.IDCardUtils;
-import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
@@ -41,6 +44,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	private GroupInsuranceGuaranteeService groupInsuranceGuaranteeService;
 	@Inject
 	private GroupInsurancePersonService groupInsurancePersonService;
+	@Inject
+	private BrandService brandService;
+	@Inject
+	private CustomerInfoService customerInfoService;
+	@Inject
+	private GroupInfoService groupInfoService;
+	@Inject
+	private UserService userService;
 	
 	//团险理赔类型
 	public static final int GROUP_CLAIM_TYPE =1;
@@ -49,7 +60,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void index() {
 		//获取品牌集合
-		//setAttr("brands", brandService.selectList());
+		setAttr("brands", brandService.selectList());
 		render("index.html");
 	}
 	
@@ -78,9 +89,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void add() {
 		//获取品牌集合
-		//setAttr("brands", brandService.selectList());
-		//setAttr("claimItemConfigs", claimItemConfigService.findRoots());
-		//setAttr("claimDataConfigs", claimDataConfigService.findAll());
+		setAttr("brands", brandService.selectList());
+		setAttr("groups", groupInfoService.selectList());
+		setAttr("admins", userService.selectList());
 		render("add.html");
 	}
 	
@@ -224,40 +235,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @return
 	 * @throws Exception 
 	 */
-	public void saveBaseInfo(Long hiddenCompanyId, GroupInsuranceCompany company, GroupInsuranceOrder order) throws Exception {
+	public void saveBaseInfo() throws Exception {
 		Map<String, Object> data = new HashMap<>();
-		
-		//若企业不存在，应保存企业信息
-		if(hiddenCompanyId == null || hiddenCompanyId <= 0) {
-			/*if(companyService.findByNameAndLicence(company.get("name"),company.get("licence_num")) != null){
-				data.put("msg", "企业已经存在，请勿重复保存！");
-				renderJson(data);
-				return;
-			}*/
-			if(StringUtils.isBlank(company.get("phone"))) {
-				data.put("msg", "请填写联系人手机号！");
-				renderJson(data);
-				return;
-			}
-			//GroupInsuranceCompany pCompany = companyService.saveCompany(company);
-			//order.set("company_id",pCompany.get("id"));
-		} else {
-			GroupInsuranceCompany pCompany = GroupInsuranceCompany.dao.findById(hiddenCompanyId);
-			pCompany.set("name",company.get("name"));
-			pCompany.set("id_num",company.get("id_num"));
-			pCompany.set("licence_num",company.get("licence_num"));
-			pCompany.set("licence_type",company.get("licence_type"));
-			pCompany.set("contacts",company.get("contacts"));
-			pCompany.set("industry_category",company.get("industry_category"));
-			pCompany.set("main_business",company.get("main_business"));
-			pCompany.set("phone",company.get("phone"));
-			pCompany.set("address",company.get("address"));
-			pCompany.set("email",company.get("email"));
-			pCompany.set("insured_address",company.get("insured_address"));
-			//companyService.update(pCompany);
-			//order.set("company_id",pCompany.get("id"));
-		}
-		
+		GroupInsuranceOrder order = getModel(GroupInsuranceOrder.class);
+        		
 		Date policyEffectiveDate = DateUtil.parseDate(DateUtil.formatDate(order.get("policy_effective_date"),"yyyy-MM-dd") + " 00:00:00");
 		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(order.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
 		
@@ -302,9 +283,11 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	public void saveGrantee() {
 		Map<String, Object> data = new HashMap<>();
 		// 获取参数组
+		String[] premium= getParaValues("premium[]");
 		String json = HttpKit.readData(getRequest());
 		JSONObject obj=JSON.parseObject(json);
 		JSONArray jsarr=obj.getJSONArray("guaranteeList");
+		JSONArray premiumJsarr=obj.getJSONArray("premiumList");
 		if(jsarr!=null) {
 		Long hiddenOrderIdForGuarantee = obj.getLong("hiddenOrderIdForGuarantee");
 		//保存之前先根据order_id，删除已有项目
@@ -330,13 +313,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				pbjj.put("description", job2.get("description"));
 				pbjj.put("claimInfo", job2.get("claimInfo"));
 				pbjj.put("tip", job2.get("tip"));
-			
 				pbjj.put("value", plan2.get(j));
 				newAray.add(pbjj);
 				}
 				if(newAray.size() == 0) {
 					continue;
 				}
+				guarant.set("premium", premiumJsarr.get(j));
 				guarant.set("create_time", new Date());
 				guarant.set("details", newAray.toString()).save();
 			}
@@ -428,11 +411,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param guaranteeDesc
 	 * @return
 	 */
-	public void saveGuaranteeDesc(Long hiddenOrderIdForGuarantee2, String guarantee_desc) {
+	public void saveGuaranteeDesc() {
+		Long hiddenOrderIdForGuarantee2 = getParaToLong("hiddenOrderIdForGuarantee2");
+		GroupInsuranceOrder groupInsuranceOrder = getModel(GroupInsuranceOrder.class);
+		groupInsuranceOrder.set("id", hiddenOrderIdForGuarantee2);
 		Map<String, Object> data = new HashMap<>();
-		GroupInsuranceOrder existsOrder = GroupInsuranceOrder.dao.findById(hiddenOrderIdForGuarantee2);
-		existsOrder.set("guarantee_desc",guarantee_desc);
-		existsOrder.update();
+		groupInsuranceOrder.update();
 		data.put("orderId", hiddenOrderIdForGuarantee2);
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
@@ -445,7 +429,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param orderId
 	 * @return
 	 */
-	public void findGuaranteeSchemes(Long orderId) {
+	public void findGuaranteeSchemes() {
+		Long orderId = getParaToLong("orderId");
 		Map<String, Object> data = new HashMap<>();
 		List<GroupInsuranceGuarantee> guarantees = groupInsuranceGuaranteeService.findByOrderId(orderId);
 		Map<Long, String> resultMap = new HashMap<>();
@@ -465,7 +450,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param person
 	 * @return
 	 */
-	public void addPerson(Long hiddenOrderId, GroupInsurancePerson person) {
+	public void addPerson() {
+		Long hiddenOrderId = getParaToLong("hiddenOrderId");
+		GroupInsurancePerson person = getModel(GroupInsurancePerson.class);
 		Map<String, Object> data = new HashMap<>();
 		if(person.get("name")==null) {
 			data.put("msg", "姓名不能为空！");
@@ -487,13 +474,21 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			renderJson(data);
 			return;
 		}
+		if(person.get("policy_effective_date")==null) {
+			data.put("msg", "生效日期不能为空！");
+			renderJson(data);
+			return;
+		}
+		if(person.get("policy_expiration_date")==null) {
+			data.put("msg", "生效日期不能为空！");
+			renderJson(data);
+			return;
+		}
 		if(!IDCardUtils.isValidatedAllIdcard(person.get("id_num"))) {
 			data.put("msg", "证件号码不合法!");
 			renderJson(data);
 			return;
 		}
-		
-		
 		
 		if((int)person.get("id_type")==0) {
 			if(CommonUtils.isOdd(person.get("id_num").toString().charAt(person.get("id_num").toString().length() - 2))) {
@@ -513,7 +508,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		}
 		person.set("create_time", new Date());
 		person.set("order_id",hiddenOrderId);
-		
+		person.set("status", 0);
 		//更新
 		if(person.get("id")!=null) {
 			GroupInsurancePerson newPerson = GroupInsurancePerson.dao.findById((Long)person.get("id"));
@@ -540,7 +535,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param hiddenOrderId
 	 * @param person
 	 */
-	public void queryPersonByOrderId(Long orderId) {
+	public void queryPersonByOrderId() {
+		Long orderId = getParaToLong("orderId");
 		Map<String, Object> data = new HashMap<>();
 		List<GroupInsurancePerson> persons = groupInsurancePersonService.findByOrderId(orderId);
 		if(CollectionUtils.isNotEmpty(persons)) {
@@ -712,6 +708,18 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	     return;
 	}
 	
+	public void selectCustomer() {
+		Long id = getParaToLong("id");
+		List<Map<String, Object>> data = new ArrayList<>();
+		List<CustomerInfo> customerInfos = customerInfoService.findByGroupId(id);
+		for (CustomerInfo customerInfo : customerInfos) {
+			Map<String, Object> item = new HashMap<>();
+			item.put("name", customerInfo.get("customer_name"));
+			item.put("value", customerInfo.get("id"));
+			data.add(item);
+		}
+		renderJson(data);
+	}
 	
 	
 }

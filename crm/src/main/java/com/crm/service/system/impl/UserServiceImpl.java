@@ -128,4 +128,9 @@ public class UserServiceImpl implements UserService {
 		return Ret.ok("msg", "修改成功！");
 	}
 
+	@Override
+	public List<User> selectList() {
+		return User.dao.find("select * from sys_user where status=1 ");
+	}
+
 }

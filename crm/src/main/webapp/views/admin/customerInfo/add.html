@@ -41,23 +41,22 @@
 				</div>
 			</div>
 			<div class="layui-inline">
-				<label class="layui-form-label">客户证件类型</label>
-				<div class="layui-input-inline">
-					<select name="customerInfo.cert_type" lay-filter="certType">
-						<option value=""></option>
-						<option value="1">有限责任公司</option>
-						<option value="2">股份有限责任公司</option>
-						<option value="3">个人独资企业</option>
-						<option value="4">合伙企业</option>
-					</select>
-				</div>
-			</div>
-			<div class="layui-inline">
 				<label class="layui-form-label">公司性质</label>
 				<div class="layui-input-inline">
 					<input name="customerInfo.company_nature" value="合资" title="合资" type="radio">
 					<input name="customerInfo.company_nature" value="国企" title="国企" type="radio">
 					<input name="customerInfo.company_nature" value="民营" title="民营" type="radio">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">客户证件类型</label>
+				<div class="layui-input-inline">
+					<select name="customerInfo.cert_type" lay-filter="certType">
+						<option value=""></option>
+						<option value="1">营业执照</option>
+						<option value="2">税务登记证</option>
+						<option value="3">组织机构代码证</option>
+					</select>
 				</div>
 			</div>
 			<div class="layui-inline">

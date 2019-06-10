@@ -42,23 +42,22 @@
 				</div>
 			</div>
 			<div class="layui-inline">
-				<label class="layui-form-label">客户证件类型</label>
-				<div class="layui-input-inline">
-					<select name="customerInfo.cert_type" lay-filter="certType">
-						<option value=""></option>
-						<option value="1" #if(customerInfo.cert_type=="1")selected#end>有限责任公司</option>
-						<option value="2" #if(customerInfo.cert_type=="2")selected#end>股份有限责任公司</option>
-						<option value="3" #if(customerInfo.cert_type=="3")selected#end>个人独资企业</option>
-						<option value="4" #if(customerInfo.cert_type=="4")selected#end>合伙企业</option>
-					</select>
-				</div>
-			</div>
-			<div class="layui-inline">
 				<label class="layui-form-label">公司性质</label>
 				<div class="layui-input-inline">
 					<input name="customerInfo.company_nature" #if(customerInfo.company_nature=="合资")checked=checked#end value="合资" title="合资" type="radio">
 					<input name="customerInfo.company_nature" #if(customerInfo.company_nature=="国企")checked=checked#end value="国企" title="国企" type="radio">
 					<input name="customerInfo.company_nature" #if(customerInfo.company_nature=="民营")checked=checked#end value="民营" title="民营" type="radio">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">客户证件类型</label>
+				<div class="layui-input-inline">
+					<select name="customerInfo.cert_type" lay-filter="certType">
+						<option value=""></option>
+						<option value="1" #if(customerInfo.cert_type=="1")selected#end>营业执照</option>
+						<option value="2" #if(customerInfo.cert_type=="2")selected#end>税务登记证</option>
+						<option value="3" #if(customerInfo.cert_type=="3")selected#end>组织机构代码证</option>
+					</select>
 				</div>
 			</div>
 			<div class="layui-inline">

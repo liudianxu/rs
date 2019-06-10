@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.groupinfo.GroupInfo;
@@ -39,10 +40,18 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	public void list() {
 		Map<String, String> params = new HashMap<>();
 		//查询参数
-		params.put("customerName", getPara("customerName"));
-		params.put("certNo", getPara("certNo"));
-		
-		renderJson(customerInfoService.selectPage(params, getPage()));
+		params.put("customerName", getPara("customer_name"));
+		params.put("certNo", getPara("cert_no"));
+		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage());
+		List<CustomerInfo> customerInfos = dataGrid.getData();
+		for (CustomerInfo customerInfo : customerInfos) {
+			if(customerInfo.get("group_id")!=null){
+				GroupInfo groupInfo = GroupInfo.dao.findById(customerInfo.getLong("group_id"));
+				customerInfo.put("groupName", groupInfo.getStr("group_name"));
+			}
+		}
+		dataGrid.setData(customerInfos);
+		renderJson(dataGrid);
 	}
 	
 	/**

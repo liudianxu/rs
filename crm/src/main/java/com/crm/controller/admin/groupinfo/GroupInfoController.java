@@ -35,8 +35,8 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 	public void list() {
 		Map<String, String> params = new HashMap<>();
 		//查询参数
-		params.put("groupName", getPara("groupName"));
-		params.put("certNo", getPara("certNo"));
+		params.put("groupName", getPara("group_name"));
+		params.put("certNo", getPara("certn_no"));
 		
 		renderJson(service.selectPage(params, getPage()));
 	}

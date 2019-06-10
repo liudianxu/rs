@@ -28,7 +28,7 @@
 <script type="text/html" id="headBar">
 	<div class="layui-btn-container">
         #if(nodeUrl??)
-        #if(nodeUrl.contains("/admin/customerInfo/add"))
+        #if(nodeUrl.contains("/admin/customermanage/customerInfo/add"))
     	<button class="layui-btn layui-btn-sm" lay-event='add'>
 			<i class="layui-icon layui-icon-add-1"></i>添加
 		</button>
@@ -48,19 +48,19 @@
 	  
 	  table.render({
 	    elem: '#brandTable'
-	    ,url:'/admin/customerInfo/list'
+	    ,url:'/admin/customermanage/customerInfo/list'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,title: '客户管理'
 	    ,cols: [[
 	        {field:'customer_name', title:'客户名称'}
 		   ,{field:'cert_no', title:'证件号码'}
-	      ,{field:'group_id', title:'集团名称'}
+	      ,{field:'groupName', title:'集团名称'}
 	      ,{field:'create_time', title:'创建时间'}
 	      ,{field:'update_time', title:'更新时间'}
 	      ,{field:'creator', title:'创建人'}
 	      ,{fixed: 'right', title:'操作',templet: function(d){
-	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/customerInfo/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
+	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/customermanage/customerInfo/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
 	    	 /*  var html;
 	    	  if(d.is_on_sale==0){
 	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-info layui-btn-xs" lay-event="put">上架</a>#end#end';
@@ -94,22 +94,22 @@
 	  //头工具栏事件
 	  table.on('toolbar(test)',function(obj){
 		  if(obj.event == 'add'){
-			  location.href="/admin/customerInfo/add";
+			  location.href="/admin/customermanage/customerInfo/add";
 		  }
 	  })
 	  //监听行工具事件
 	  table.on('tool(test)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'put'){
-	    	  $.get('/admin/customerInfo/put', {id: data.id},
+	    	  $.get('/admin/customermanage/customerInfo/put', {id: data.id},
 	  				function(res) {
 	  					layer.msg(res.message);
 	  		    		if(res.code == 1) {
-	  		    			 setTimeout("location.href='/admin/customerInfo/index'",500);
+	  		    			 setTimeout("location.href='/admincustomermanage//customerInfo/index'",500);
 	  		    		}
 	  				}, "json");
 	    } else if(obj.event === 'edit'){
-	    	location.href="/admin/customerInfo/edit?id="+data.id;
+	    	location.href="/admin/customermanage/customerInfo/edit?id="+data.id;
 	    	//siMenu("product/brand/edit",{id: data.id});
 	    }
 	  });

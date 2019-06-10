@@ -121,7 +121,5 @@ public class CustomerInfo extends Model<CustomerInfo> {
 	public void setScoreStr(String scoreStr) {
 		this.scoreStr = scoreStr;
 	}
-	
-	
 
 }

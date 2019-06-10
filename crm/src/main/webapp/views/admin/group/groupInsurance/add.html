@@ -152,11 +152,13 @@
 				<div class='layui-inline'>
 					<div class='layui-inline'>
 					<div class='layui-form-label'></div>
-					 <input type="radio" name="groupInsuranceOrder.profit_type" value="0" title="法定" checked="checked"  >
+					 <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="0" title="法定" checked="checked"  >
+					 <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="1" title="指定"  >
+					
 					</div>
 					</div>
 				</div>
-				<div class='layui-form-item'>
+				<div class='layui-form-item profitDiv' style="display: none;">
 					<div class='layui-inline '>
 						<div class='layui-form-label'>名称</div>
 						<div class='layui-input-inline'>
@@ -191,12 +193,15 @@
 						<input name='groupInsuranceOrder.subject_name' 
 								class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
-							<div class='layui-form-label'>说明信息</div>
-						<div class='layui-input-inline'>
-						<input name='subject_info' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
-						</div>
 					</div>
+				</div>
+				<div class='layui-form-item'>
+					<div class='layui-form-label'>说明信息</div>
+					<div class='layui-input-block'>
+					<div id="editor3">
+               </div>
+               	  <textarea id="editorTextarea3" name='groupInsuranceOrder.subject_info' style="display:none;"></textarea>
+               </div>
 				</div>
 					<span style="font-size: 20px;">保险人</span>
 				<div class='layui-form-item'>
@@ -287,7 +292,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>订单类型</div>
 						<div class='layui-input-inline'>
-							<select name='groupInsuranceOrder.type' lay-verify='required' lay-search
+							<select name='groupInsuranceOrder.type'  lay-search
 								lay-verify>
 								<option value='0'>线上</option>
 								<option value='1'>线下</option>
@@ -299,7 +304,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系电话</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.phone' lay-verify='required'
+							<input name='groupInsuranceOrder.phone' 
 								class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
@@ -308,7 +313,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系邮箱</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.email' lay-verify='required'
+							<input name='groupInsuranceOrder.email' 
 								class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
@@ -317,7 +322,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系地址</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.address' lay-verify='required'
+							<input name='groupInsuranceOrder.address' 
 								class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
@@ -415,6 +420,8 @@
 				</table>
 				<table>
 						<button class="layui-btn" lay-submit lay-filter="submit2">保存</button>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
 				</table>
 			</form>
 		</div>
@@ -493,6 +500,8 @@
 				</div>
   				<table>
 						<button class="layui-btn" lay-submit lay-filter="submit3">保存</button>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
 				</table>
 				</form>
 				</div>
@@ -607,6 +616,8 @@
 				</div>
 					<table>
 						<button class="layui-btn" lay-submit lay-filter="submit5">保存</button>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
 				</table>
 				</form>
 				</div>
@@ -704,8 +715,8 @@ function wangedit(id){
 	var editor = new E('#editor'+id)
 	//或者 var editor = new E( document.getElementById('editor') )
 	editor.customConfig.uploadFileName = 'file';
-	editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
-	editor.customConfig.uploadImgMaxLength = 5;  
+	editor.customConfig.uploadImgMaxSize = 2 * 800 * 800;
+	editor.customConfig.uploadImgMaxLength = 4;  
 	editor.customConfig.uploadImgServer = '/common/file/wangUpload'  // 上传图片到服务器
 	editor.customConfig.uploadImgHooks = {
 	customInsert: function (insertImg, result, editor) {
@@ -726,7 +737,7 @@ function wangedit(id){
 
 
 
-	for(var i=1;i<3;i++){
+	for(var i=1;i<4;i++){
 		wangedit(i);
 	 }
 
@@ -772,6 +783,17 @@ var parameterss;
 							 }
 					        });
 						
+						 
+						 form.on('radio(profit)', function (data) {
+							 if(data.value==1){
+								 $(".profitDiv").show();
+							 }
+							 else{
+								 $(".profitDiv").hide();
+							 }
+					        });
+						 
+						 
 						form.on('checkbox(allChoose)', function(data){
 						    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
 						    child.each(function(index, item){
@@ -1292,7 +1314,7 @@ var parameterss;
 	        	});
 	        	selectHtml += '</select>';
 	        	var html = '<form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPerson">'+
-					'<table class="input"> '+
+					'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> <table class="input"> '+
 						'<tr>'+
 						'<th>'+
 								'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>姓名</div></div>'+

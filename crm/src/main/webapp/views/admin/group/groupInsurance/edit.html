@@ -1,5 +1,5 @@
 #@layout() #define main()
-<div class="layui-card-header">添加合同</div>
+<div class="layui-card-header">修改合同</div>
 <div class="layui-card-body">
 
 	<div class='layui-tab layui-tab-brief' lay-filter='TabBrief'>
@@ -158,11 +158,13 @@
 				<div class='layui-inline'>
 					<div class='layui-inline'>
 					<div class='layui-form-label'></div>
-					 <input type="radio" name="groupInsuranceOrder.profit_type"  value="0" title="法定" checked="checked"  >
-					</div>
+                      <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="0" title="法定" #if(order.profit_type=="0")checked="checked" #end  >
+					 <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="1" title="指定"  #if(order.profit_type=="1")checked="checked" #end>
+										</div>
 					</div>
 				</div>
-				<div class='layui-form-item'>
+				
+				<div class='layui-form-item profitDiv' #if(order.profit_type=="0")style="display: none;"#end>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>名称</div>
 						<div class='layui-input-inline'>
@@ -197,12 +199,15 @@
 						<input name='groupInsuranceOrder.subject_name' 
 								class='layui-input' autocomplete='off' value='#(order.subject_name)' placeholder='请输入' />
 						</div>
-							<div class='layui-form-label'>说明信息</div>
-						<div class='layui-input-inline'>
-						<input name='groupInsuranceOrder.subject_info' 
-								class='layui-input' autocomplete='off' value='#(order.subject_info)' placeholder='请输入' />
-						</div>
 					</div>
+				</div>
+				<div class='layui-form-item'>
+					<div class='layui-form-label'>说明信息</div>
+					<div class='layui-input-block'>
+					<div id="editor3">
+               </div>
+               	  <textarea id="editorTextarea3" name='groupInsuranceOrder.subject_info' style="display:none;">#(order.subject_info)</textarea>
+               </div>
 				</div>
 					<span style="font-size: 20px;">保险人</span>
 				<div class='layui-form-item'>
@@ -258,7 +263,7 @@
 						<div class='layui-form-label'>保单终止日期</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input" lay-verify='required'
-								name="groupInsuranceOrder.policy_expiration_date" value="#(com.crm.util.DateUtil::formatDate(order.policy_effective_date,'yyyy-MM-dd'))"  id="policy_expiration_date">
+								name="groupInsuranceOrder.policy_expiration_date" value="#(com.crm.util.DateUtil::formatDate(order.policy_expiration_date,'yyyy-MM-dd'))"  id="policy_expiration_date">
 						</div>
 					</div>
 				</div>
@@ -293,7 +298,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>订单类型</div>
 						<div class='layui-input-inline'>
-							<select name='groupInsuranceOrder.type' lay-verify='required' lay-search
+							<select name='groupInsuranceOrder.type'  lay-search
 								lay-verify>
 								<option value='0' #if(order.type==0)selected #end>线上</option>
 								<option value='1' #if(order.type==1)selected #end>线下</option>
@@ -305,7 +310,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系电话</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.phone' lay-verify='required'
+							<input name='groupInsuranceOrder.phone'
 								class='layui-input' autocomplete='off' value='#(order.phone)' placeholder='请输入' />
 						</div>
 					</div>
@@ -314,7 +319,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系邮箱</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.email' lay-verify='required'
+							<input name='groupInsuranceOrder.email' 
 								class='layui-input' autocomplete='off' value='#(order.email)' placeholder='请输入' />
 						</div>
 					</div>
@@ -323,7 +328,7 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系地址</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.address' lay-verify='required'
+							<input name='groupInsuranceOrder.address' 
 								class='layui-input' autocomplete='off' value='#(order.address)' placeholder='请输入' />
 						</div>
 					</div>
@@ -429,14 +434,16 @@
 				</table>
 				<table style="margin-left:750px;" class="planPremiumTable">
 				<tr class="planPremium"><td></td><td></td><td></td><td></td><td>方案保费</td>
-					<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 value="#(premiums[0])" class="layui-input" style="width: 100px;"></td>
-					<td style="padding: 9px 15px;"><input type="text" name="premium[1]" premium1 value="#(premiums[1])" class="layui-input" style="width: 100px;"></td>
-			       <td style="padding: 9px 15px;"><input type="text" name="premium[2]"  premium2 value="#(premiums[2])" class="layui-input"  style="width: 100px;"></td>
-			       <td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3  value="#(premiums[3])" class="layui-input" style="width: 100px;"></td>
-			      <td style="padding: 9px 15px;"><input type="text" name="premium[4]"  premium4  value="#(premiums[4])" class="layui-input" style="width: 100px;"></td></tr>
+					<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 #if(premiums.size()>0)value="#(premiums[0]??)"#end class="layui-input" style="width: 100px;"></td>
+					<td style="padding: 9px 15px;"><input type="text" name="premium[1]" premium1  #if(premiums.size()>1)value="#(premiums[1])"#end class="layui-input" style="width: 100px;"></td>
+			       <td style="padding: 9px 15px;"><input type="text" name="premium[2]"  premium2 #if(premiums.size()>2)value="#(premiums[2]??)"#end class="layui-input"  style="width: 100px;"></td>
+			       <td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3  #if(premiums.size()>3)value="#(premiums[3]??)"#end class="layui-input" style="width: 100px;"></td>
+			      <td style="padding: 9px 15px;"><input type="text" name="premium[4]"  premium4  #if(premiums.size()>4)value="#(premiums[4]??)"#end class="layui-input" style="width: 100px;"></td></tr>
 				</table>
 				<table>
 						<button class="layui-btn" lay-submit lay-filter="submit2">保存</button>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
 				</table>
 			</form>
 		</div>
@@ -515,6 +522,8 @@
 				</div>
   				<table>
 						<button class="layui-btn" lay-submit lay-filter="submit3">保存</button>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
 				</table>
 				</form>
 				</div>
@@ -629,6 +638,8 @@
 				</div>
 					<table>
 						<button class="layui-btn" lay-submit lay-filter="submit5">保存</button>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
 				</table>
 				</form>
 				</div>
@@ -748,7 +759,7 @@ function wangedit(id){
 
 
 
-	for(var i=1;i<3;i++){
+	for(var i=1;i<4;i++){
 		wangedit(i);
 	 }
 
@@ -794,6 +805,15 @@ var parameterss;
 							 }
 					        });
 						
+						 form.on('radio(profit)', function (data) {
+							 if(data.value==1){
+								 $(".profitDiv").show();
+							 }
+							 else{
+								 $(".profitDiv").hide();
+							 }
+					        });
+						 
 						form.on('checkbox(allChoose)', function(data){
 						    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
 						    child.each(function(index, item){
@@ -1314,7 +1334,7 @@ var parameterss;
 	        	});
 	        	selectHtml += '</select>';
 	        	var html = '<form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPerson">'+
-					'<table class="input"> '+
+					'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> <table class="input"> '+
 						'<tr>'+
 						'<th>'+
 								'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>姓名</div></div>'+

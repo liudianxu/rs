@@ -324,7 +324,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				if(newAray.size() == 0) {
 					continue;
 				}
-				guarant.set("premium", premiumJsarr.get(j));
+				guarant.set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));
 				guarant.set("create_time", new Date());
 				guarant.set("details", newAray.toString()).save();
 			}
@@ -491,11 +491,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			renderJson(data);
 			return;
 		}
-		if(!IDCardUtils.isValidatedAllIdcard(person.get("id_num"))) {
-			data.put("msg", "证件号码不合法!");
+		
+		if(person.getDate("policy_effective_date").getTime()<groupInsuranceOrder.getDate("policy_effective_date").getTime()
+				||person.getDate("policy_expiration_date").getTime()>groupInsuranceOrder.getDate("policy_expiration_date").getTime()
+				) 
+		{
+			data.put("msg", "需要与保单起止日期一致！");
 			renderJson(data);
 			return;
 		}
+		
+		
 		
 		if(groupInsuranceOrder.get("max_review_time")!=null) {
 			Integer maxTime = groupInsuranceOrder.get("max_review_time");
@@ -514,6 +520,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		
 		
 		if((int)person.get("id_type")==0) {
+			if(!IDCardUtils.isValidatedAllIdcard(person.get("id_num"))) {
+				data.put("msg", "证件号码不合法!");
+				renderJson(data);
+				return;
+			}
+			
 			if(CommonUtils.isOdd(person.get("id_num").toString().charAt(person.get("id_num").toString().length() - 2))) {
 				person.set("gender",Constant.FEMALE);
 			} else {
@@ -560,8 +572,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		person.set("premium", totelPre);
 		//更新
 		if(person.get("id")!=null) {
-			GroupInsurancePerson newPerson = GroupInsurancePerson.dao.findById((Long)person.get("id"));
-			newPerson.set("birth", person.get("birth"))
+			person.set("birth", person.get("birth"))
 			.set("gender", person.get("gender"))
 			.set("id_num", person.get("id_num"))
 			.set("id_type", person.get("id_type"))
@@ -598,6 +609,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long orderId = getParaToLong("orderId");
 		Map<String, Object> data = new HashMap<>();
 		List<GroupInsurancePerson> persons = groupInsurancePersonService.findByOrderId(orderId);
+		for (GroupInsurancePerson groupInsurancePerson : persons) {
+			groupInsurancePerson.set("policy_effective_date", DateUtil.formatDate(groupInsurancePerson.getDate("policy_effective_date"), "yyyy-MM-dd"));
+			groupInsurancePerson.set("policy_expiration_date", DateUtil.formatDate(groupInsurancePerson.getDate("policy_expiration_date"), "yyyy-MM-dd"));
+		}
 		if(CollectionUtils.isNotEmpty(persons)) {
 			data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 			data.put("data", persons);

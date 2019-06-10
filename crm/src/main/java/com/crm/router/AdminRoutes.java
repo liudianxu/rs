@@ -35,8 +35,8 @@ public class AdminRoutes extends Routes {
 		add("admin/setting", SettingController.class, "/setting");
 		add("admin/groupInsurance", GroupInsuranceController.class, "/group/groupInsurance");
 		add("admin/brand", BrandController.class, "/brand");
-		add("admin/customerInfo", CustomerInfoController.class, "/customerInfo");
-		add("admin/groupInfo", GroupInfoController.class, "/groupInfo");
+		add("admin/customermanage/customerInfo", CustomerInfoController.class, "/customermanage/customerInfo");
+		add("admin/customermanage/groupInfo", GroupInfoController.class, "/customermanage/groupInfo");
 	}
 
 }

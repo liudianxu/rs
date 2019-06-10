@@ -1,22 +1,31 @@
 #@layout()
 #define main()
-
 <div class="layui-card-header">
-	添加集团
+	添加客户
 </div>
 <div class="layui-card-body">
-	<form class="layui-form" action="/admin/groupInfo/save">
+	<form class="layui-form" action="/admin/customermanage/customerInfo/save">
 		<div class="sttl">主要信息</div>
 		<div class="layui-form-item">
 			<div class="layui-inline theme-required">
 				<label class="layui-form-label">客户名称</label>
-				<input type="text" name="groupInfo.group_name" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
+				<input type="text" name="customerInfo.customer_name" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
 			</div>
-
+			<div class="layui-inline">
+				<label class="layui-form-label">集团名称</label>
+				<div class="layui-input-inline">
+					<select name="customerInfo.group_id" lay-filter="groupId">
+						<option value=''>请选择</option>
+						#for(group:groups)
+						<option value='#(group.id)'>#(group.group_name)</option>
+						#end
+					</select>
+				</div>
+			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">客户行业</label>
 				<div class="layui-input-inline">
-					<select name="groupInfo.group_industry" lay-filter="aihao">
+					<select name="customerInfo.customer_industry" lay-filter="customerIndustry">
 						<option value=""></option>
 						<option value="1">金融业</option>
 						<option value="2">房地产</option>
@@ -34,15 +43,15 @@
 			<div class="layui-inline">
 				<label class="layui-form-label">公司性质</label>
 				<div class="layui-input-inline">
-					<input name="groupInfo.company_nature" value="合资" title="合资" type="radio">
-					<input name="groupInfo.company_nature" value="国企" title="国企" type="radio">
-					<input name="groupInfo.company_nature" value="民营" title="民营" type="radio">
+					<input name="customerInfo.company_nature" value="合资" title="合资" type="radio">
+					<input name="customerInfo.company_nature" value="国企" title="国企" type="radio">
+					<input name="customerInfo.company_nature" value="民营" title="民营" type="radio">
 				</div>
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">客户证件类型</label>
 				<div class="layui-input-inline">
-					<select name="groupInfo.cert_type" lay-filter="aihao">
+					<select name="customerInfo.cert_type" lay-filter="certType">
 						<option value=""></option>
 						<option value="1">营业执照</option>
 						<option value="2">税务登记证</option>
@@ -52,12 +61,12 @@
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">证件号码</label>
-				<input type="text" name="groupInfo.cert_no" autocomplete="off" class="layui-input" style="width: 250px;">
+				<input type="text" name="customerInfo.cert_no" autocomplete="off" class="layui-input" style="width: 250px;">
 			</div>
 			<!-- <div class="layui-inline">
 				<label class="layui-form-label">年营业额</label>
 				<div class="layui-input-inline">
-					<select name="groupInfo" lay-filter="NYYE">
+					<select name="interest" lay-filter="NYYE">
 						<option value=""></option>
 						<option value="0">写作</option>
 						<option value="1" selected="">阅读</option>
@@ -66,8 +75,8 @@
 						<option value="4">旅行</option>
 					</select>
 				</div>
-			</div>
-			<div class="layui-inline">
+			</div> -->
+			<!-- <div class="layui-inline">
 				<label class="layui-form-label">评分</label>
 				<div class="layui-input-block">
 					<input name="star" value="一星" title="一星" type="radio">
@@ -78,7 +87,7 @@
 			<div class="layui-block">
 				<label class="layui-form-label">客户地址</label>
 				<div class="layui-input-inline">
-				 <input name='groupInfo.address' style="display:none;" id="areaId">
+				 <input name='customerInfo.address' style="display:none;" id="areaId">
 					<select name="provance" lay-filter="province">
 						<option>请选择</option>
                       #for(root:roots)
@@ -97,7 +106,7 @@
                    </select>
 				</div>
 				<div class="layui-input-inline">
-					<input type="text" name="groupInfo.stress" autocomplete="off" placeholder="详细街道" class="layui-input">
+					<input type="text" name="customerInfo.stress" autocomplete="off" placeholder="详细街道" class="layui-input">
 				</div>
 			</div>
 		</div>
@@ -105,7 +114,7 @@
 		<div class="layui-form-item layui-form-text">
 			<label class="layui-form-label">备注</label>
 			<div class="layui-input-block" style="margin-left: 118px;">
-				<textarea name='groupInfo.remark' placeholder="请输入内容" class="layui-textarea"></textarea>
+				<textarea name='customerInfo.remark' placeholder="请输入内容" class="layui-textarea"></textarea>
 			</div>
 		</div>
 		<div>
@@ -134,13 +143,36 @@
 				function(res) {
 					layer.msg(res.message);
 					if (res.code == 1) {
-						setTimeout("location.href='/admin/groupInfo/index'", 500);
+						setTimeout("location.href='/admin/customermanage/customerInfo/index'", 500);
 
 					}
 				}, "json");
 
 			return false;
 		});
+		/* form.on('select(groupId)', function(data){
+			if(data.value != ""){
+				  $.ajax({
+		              type: "get",
+		              url: '/common/area/query',
+		              async:false,//同步提交。不设置则默认异步，异步的话，最后执行ajax
+		              data: {
+		            	  parentId: data.value,
+		              },
+		              success: function(result) {
+		            	  $("select[name='C1']").val("");
+		            	  $("select[name='A1']").val("");
+		            	  $("#areaId").val(data.value);
+		            	  var options="<option>请选择<option>"
+		            	  for(var i=0;i<result.length;i++){
+		            		  options +="<option value="+result[i].value+">"+result[i].name+"<option>";
+		            	  }
+		            	  $("select[name='C1']").html(options);
+		            	  form.render();
+		              }
+		          });
+			}
+		}); */
 		form.on('select(province)', function(data){
 			if(data.value != ""){
 				  $.ajax({
@@ -195,7 +227,7 @@
 		});
 		//监听返回
 		$('#backBtn').on('click', function(data) {
-			location.href = "/admin/groupInfo/index";
+			location.href = "/admin/customermanage/customerInfo/index";
 			return false;
 		});
 

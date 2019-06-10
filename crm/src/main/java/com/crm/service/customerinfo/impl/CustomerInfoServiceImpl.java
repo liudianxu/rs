@@ -32,7 +32,7 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
 		if(StringUtils.isNotBlank(params.get("certNo"))){
 			sql.append(" and cert_no ="+params.get("certNo"));
 		}
-		sql.append("order by create_time desc ");
+		sql.append(" order by create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<CustomerInfo> customerInfos = CustomerInfo.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);

@@ -28,7 +28,7 @@
 <script type="text/html" id="headBar">
 	<div class="layui-btn-container">
         #if(nodeUrl??)
-        #if(nodeUrl.contains("/admin/groupInfo/add"))
+        #if(nodeUrl.contains("/admin/customermanage/groupInfo/add"))
     	<button class="layui-btn layui-btn-sm" lay-event='add'>
 			<i class="layui-icon layui-icon-add-1"></i>添加
 		</button>
@@ -48,7 +48,7 @@
 	  
 	  table.render({
 	    elem: '#groupInfoTable'
-	    ,url:'/admin/groupInfo/list'
+	    ,url:'/admin/customermanage/groupInfo/list'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,title: '保险公司'
@@ -59,7 +59,7 @@
 	      ,{field:'update_time', title:'修改时间'}
 	      ,{field:'creator', title:'创建人'}
 	      ,{fixed: 'right', title:'操作',templet: function(d){
-	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInfo/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
+	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/customermanage/groupInfo/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
 	    	 /*  var html;
 	    	  if(d.is_on_sale==0){
 	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInfo/put"))<a class="layui-btn layui-btn-info layui-btn-xs" lay-event="put">上架</a>#end#end';
@@ -93,22 +93,22 @@
 	  //头工具栏事件
 	  table.on('toolbar(test)',function(obj){
 		  if(obj.event == 'add'){
-			  location.href="/admin/groupInfo/add";
+			  location.href="/admin/customermanage/groupInfo/add";
 		  }
 	  })
 	  //监听行工具事件
 	  table.on('tool(test)', function(obj){
 	    var data = obj.data;
 	    if(obj.event === 'put'){
-	    	  $.get('/admin/groupInfo/put', {id: data.id},
+	    	  $.get('/admin/customermanage/groupInfo/put', {id: data.id},
 	  				function(res) {
 	  					layer.msg(res.message);
 	  		    		if(res.code == 1) {
-	  		    			 setTimeout("location.href='/admin/groupInfo/index'",500);
+	  		    			 setTimeout("location.href='/admin/customermanage/groupInfo/index'",500);
 	  		    		}
 	  				}, "json");
 	    } else if(obj.event === 'edit'){
-	    	location.href="/admin/groupInfo/edit?id="+data.id;
+	    	location.href="/admin/customermanage/groupInfo/edit?id="+data.id;
 	    	//siMenu("product/groupInfo/edit",{id: data.id});
 	    }
 	  });

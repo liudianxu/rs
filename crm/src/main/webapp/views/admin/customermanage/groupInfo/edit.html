@@ -2,10 +2,10 @@
 #define main()
 
 <div class="layui-card-header">
-	添加集团
+	编辑集团
 </div>
 <div class="layui-card-body">
-	<form class="layui-form" action="/admin/groupInfo/save">
+	<form class="layui-form" action="/admin/customermanage/groupInfo/save">
 	<input type="text" name="groupInfo.id" value="#(groupInfo.id)" style="display:none;">
 		<div class="sttl">主要信息</div>
 		<div class="layui-form-item">
@@ -136,7 +136,7 @@
 				function(res) {
 					layer.msg(res.message);
 					if (res.code == 1) {
-						setTimeout("location.href='/admin/groupInfo/index'", 500);
+						setTimeout("location.href='/admin/customermanage/groupInfo/index'", 500);
 					}
 				}, "json");
 
@@ -196,7 +196,7 @@
 		});
 		//监听返回
 		$('#backBtn').on('click', function(data) {
-			location.href = "/admin/groupInfo/index";
+			location.href = "/admin/customermanage/groupInfo/index";
 			return false;
 		});
 

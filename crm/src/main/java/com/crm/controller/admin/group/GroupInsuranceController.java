@@ -169,24 +169,34 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		render("edit.html");
 	}
 	
-	
 	/**
 	 * 编辑页面
 	 * @param id
 	 */
-	public void view(Long id) {
+	public void view() {
+		Long id = getParaToLong("id");
 		//获取品牌集合
+		setAttr("brands", brandService.selectList());
+		setAttr("groups", groupInfoService.selectList());
+		setAttr("admins", userService.selectList());
+		
 		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
 		//GroupInsuranceCompany company = GroupInsuranceCompany.dao.findById((Long)order.get("company_id"));
-		//if(order.get("brand_id")!=null) {
-		//setAttr("brand", Brand.dao.findById((Long)order.get("brand_id")));
-		//}
+		//setAttr("brands", brandService.selectList());
 		setAttr("order", order);
+		List<CustomerInfo> customers = customerInfoService.findByGroupId(order.getLong("insure_group_id"));
+		setAttr("customers", customers);
+		
 		//setAttr("company", company);
 		int size = 0;
 		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
 		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByOrderId(id);
-        for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
+		List<BigDecimal> premiums =new ArrayList<>();  
+		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
+        	  premiums.add(groupInsuranceGuarantee.getBigDecimal("premium"));
+		} 
+          setAttr("premiums", premiums);
+		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
 			 String details = groupInsuranceGuarantee.get("details");
 			 List<Guarantee> list = JSONObject.parseArray(details, Guarantee.class);
 			 guaranteeMap.put(groupInsuranceGuarantee.get("id"), list);
@@ -201,7 +211,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				Long guarantId = null;
 				for(GroupInsuranceGuarantee guarant : groupInsuranceGuarantees) {
 					guarantId = guarant.get("id");
-					plans.add(guaranteeMap.get(guarant.get("id")).get(i).getValue());
+					if(guaranteeMap.get(guarant.get("id")).size()>i) {
+						plans.add(guaranteeMap.get(guarant.get("id")).get(i).getValue());
+					}
 				}
 				if(plans.size() < 5) {
 					for(int j=7; j>=plans.size(); j--) {
@@ -219,9 +231,15 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			}
 			setAttr("guarantees", resultGuarantees);
 		}
+    	
+    	//获取理赔测算
+		//List<ClaimCalculation> calculations = claimCalculationService.findByTypeAndReferId(GROUP_CLAIM_TYPE,id);
+		//setAttr("calculations", calculations);
+		//理赔配置相关
+		//setAttr("claimItemConfigs", claimItemConfigService.findRoots());
+		//setAttr("claimDataConfigs", claimDataConfigService.findAll());
 		render("view.html");
 	}
-	
 	
 	/**
 	 * 根据单位名称和证件号码查询企业是否存在

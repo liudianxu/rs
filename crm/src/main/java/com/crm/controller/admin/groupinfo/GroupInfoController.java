@@ -23,7 +23,7 @@ import com.jfinal.kit.StrKit;
 public class GroupInfoController extends BaseController<GroupInfo> {
 	
 	@Inject
-	private GroupInfoService service;
+	private GroupInfoService groupInfoService;
     @Inject
     private AdminLoginService adminLoginService;
     @Inject
@@ -38,7 +38,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 		params.put("groupName", getPara("group_name"));
 		params.put("certNo", getPara("certn_no"));
 		
-		renderJson(service.selectPage(params, getPage()));
+		renderJson(groupInfoService.selectPage(params, getPage()));
 	}
 	
 	/**
@@ -108,19 +108,21 @@ public class GroupInfoController extends BaseController<GroupInfo> {
   				renderJson(response);
   			}
   			groupInfo.set("creator", admin.get("name"));
-  			if(service.add(groupInfo) == null) {
+  			if(groupInfoService.add(groupInfo) == null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");
+  				renderJson(response);
   			} else {
   				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
   				response.setMessage("添加成功！");
   			}
+  			renderJson(response);
   		}
   		//编辑操作
   		else {
   			if(getPara("areaId")!=null&&!getPara("areaId").equals("")) {
   				groupInfo.set("address", getPara("areaId"));
-  				if(service.update(groupInfo) == null) {
+  				if(groupInfoService.update(groupInfo) == null) {
   	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
   	  				response.setMessage("编辑失败！");
   	  			} else {
@@ -130,7 +132,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
   				renderJson(response);
   	  		}else if(getPara("cityId")!=null&&!getPara("cityId").equals("")){
   	  		    groupInfo.set("address", getPara("cityId"));
-  	  		    if(service.update(groupInfo) == null) {
+  	  		    if(groupInfoService.update(groupInfo) == null) {
 	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
 	  				response.setMessage("编辑失败！");
 	  			} else {
@@ -140,7 +142,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 				renderJson(response);
   	  		}else if(getPara("provinceId")!=null&&!getPara("provinceId").equals("")){
   	  		    groupInfo.set("address", getPara("provinceId"));
-  	  		    if(service.update(groupInfo) == null) {
+  	  		    if(groupInfoService.update(groupInfo) == null) {
 	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
 	  				response.setMessage("编辑失败！");
 	  			} else {
@@ -168,7 +170,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 				return;
 			}
 			
-			if(!service.delete(id)) {
+			if(!groupInfoService.delete(id)) {
 				response.setCode(Constant.RESPONSE_CODE_FAIL);
 				response.setMessage("删除失败！");
 			} else {

@@ -86,4 +86,10 @@ public interface GroupInsuranceOrderService {
 	 */
 	GroupInsuranceOrder findByOrderSn(String groupOrderSn);
 
+	/**
+	 * 是否已完成5步
+	 * @param orderId
+	 * @return
+	 */
+	boolean isComplete(Long orderId);
 }

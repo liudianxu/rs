@@ -1,5 +1,5 @@
 #@layout() #define main()
-<div class="layui-card-header">添加合同</div>
+<div class="layui-card-header">保全合同</div>
 <div class="layui-card-body">
 
 	<div class='layui-tab layui-tab-brief' lay-filter='TabBrief'>
@@ -14,7 +14,7 @@
 		<div class='layui-tab-item layui-show'>
 			<form class="layui-tab-content layui-form layui-form1"
 				action="/admin/groupInsurance/saveBaseInfo">
-				<input name='groupInsuranceOrder.id'  style="display: none;">
+				<input name='groupInsuranceOrder.id'  style="display: none;" value="#(order.id)">
 				<span style="font-size: 20px;">投保人</span>
 				<div class='layui-form-item'>
 					<div class='layui-inline '>
@@ -24,7 +24,7 @@
 								lay-verify>
 								<option value=''>请选择</option>
 									#for(group:groups)
-								<option value='#(group.id)'>#(group.group_name)</option>
+								<option value='#(group.id)' #if(order.insure_group_id==group.id)selected #end>#(group.group_name)</option>
 								#end
 							</select>
 						</div>
@@ -35,6 +35,9 @@
 							<select name='groupInsuranceOrder.insure_customer_id' lay-verify='required' id="insureCustomerId"  lay-search
 								lay-verify>
 								<option value=''>请选择</option>
+									#for(customer:customers)
+								<option value='#(customer.id)' #if(order.insure_customer_id==customer.id)selected #end>#(customer.customer_name)</option>
+								#end
 							</select>
 						</div>
 					</div>
@@ -45,9 +48,9 @@
 						<div class='layui-input-inline'>
 						<select name='groupInsuranceOrder.insure_id_type'  lay-search
 								lay-verify>
-								<option value='0'>营业执照</option>
-								<option value='1'>组织机构代码</option>
-								<option value='2'>税务登记证</option>
+								<option value='0' #if(order.insure_id_type==0)selected #end>营业执照</option>
+								<option value='1' #if(order.insure_id_type==1)selected #end>组织机构代码</option>
+								<option value='2' #if(order.insure_id_type==2)selected #end>税务登记证</option>
 							</select>
 							
 						</div>
@@ -56,7 +59,7 @@
 						<div class='layui-form-label'>证件号码</div>
 						<div class='layui-input-inline'>
 								<input name='groupInsuranceOrder.insure_id_num' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.insure_id_num)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -65,14 +68,14 @@
 						<div class='layui-form-label'>行业类别</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.insure_category' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.insure_category)' placeholder='请输入' />
 						</div>
 					</div>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>主营业务</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.insure_service' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.insure_service)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -81,12 +84,12 @@
 				<div class='layui-inline'>
 					<div class='layui-inline'>
 					<div class='layui-form-label'></div>
-					<input type="radio" name="groupInsuranceOrder.relation_type" value="0" lay-filter="erweima" checked="checked" title="团体" >
-                     <input type="radio" name="groupInsuranceOrder.relation_type" value="1" lay-filter="erweima" title="企业"   >
+					<input type="radio" name="groupInsuranceOrder.relation_type" #if(order.relation_type==0)checked #end value="0" lay-filter="erweima"  title="团体" >
+                     <input type="radio" name="groupInsuranceOrder.relation_type" #if(order.relation_type==1)checked #end value="1" lay-filter="erweima" title="企业"   >
 					</div>
 					</div>
 				</div>
-				<div class='relationDiv' style="display: none;">
+				<div class='relationDiv' #if(order.relation_type==0)style="display: none;" #end>
 					<div class='layui-form-item'>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>集团名称</div>
@@ -95,7 +98,7 @@
 								lay-verify>
 								<option value=''>请选择</option>
 								#for(group:groups)
-								<option value='#(group.id)'>#(group.group_name)</option>
+								<option value='#(group.id)' #if(order.relation_group_id==group.id)selected #end>#(group.group_name)</option>
 								#end
 							</select>
 							</div>
@@ -106,6 +109,9 @@
 							<select name='groupInsuranceOrder.relation_customer_id' id="relationCustomerId"  lay-search
 								lay-verify>
 								<option value=''>请选择</option>
+									#for(customer:customers)
+								<option value='#(customer.id)' #if(order.relation_customer_id==customer.id)selected #end>#(customer.customer_name)</option>
+								#end
 							</select>
 						</div>
 					</div>
@@ -116,9 +122,9 @@
 						<div class='layui-input-inline'>
 						<select name='groupInsuranceOrder.relation_id_type'  lay-search
 								lay-verify>
-								<option value='0'>营业执照</option>
-								<option value='1'>组织机构代码</option>
-								<option value='2'>税务登记证</option>
+								<option value='0' #if(order.relation_id_type==0)selected #end>营业执照</option>
+								<option value='1' #if(order.relation_id_type==1)selected #end>组织机构代码</option>
+								<option value='2' #if(order.relation_id_type==2)selected #end>税务登记证</option>
 							</select>
 						</div>
 					</div>
@@ -126,7 +132,7 @@
 						<div class='layui-form-label'>证件号码</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.relation_id_num' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.relation_id_num)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -135,14 +141,14 @@
 						<div class='layui-form-label'>行业类别</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.relation_category' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.relation_category)' placeholder='请输入' />
 						</div>
 					</div>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>主营业务</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.relation_service' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.relation_service)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -152,18 +158,18 @@
 				<div class='layui-inline'>
 					<div class='layui-inline'>
 					<div class='layui-form-label'></div>
-					 <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="0" title="法定" checked="checked"  >
-					 <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="1" title="指定"  >
-					
-					</div>
+                      <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="0" title="法定" #if(order.profit_type=="0")checked="checked" #end  >
+					 <input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="1" title="指定"  #if(order.profit_type=="1")checked="checked" #end>
+										</div>
 					</div>
 				</div>
-				<div class='layui-form-item profitDiv' style="display: none;">
+				
+				<div class='layui-form-item profitDiv' #if(order.profit_type=="0")style="display: none;"#end>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>名称</div>
 						<div class='layui-input-inline'>
 						<input name='groupInsuranceOrder.profit_name' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off'  value='#(order.profit_name)' placeholder='请输入' />
 						</div>
 					</div>
 						<div class='layui-inline '>
@@ -171,9 +177,9 @@
 						<div class='layui-input-inline'>
 							<select name='groupInsuranceOrder.profit_id_type'  lay-search
 								lay-verify>
-								<option value='0'>营业执照</option>
-								<option value='1'>组织机构代码</option>
-								<option value='2'>税务登记证</option>
+								<option value='0' #if(order.profit_id_type==0)selected #end>营业执照</option>
+								<option value='1' #if(order.profit_id_type==1)selected #end>组织机构代码</option>
+								<option value='2' #if(order.profit_id_type==2)selected #end>税务登记证</option>
 							</select>
 						</div>
 					</div>
@@ -181,7 +187,7 @@
 						<div class='layui-form-label'>证件号码</div>
 						<div class='layui-input-inline'>
 						<input name='groupInsuranceOrder.profit_id_num' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.profit_id_num)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -191,7 +197,7 @@
 						<div class='layui-form-label'>名称</div>
 						<div class='layui-input-inline'>
 						<input name='groupInsuranceOrder.subject_name' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.subject_name)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -199,6 +205,7 @@
 					<div class='layui-form-label'>说明信息</div>
 					<div class='layui-input-block'>
 					<div id="editor3">
+					#(order.subject_info)
                </div>
                	  <textarea id="editorTextarea3" name='groupInsuranceOrder.subject_info' style="display:none;"></textarea>
                </div>
@@ -212,7 +219,7 @@
 								lay-verify>
 								<option value=''>请选择</option> 
 								#for(brand:brands)
-								<option value='#(brand.id)' >#(brand.name )</option> 
+								<option value='#(brand.id)' #if(order.brand_id==brand.id)selected #end>#(brand.name )</option> 
 								#end
 							</select>
 						</div>
@@ -225,11 +232,11 @@
 						<div class='layui-input-inline'>
 							<select name='groupInsuranceOrder.insurance_type' lay-verify='required'
 								lay-search lay-verify>
-								<option value='0'>雇主责任险</option>
-								<option value='1'>年金保险</option>
-								<option value='2'>补充医疗</option>
-								<option value='3'>团体意外险</option>
-								<option value='4'>其他</option>
+								<option value='0' #if(order.insurance_type==0)selected #end>雇主责任险</option>
+								<option value='1' #if(order.insurance_type==1)selected #end>年金保险</option>
+								<option value='2' #if(order.insurance_type==2)selected #end>补充医疗</option>
+								<option value='3' #if(order.insurance_type==3)selected #end>团体意外险</option>
+								<option value='4' #if(order.insurance_type==4)selected #end>其他</option>
 							</select>
 						</div>
 					</div>
@@ -239,7 +246,7 @@
 						<div class='layui-form-label'>方案名称</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.plan_name' lay-verify='required'
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.plan_name)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -248,7 +255,7 @@
 						<div class='layui-form-label'>保单生效日期</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input" lay-verify='required'
-								name="groupInsuranceOrder.policy_effective_date" id="policy_effective_date">
+								name="groupInsuranceOrder.policy_effective_date" value="#(com.crm.util.DateUtil::formatDate(order.policy_effective_date,'yyyy-MM-dd'))"   id="policy_effective_date">
 						</div>
 					</div>
 				</div>
@@ -257,7 +264,7 @@
 						<div class='layui-form-label'>保单终止日期</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input" lay-verify='required'
-								name="groupInsuranceOrder.policy_expiration_date" id="policy_expiration_date">
+								name="groupInsuranceOrder.policy_expiration_date" value="#(com.crm.util.DateUtil::formatDate(order.policy_expiration_date,'yyyy-MM-dd'))"  id="policy_expiration_date">
 						</div>
 					</div>
 				</div>
@@ -266,7 +273,7 @@
 						<div class='layui-form-label'>保单号</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.policy_num' lay-verify='required'
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.policy_num)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -275,7 +282,7 @@
 						<div class='layui-form-label'>保费</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.premium' lay-verify='required'
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.premium)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -284,7 +291,7 @@
 						<div class='layui-form-label'>联系人</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.contacts' lay-verify='required'
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.contacts)'  placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -294,8 +301,8 @@
 						<div class='layui-input-inline'>
 							<select name='groupInsuranceOrder.type'  lay-search
 								lay-verify>
-								<option value='0'>线上</option>
-								<option value='1'>线下</option>
+								<option value='0' #if(order.type==0)selected #end>线上</option>
+								<option value='1' #if(order.type==1)selected #end>线下</option>
 							</select>
 						</div>
 					</div>
@@ -304,8 +311,8 @@
 					<div class='layui-inline '>
 						<div class='layui-form-label'>联系电话</div>
 						<div class='layui-input-inline'>
-							<input name='groupInsuranceOrder.phone' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+							<input name='groupInsuranceOrder.phone'
+								class='layui-input' autocomplete='off' value='#(order.phone)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -314,7 +321,7 @@
 						<div class='layui-form-label'>联系邮箱</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.email' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.email)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -323,7 +330,7 @@
 						<div class='layui-form-label'>联系地址</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.address' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value='#(order.address)' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -346,7 +353,7 @@
 			</div>
 			<form class="layui-tab-content layui-form2"
 				action="/admin/groupInsurance/saveGrantee">
-				<input type="hidden" name="hiddenOrderIdForGuarantee" value="" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee" value="#(order.id)" />
 				<table id="guaranteeTable" class="input layui-table">
 					<tr>
 				<th>保障项目
@@ -377,8 +384,8 @@
 					<tr class="guaranteeClass">
 						<td><input type="text"
 							name="guaranteeList[#(for.index)].item" param-guarantee-item class="layui-input"
-							placeholder="保障项目" maxlength="200" style="width: 150px;"
-							value="#(guarantee.name )" /></td>
+							placeholder="保障项目" maxlength="200" style="width: 100px;"
+							value="#(guarantee.item )" /></td>
 						<td><input type="text"
 							name="guaranteeList[#(for.index)].quota" param-guarantee-quota class="layui-input"
 							placeholder="保障额度" maxlength="200" style="width: 100px;"
@@ -386,11 +393,26 @@
 						<td><input type="text"
 							name="guaranteeList[#(for.index)].description"
 							class="layui-input" placeholder="保障说明" param-guarantee-description maxlength="200"
-							style="width: 480px;" value="#(guarantee.description )" /></td>
-						<td><input type="text"
+							style="width: 150px;" value="#(guarantee.description )" /></td>
+						<td>
+							<input type="text"
+							name="guaranteeList[#(for.index)].claimInfo"
+							class="layui-input" placeholder="理赔说明" param-guarantee-claimInfo maxlength="200"
+							style="width: 150px;" value="#(guarantee.claimInfo )" />
+						</td>
+						<td>
+							<input type="text"
+							name="guaranteeList[#(for.index)].tip"
+							class="layui-input" placeholder="保障提示" param-guarantee-tip maxlength="200"
+							style="width: 150px;" value="#(guarantee.tip )" />
+						</td>
+						<td>
+						<input type="text"
 							name="guaranteeList[#(for.index)].plan[0]" param-guarantee-plan0 class="layui-input plans"
 							placeholder="方案一保额" maxlength="200" style="width: 100px;"
-							value="#(guarantee.plan[0] )" /></td>
+							value="#(guarantee.plan[0] )" />
+							
+						</td>
 						<td><input type="text"
 							name="guaranteeList[#(for.index)].plan[1]" param-guarantee-plan1 class="layui-input plans"
 							placeholder="方案二保额" maxlength="200" style="width: 100px;"
@@ -407,16 +429,17 @@
 							name="guaranteeList[#(for.index)].plan[4]" param-guarantee-plan4 class="layui-input plans"
 							placeholder="方案五保额" maxlength="200" style="width: 100px;"
 							value="#(guarantee.plan[4] )" /></td>
+						<td><a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]</a></td>	
 					</tr>
 					#end
 				</table>
-				<table style="margin-left:750px;display: none;" class="planPremiumTable">
+				<table style="margin-left:750px;" class="planPremiumTable">
 				<tr class="planPremium"><td></td><td></td><td></td><td></td><td>方案保费</td>
-					<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 class="layui-input" style="width: 100px;"></td>
-					<td style="padding: 9px 15px;"><input type="text" name="premium[1]" premium1 class="layui-input" style="width: 100px;"></td>
-			       <td style="padding: 9px 15px;"><input type="text" name="premium[2]"  premium2 class="layui-input"  style="width: 100px;"></td>
-			       <td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3 class="layui-input" style="width: 100px;"></td>
-			      <td style="padding: 9px 15px;"><input type="text" name="premium[4]"  premium4 class="layui-input" style="width: 100px;"></td></tr>
+					<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 #if(premiums.size()>0)value="#(premiums[0]??)"#end class="layui-input" style="width: 100px;"></td>
+					<td style="padding: 9px 15px;"><input type="text" name="premium[1]" premium1  #if(premiums.size()>1)value="#(premiums[1])"#end class="layui-input" style="width: 100px;"></td>
+			       <td style="padding: 9px 15px;"><input type="text" name="premium[2]"  premium2 #if(premiums.size()>2)value="#(premiums[2]??)"#end class="layui-input"  style="width: 100px;"></td>
+			       <td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3  #if(premiums.size()>3)value="#(premiums[3]??)"#end class="layui-input" style="width: 100px;"></td>
+			      <td style="padding: 9px 15px;"><input type="text" name="premium[4]"  premium4  #if(premiums.size()>4)value="#(premiums[4]??)"#end class="layui-input" style="width: 100px;"></td></tr>
 				</table>
 				<table>
 						<button class="layui-btn" lay-submit lay-filter="submit2">保存</button>
@@ -455,11 +478,11 @@
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form3"
 				action="/admin/groupInsurance/saveGuaranteeDesc">
-				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="#(order.id)" />
 				<div class="layui-form-item layui-form-text">
  			   <label class="layui-form-label">产品保障说明</label>
    				 <div class="layui-input-block">
-   					   <textarea name="groupInsuranceOrder.guarantee_desc" id="guarantee_desc"  placeholder="请输入内容(不超过1000字)"  class="layui-textarea"></textarea>
+   					   <textarea name="groupInsuranceOrder.guarantee_desc"  value="#(order.guarantee_desc )" id="guarantee_desc"  placeholder="请输入内容(不超过1000字)"  class="layui-textarea">#(order.guarantee_desc )</textarea>
    					 </div>
   				</div>
   					<div class='layui-form-item'>
@@ -467,7 +490,7 @@
 						<div class='layui-form-label'>最长可追溯日期</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input" 
-								name="groupInsuranceOrder.max_review_time">
+								name="groupInsuranceOrder.max_review_time" value="#(order.max_review_time )" >
 						</div>
 					</div>
 				</div>
@@ -476,7 +499,7 @@
 						<div class='layui-form-label'>最大可承保年龄</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input" 
-								name="groupInsuranceOrder.max_insurance_age" >
+								name="groupInsuranceOrder.max_insurance_age" value="#(order.max_insurance_age )" >
 						</div>
 					</div>
 				</div>
@@ -485,7 +508,7 @@
 						<div class='layui-form-label'>最小可承保年龄</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input" 
-								name="groupInsuranceOrder.min_insurance_age" >
+								name="groupInsuranceOrder.min_insurance_age" value="#(order.min_insurance_age )">
 						</div>
 					</div>
 				</div>
@@ -494,7 +517,7 @@
 						<div class='layui-form-label' style="width: 103px">最高承保职业类别</div>
 						<div class='layui-input-inline'>
 							<input type="text" class="form-control layui-input"
-								name="groupInsuranceOrder.max_occupation_category" >
+								name="groupInsuranceOrder.max_occupation_category" value="#(order.max_occupation_category)">
 						</div>
 					</div>
 				</div>
@@ -508,33 +531,27 @@
 			<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form layui-form4"
 				action="/admin/groupInsurance/savePerson">
-				<div class='layui-form-item'>
-				<div class='layui-inline'>
-					<div class='layui-inline'>
-					<div class='layui-form-label'></div>
-					 <input type="radio" name="person" lay-filter="person" value="1" title="有人员信息" checked="checked"  >
-					 <input type="radio"  name="person" lay-filter="person" value="0" title="无人员信息"  >
-					</div>
-					</div>
-				</div>
-			<div id="personDiv">
-			<input type="hidden" name="hiddenOrderIdForGuarantee3" value="" />
+				<div id="personDiv">
+			<input type="hidden" name="hiddenOrderIdForGuarantee3" value="#(order.id)" />
 				<div class="bar">
 				<div class="buttonGroup">
 					<a class="layui-btn layui-btn-sm" id='addPersonBtn'>
-						<i class="layui-icon layui-icon-add-1"></i>新增人员
+						<i class="layui-icon layui-icon-add-1"></i>新增进保
 					</a>
 					<a class="layui-btn layui-btn-sm" id='exportPersonBtn'>
-						<i class="layui-icon layui-icon-add-1"></i>Excel导入
+						<i class="layui-icon layui-icon-add-1"></i>批量进退保
+					</a>
+					<a class="layui-btn layui-btn-sm" id='exportPersonBtn'>
+						<i class="layui-icon layui-icon-add-1"></i>批量变更层级
 					</a>
 					<a class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
 						<i class="layui-icon"></i>删除
 					</a>
-					<a class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
+						<a class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
 						<i class="layui-icon"></i>Excel模板
 					</a>
 					<input type="text" style="display:none;" id="logo" name="groupInsuranceOrder.excel_tem" autocomplete="off" class="layui-input" style="width: 250px;">
-					<a   style="display:none;  id="viewLogo" class="layui-btn layui-btn-sm layui-btn-info" target="_blank">查看模板</a>
+					<a  #if(!order.excel_tem??) style="display:none;" #end  id="viewLogo" href="#(order.excel_tem)" class="layui-btn layui-btn-sm layui-btn-info" target="_blank">查看模板</a>
 				</div>
 			</div>
 				<div class='line-block'>
@@ -579,17 +596,17 @@
 					</div>
 				</div>
 				</div>
-				<table>
+					<table>
 						<a class="layui-btn" lay-submit lay-filter="submit4">保存</a>
 						<a class="layui-btn layui-btn-primary"
 							href='/admin/groupInsurance'>返回</a>
 				</table>
-				</form>
+			</form>
 				</div>	
 				<div class='layui-tab-item'>
-			<form class="layui-tab-content  layui-form5"
+			<form class="layui-tab-content layui-form5"
 				action="/admin/groupInsurance/saveServiceInfo">
-				<input type="hidden" name="hiddenOrderIdForGuarantee5" value="" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee5" value="#(order.id)"/>
 					<div class='layui-form-item'>
 						<div class='layui-inline '>
 						<div class='layui-form-label'>服务人员</div>
@@ -598,7 +615,7 @@
 								lay-verify>
 								<option value=''>请选择</option>
 									#for(admin:admins)
-								<option value='#(admin.id)'>#(admin.name)</option>
+								<option value='#(admin.id)' #if(order.user_id==admin.id)selected #end>#(admin.name)</option>
 								#end
 							</select>
 						</div>
@@ -609,7 +626,7 @@
 						<div class='layui-form-label'>服务电话</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.service_phone' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value="#(order.service_phone)" placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -617,16 +634,17 @@
 					<div class='layui-form-label'>提示信息</div>
 					<div class='layui-input-block'>
 					<div id="editor1">
+					#(order.prompt_info)
                </div>
-               	  <textarea id="editorTextarea1" name='groupInsuranceOrder.prompt_info' style="display:none;"></textarea>
+               	  <textarea id="editorTextarea1" name='groupInsuranceOrder.prompt_info'  style="display:none;">#(order.prompt_info)</textarea>
                </div>
 				</div>
 					<div class='layui-form-item'>
 					<div class='layui-form-label'>理赔流程</div>
 					<div class='layui-input-block'>
-					<div id="editor2">
+					<div id="editor2">#(order.claim_flow)
                </div>
-               	  <textarea id="editorTextarea2" name='groupInsuranceOrder.claim_flow' style="display:none;"></textarea>
+               	  <textarea id="editorTextarea2" name='groupInsuranceOrder.claim_flow' style="display:none;">#(order.claim_flow)</textarea>
                </div>
 				</div>
 					<div class='layui-form-item'>
@@ -634,7 +652,7 @@
 						<div class='layui-form-label'>保险公司服务邮箱</div>
 						<div class='layui-input-inline'>
 							<input name='groupInsuranceOrder.brand_service_emial' 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+								class='layui-input' autocomplete='off' value="#(order.brand_service_emial)" placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -739,8 +757,8 @@ function wangedit(id){
 	var editor = new E('#editor'+id)
 	//或者 var editor = new E( document.getElementById('editor') )
 	editor.customConfig.uploadFileName = 'file';
-	editor.customConfig.uploadImgMaxSize = 2 * 800 * 800;
-	editor.customConfig.uploadImgMaxLength = 4;  
+	editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+	editor.customConfig.uploadImgMaxLength = 5;  
 	editor.customConfig.uploadImgServer = '/common/file/wangUpload'  // 上传图片到服务器
 	editor.customConfig.uploadImgHooks = {
 	customInsert: function (insertImg, result, editor) {
@@ -807,7 +825,6 @@ var parameterss;
 							 }
 					        });
 						
-						 
 						 form.on('radio(profit)', function (data) {
 							 if(data.value==1){
 								 $(".profitDiv").show();
@@ -828,10 +845,10 @@ var parameterss;
 						 
 						 layui.use('upload', function(){
 					  		  var upload = layui.upload;
-					  		   var id = $('input[name=hiddenOrderIdForGuarantee]').val();
+					  		   
 					  		  var uploadInst = upload.render({
 					  			    elem: '#exportTem'
-					  			    ,url: '/common/file/uploadTem?id='+id
+					  			    ,url: '/common/file/uploadTem?id=#(order.id)'
 					  			    ,accept:'file'
 					  			    ,before: function(obj){
 					  			      //预读本地文件示例，不支持ie8
@@ -1054,7 +1071,6 @@ var parameterss;
 					
 						form.on('submit(submit4)',
 						function(data) {
-						
 							if($('input[name=hiddenOrderIdForGuarantee3]').val() == null || $('input[name=hiddenOrderIdForGuarantee3]').val() == "") {
 								layer.msg("请先保存保障说明！");
 								return false;
@@ -1187,10 +1203,10 @@ var parameterss;
 	$("#addPersonBtn").click(function() {
 		//判断是否已保存产品保障说明
 		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
-		  if(hiddenOrderId == undefined || hiddenOrderId == null || hiddenOrderId == "") {
+		 if(hiddenOrderId == undefined || hiddenOrderId == null || hiddenOrderId == "") {
 			layer.msg("请先保存产品保障说明！");
 			return false;
-		}  
+		} 
 		//查询保障方案
 		$.ajax({
 	        type: 'GET',
@@ -1344,11 +1360,10 @@ var parameterss;
 					function(res) {
 						layer.msg(res.msg); 
 			    		if(res.code == 1) {
-			    			reloadPersonTable(hiddenOrderId).
-			    			then(function(){       //成功
-				        		form.render()		//再选染
-				        		cover.hide()
-				        	})
+			    			reloadPersonTable(hiddenOrderId).then(function(){
+			    				form.render()
+			    				cover.hide()
+			    			})
 			    		}
 					}, "json");
 	})
@@ -1498,6 +1513,10 @@ var parameterss;
 								'<input type="text" name="groupInsurancePerson.remark" value="'+remark+'" class="layui-input" maxlength="200" />'+
 								'</th>';
 							}
+							html +='<tr><th>'+
+							'操作'+
+						'</th>';
+						html +='<td><select name="groupInsurancePerson.status" class="layui-input"><option value="0">进保</option><option value="2">退保</option></select></td></tr>';
 						   html +='</tr>'+
 						   '<tr>'+
 							'<th>'+
@@ -1532,10 +1551,10 @@ var parameterss;
 	        						function(res) {
 	        							layer.msg(res.msg); 
 	        				    		if(res.code == 1) {
-	        				    			reloadPersonTable(hiddenOrderId).
-	        				    			then(function(){       //成功
-	        					        		form.render()		//再选染
-	        					        	})
+	        				    			reloadPersonTable(hiddenOrderId).then(function(){
+	        				    				form.render()
+	        				    				cover.hide()
+	        				    			})
 	        				    		}
 	        						}, "json");
 	        			  
@@ -1568,10 +1587,10 @@ var parameterss;
 				function(res) {
 					layer.msg(res.msg); 
 		    		if(res.code == 1) {
-		    			    reloadPersonTable(hiddenOrderId).then(function(){       //成功
-				        		form.render()		//再选染
-				        	})
-		    			    
+		    			    reloadPersonTable(hiddenOrderId).then(function(){
+		    			    	form.render()
+			    				cover.hide()
+		    			    })
 		    		}
 				}, "json");
 	})
@@ -1586,9 +1605,10 @@ var parameterss;
 				function(res) {
 					layer.msg(res.msg); 
 		    		if(res.code == 1) {
-		    			    reloadPersonTable(hiddenOrderId).then(function(){       //成功
-				        		form.render()		//再选染
-				        	})
+		    			    reloadPersonTable(hiddenOrderId).then(function(){
+		    			    	form.render()
+			    				cover.hide()
+		    			    })
 		    		}
 				}, "json");
 	})
@@ -1625,9 +1645,10 @@ var parameterss;
 	        success: function(data) {
 	        	layer.msg(data.msg);
 	        	if(data.code==1){
-	        		reloadPersonTable(hiddenOrderId).then(function(){       //成功
-		        		form.render()		//再选染
-		        	})
+	        		reloadPersonTable(hiddenOrderId).then(function(){
+	        			form.render()
+	    				cover.hide()
+	        		})
 	        	}
 	        	}
 	        })
@@ -1716,7 +1737,11 @@ var parameterss;
 		})
 	}
 	
-	
+	 $(function(){
+		   reloadPersonTable(#(order.id)).then(function(){
+			   form.render()
+		   })
+	   })
 </script>
 <style>
 .layui-form-label {

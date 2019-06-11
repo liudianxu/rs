@@ -46,4 +46,9 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 		return GroupInsurancePerson.dao.findFirst("select * from crm_group_insurance_person where id_num=? and order_id=? ", idNum,orderId);
 	}
 
+	@Override
+	public void deleteByOrderId(Long hiddenOrderIdForGuarantee3) {
+		Db.delete("delete from crm_group_insurance_person where order_id = ? ", hiddenOrderIdForGuarantee3);
+	}
+
 }

@@ -169,6 +169,77 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		render("edit.html");
 	}
 	
+	/**
+	 * 保全页面
+	 * @param id
+	 */
+	public void preserve() {
+		Long id = getParaToLong("id");
+		//获取品牌集合
+		setAttr("brands", brandService.selectList());
+		setAttr("groups", groupInfoService.selectList());
+		setAttr("admins", userService.selectList());
+		
+		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
+		//GroupInsuranceCompany company = GroupInsuranceCompany.dao.findById((Long)order.get("company_id"));
+		//setAttr("brands", brandService.selectList());
+		setAttr("order", order);
+		List<CustomerInfo> customers = customerInfoService.findByGroupId(order.getLong("insure_group_id"));
+		setAttr("customers", customers);
+		
+		//setAttr("company", company);
+		int size = 0;
+		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
+		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByOrderId(id);
+		List<BigDecimal> premiums =new ArrayList<>();  
+		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
+        	  premiums.add(groupInsuranceGuarantee.getBigDecimal("premium"));
+		} 
+          setAttr("premiums", premiums);
+		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
+			 String details = groupInsuranceGuarantee.get("details");
+			 List<Guarantee> list = JSONObject.parseArray(details, Guarantee.class);
+			 guaranteeMap.put(groupInsuranceGuarantee.get("id"), list);
+			 size = list.size();
+		}
+        
+    	if(!CollectionUtils.isEmpty(groupInsuranceGuarantees)) {
+			List<Guarantee> resultGuarantees = new ArrayList<>();
+			for(int i=0; i<size; i++) {
+				Guarantee guarantee = new Guarantee();
+				List<String> plans = new ArrayList<>();
+				Long guarantId = null;
+				for(GroupInsuranceGuarantee guarant : groupInsuranceGuarantees) {
+					guarantId = guarant.get("id");
+					if(guaranteeMap.get(guarant.get("id")).size()>i) {
+						plans.add(guaranteeMap.get(guarant.get("id")).get(i).getValue());
+					}
+				}
+				if(plans.size() < 5) {
+					for(int j=7; j>=plans.size(); j--) {
+						plans.add(null);
+					}
+				}
+				guarantee.setPlan(plans);
+				guarantee.setName(guaranteeMap.get(guarantId).get(i).getName());
+				guarantee.setItem(guaranteeMap.get(guarantId).get(i).getItem());
+				guarantee.setDescription(guaranteeMap.get(guarantId).get(i).getDescription());
+				guarantee.setQuota(guaranteeMap.get(guarantId).get(i).getQuota());
+				guarantee.setClaimInfo(guaranteeMap.get(guarantId).get(i).getClaimInfo());
+				guarantee.setTip(guaranteeMap.get(guarantId).get(i).getTip());
+				resultGuarantees.add(guarantee);
+			}
+			setAttr("guarantees", resultGuarantees);
+		}
+    	
+    	//获取理赔测算
+		//List<ClaimCalculation> calculations = claimCalculationService.findByTypeAndReferId(GROUP_CLAIM_TYPE,id);
+		//setAttr("calculations", calculations);
+		//理赔配置相关
+		//setAttr("claimItemConfigs", claimItemConfigService.findRoots());
+		//setAttr("claimDataConfigs", claimDataConfigService.findAll());
+		render("preserve.html");
+	}
 	
 	/**
 	 * 编辑页面
@@ -263,7 +334,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		order.set("policy_effective_date",policyEffectiveDate);
 		//设置终止时间
 		order.set("policy_expiration_date",policyExpirationDate);
-		
+		//完成第一步
+		order.set("step_one", 1);
 		if(order.get("id")==null) {
 			GroupInsuranceOrder createdOrder = groupInsuranceOrderService.create(order);
 			data.put("code", Constant.RESPONSE_CODE_SUCCESS);
@@ -300,6 +372,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//保存之前先根据order_id，删除已有项目
 		if(!groupInsurancePersonService.existsGuatantee(hiddenOrderIdForGuarantee)) {
 			groupInsuranceGuaranteeService.deleteByOrderId(hiddenOrderIdForGuarantee);
+			if(hiddenOrderIdForGuarantee==null) {
+				data.put("code", Constant.RESPONSE_CODE_FAIL);
+				data.put("msg", "请先保存基本信息");
+				renderJson(data);
+				return;
+			}
 		for(int i=0;i<jsarr.size();i++){
 			JSONObject job = jsarr.getJSONObject(i);
 			JSONArray plan=job.getJSONArray("plan");
@@ -406,6 +484,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 		data.put("msg", "保存成功");
 		data.put("orderId", hiddenOrderIdForGuarantee);
+		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForGuarantee);
+		order.set("step_two", 1).update();
+		//完成5步走更新为已出单
+		if(groupInsuranceOrderService.isComplete(hiddenOrderIdForGuarantee)) {
+			order.set("status", 2).update();
+		}
 		renderJson(data);
 	}
 	}
@@ -422,14 +506,48 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long hiddenOrderIdForGuarantee2 = getParaToLong("hiddenOrderIdForGuarantee2");
 		GroupInsuranceOrder groupInsuranceOrder = getModel(GroupInsuranceOrder.class);
 		groupInsuranceOrder.set("id", hiddenOrderIdForGuarantee2);
+		groupInsuranceOrder.set("step_three", 1);
 		Map<String, Object> data = new HashMap<>();
 		groupInsuranceOrder.update();
+		//完成5步走更新为已出单
+				if(groupInsuranceOrderService.isComplete(hiddenOrderIdForGuarantee2)) {
+					groupInsuranceOrder.set("status", 2).update();
+				}
 		data.put("orderId", hiddenOrderIdForGuarantee2);
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 		renderJson(data);
 	}
 
+	/**
+	 * 保存人员
+	 */
+	public void savePerson() {
+		Map<String, Object> data = new HashMap<>();
+		
+		Long hiddenOrderIdForGuarantee3 = getParaToLong("hiddenOrderIdForGuarantee3");
+		if(getPara("person")!=null) {
+	        int person = getParaToInt("person");
+	        if(person==0) {
+				groupInsurancePersonService.deleteByOrderId(hiddenOrderIdForGuarantee3);
+			}
+		}
+		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForGuarantee3);
+		
+		order.set("id", hiddenOrderIdForGuarantee3);
+		order.set("step_four", 1);
+		order.update();
+		//完成5步走更新为已出单
+				if(groupInsuranceOrderService.isComplete(hiddenOrderIdForGuarantee3)) {
+					order.set("status", 2).update();
+		}
+		data.put("orderId", hiddenOrderIdForGuarantee3);
+		data.put("msg", "保存成功");
+		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+		renderJson(data);
+	}
+	
+	
 	/**
 	 * 查询保障方案
 	 * 
@@ -490,6 +608,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		}
 		if(person.get("policy_expiration_date")==null) {
 			data.put("msg", "生效日期不能为空！");
+			renderJson(data);
+			return;
+		}
+		
+		if(person.getInt("occupation_category")>groupInsuranceOrder.getInt("max_occupation_category"))
+		{
+			data.put("msg", "职业类别不能高于"+groupInsuranceOrder.getInt("max_occupation_category")+"类");
 			renderJson(data);
 			return;
 		}
@@ -564,7 +689,6 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		
 		person.set("create_time", new Date());
 		person.set("order_id",hiddenOrderId);
-		person.set("status", 0);
 		
 		//计算保费
 		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"), person.getDate("policy_effective_date")); 
@@ -583,6 +707,25 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			.set("phone", person.get("phone"))
 			.set("remark", person.get("remark"))
 			.set("guarantee_id", person.get("guarantee_id")).update();
+			
+			if(person.get("status")!=null) {
+				GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+				groupInsurancePersonLog
+				.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
+				.set("policy_num", person.get("policy_num"))
+				.set("name", person.get("name"))
+				.set("order_id", person.getLong("order_id"))
+				.set("change",person.get("premium"))
+				.set("policy_effective_date", person.getDate("policy_effective_date"))
+				.set("create_time", new Date());
+				if(person.getInt("status")==2) {
+					groupInsurancePersonLog.set("status",2);
+				}
+				else {
+					groupInsurancePersonLog.set("status",0);
+				}
+				groupInsurancePersonLog.save();
+			}
 		}
 		else {
 			person.save();
@@ -731,7 +874,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long hiddenOrderIdForGuarantee5 =getParaToLong("hiddenOrderIdForGuarantee5");
         GroupInsuranceOrder order = getModel(GroupInsuranceOrder.class);
         order.set("id", hiddenOrderIdForGuarantee5);
+        order.set("step_fifth", 1);
 		 order.update();
+		//完成5步走更新为已出单
+			if(groupInsuranceOrderService.isComplete(hiddenOrderIdForGuarantee5)) {
+				order.set("status", 2).update();
+			}
 		 data.put("msg", "保存成功");
 	     data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 	     renderJson(data);
@@ -741,7 +889,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	/**
 	 * 删除人员
 	 */
-	public void delete(String ids) {
+	public void delete() {
+		String ids = getPara("ids");
 		Map<String, Object> data = new HashMap<>();
 		try {
 		groupInsurancePersonService.delete(ids);

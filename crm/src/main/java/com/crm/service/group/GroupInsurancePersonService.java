@@ -40,4 +40,6 @@ public interface GroupInsurancePersonService {
 	 */
 	GroupInsurancePerson findByIdNumAndOrderId(String idNum, Object orderId);
 
+	void deleteByOrderId(Long hiddenOrderIdForGuarantee3);
+
 }

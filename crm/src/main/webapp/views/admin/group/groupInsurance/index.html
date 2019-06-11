@@ -83,12 +83,17 @@
 
 <script type="text/html" id="actionBar">
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/edit"))
+#[[
+{{#if(d.status==0){ }}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+{{#  } else if(d.status==2||d.status==3){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="preserve">保全</a>
+  {{#  } }}
+]]#
 #end#end
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/view"))
         <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
 #end#end
-        <!--  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> -->
 		</script>
 <script>
 	layui.use(['table','layedit','laydate','form'], function(){
@@ -199,6 +204,9 @@
 	    } else if(obj.event === 'edit'){
 	    	console.log('edit')
 			  location.href="/admin/groupInsurance/edit?id="+data.id;
+	    }
+	    else if(obj.event === 'preserve'){
+			  location.href="/admin/groupInsurance/preserve?id="+data.id;
 	    }
 	    else if(obj.event === 'view'){
 	    	console.log('view')

@@ -12,7 +12,7 @@
 			<li>服务信息</li>
 		</ul>
 		<div class='layui-tab-item layui-show'>
-			<form class="layui-tab-content layui-form"
+			<form class="layui-tab-content layui-form layui-form1"
 				action="/admin/groupInsurance/saveBaseInfo">
 				<input name='groupInsuranceOrder.id'  style="display: none;" value="#(order.id)">
 				<span style="font-size: 20px;">投保人</span>
@@ -205,8 +205,9 @@
 					<div class='layui-form-label'>说明信息</div>
 					<div class='layui-input-block'>
 					<div id="editor3">
+					#(order.subject_info)
                </div>
-               	  <textarea id="editorTextarea3" name='groupInsuranceOrder.subject_info' style="display:none;">#(order.subject_info)</textarea>
+               	  <textarea id="editorTextarea3" name='groupInsuranceOrder.subject_info' style="display:none;"></textarea>
                </div>
 				</div>
 					<span style="font-size: 20px;">保险人</span>
@@ -481,7 +482,7 @@
 				<div class="layui-form-item layui-form-text">
  			   <label class="layui-form-label">产品保障说明</label>
    				 <div class="layui-input-block">
-   					   <textarea name="groupInsuranceOrder.guarantee_desc"  value="#(order.guarantee_desc )" id="guarantee_desc"  placeholder="请输入内容(不超过1000字)"  class="layui-textarea"></textarea>
+   					   <textarea name="groupInsuranceOrder.guarantee_desc"  value="#(order.guarantee_desc )" id="guarantee_desc"  placeholder="请输入内容(不超过1000字)"  class="layui-textarea">#(order.guarantee_desc )</textarea>
    					 </div>
   				</div>
   					<div class='layui-form-item'>
@@ -528,21 +529,33 @@
 				</form>
 				</div>
 			<div class='layui-tab-item'>
+			<form class="layui-tab-content layui-form layui-form4"
+				action="/admin/groupInsurance/savePerson">
+				<div class='layui-form-item'>
+				<div class='layui-inline'>
+					<div class='layui-inline'>
+					<div class='layui-form-label'></div>
+					 <input type="radio" name="person" lay-filter="person" value="1" title="有人员信息" checked="checked"  >
+					 <input type="radio"  name="person" lay-filter="person" value="0" title="无人员信息"  >
+					</div>
+					</div>
+				</div>
+				<div id="personDiv">
 			<input type="hidden" name="hiddenOrderIdForGuarantee3" value="#(order.id)" />
 				<div class="bar">
 				<div class="buttonGroup">
-					<button class="layui-btn layui-btn-sm" id='addPersonBtn'>
+					<a class="layui-btn layui-btn-sm" id='addPersonBtn'>
 						<i class="layui-icon layui-icon-add-1"></i>新增人员
-					</button>
-					<button class="layui-btn layui-btn-sm" id='exportPersonBtn'>
+					</a>
+					<a class="layui-btn layui-btn-sm" id='exportPersonBtn'>
 						<i class="layui-icon layui-icon-add-1"></i>Excel导入
-					</button>
-					<button class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
+					</a>
+					<a class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
 						<i class="layui-icon"></i>删除
-					</button>
-						<button class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
+					</a>
+						<a class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
 						<i class="layui-icon"></i>Excel模板
-					</button>
+					</a>
 					<input type="text" style="display:none;" id="logo" name="groupInsuranceOrder.excel_tem" autocomplete="off" class="layui-input" style="width: 250px;">
 					<a  #if(!order.excel_tem??) style="display:none;" #end  id="viewLogo" href="#(order.excel_tem)" class="layui-btn layui-btn-sm layui-btn-info" target="_blank">查看模板</a>
 				</div>
@@ -588,6 +601,13 @@
 					</div>
 					</div>
 				</div>
+				</div>
+					<table>
+						<a class="layui-btn" lay-submit lay-filter="submit4">保存</a>
+						<a class="layui-btn layui-btn-primary"
+							href='/admin/groupInsurance'>返回</a>
+				</table>
+			</form>
 				</div>	
 				<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form5"
@@ -620,6 +640,7 @@
 					<div class='layui-form-label'>提示信息</div>
 					<div class='layui-input-block'>
 					<div id="editor1">
+					#(order.prompt_info)
                </div>
                	  <textarea id="editorTextarea1" name='groupInsuranceOrder.prompt_info'  style="display:none;">#(order.prompt_info)</textarea>
                </div>
@@ -627,7 +648,7 @@
 					<div class='layui-form-item'>
 					<div class='layui-form-label'>理赔流程</div>
 					<div class='layui-input-block'>
-					<div id="editor2">
+					<div id="editor2">#(order.claim_flow)
                </div>
                	  <textarea id="editorTextarea2" name='groupInsuranceOrder.claim_flow' style="display:none;">#(order.claim_flow)</textarea>
                </div>
@@ -819,6 +840,14 @@ var parameterss;
 							 }
 					        });
 						 
+						 form.on('radio(person)', function (data) {
+							 if(data.value==1){
+								 $("#personDiv").show();
+							 }
+							 else{
+								 $("#personDiv").hide();
+							 }
+					        });
 						 
 						 layui.use('upload', function(){
 					  		  var upload = layui.upload;
@@ -983,7 +1012,7 @@ var parameterss;
 						
 						form.on('submit(submit1)',
 						function(data) {
-						$.post($(".layui-form").attr('action'),$(".layui-form").serialize(),
+						$.post($(".layui-form1").attr('action'),$(".layui-form1").serialize(),
 						function(res) {
 							layer.msg(res.msg);
 							if (res.code == 1) {
@@ -1048,14 +1077,10 @@ var parameterss;
 					
 						form.on('submit(submit4)',
 						function(data) {
-						if($('input[name=hiddenOrderIdForGuarantee4]').val() == null || $('input[name=hiddenOrderIdForGuarantee4]').val() == "") {
-							if ($('input[name=hiddenOrderIdForService]').val() == null
-								|| $('input[name=hiddenOrderIdForService]')
-									.val() == "") {
-							layer.msg("请先保存保障方案！");
-							return false;
-						}
-						}
+							if($('input[name=hiddenOrderIdForGuarantee3]').val() == null || $('input[name=hiddenOrderIdForGuarantee3]').val() == "") {
+								layer.msg("请先保存保障说明！");
+								return false;
+							}
 						$.post($(".layui-form4").attr('action'),$(".layui-form4").serialize(),
 						function(res) {
 							layer.msg(res.msg);
@@ -1200,7 +1225,7 @@ var parameterss;
 	        		selectHtml += '<option value="' + key + '">' + val + '</option>';
 	        	});
 	        	selectHtml += '</select>';
-	        	var html = '<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form4" action="/admin/groupInsurance/addPerson">'+
+	        	var html = '<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPerson">'+
 				'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> '+
 					'<div class="layui-form-item"><table class="input"> '+
 						'<tr>'+
@@ -1337,7 +1362,7 @@ var parameterss;
 	var cover = $('#cover')
 	cover.find('.a').click(function(){
 		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
-		$.post($(".layui-form4").attr('action'), $(".layui-form4").serialize(),
+		$.post($(".layui-form6").attr('action'), $(".layui-form6").serialize(),
 					function(res) {
 						layer.msg(res.msg); 
 			    		if(res.code == 1) {
@@ -1697,16 +1722,10 @@ var parameterss;
 		        		        	  html +='<td>已退保</td>';}
 		        		        	 else if(data[i].status==3){
 		        		        	 html +='<td>已失效</td>';} 
-		        			      html +='<td><button class="layui-btn layui-btn-sm" data-name="'+data[i].name+'" data-gender="'+data[i].gender+'"'+
+		        			      html +='<td><a class="layui-btn layui-btn-sm" data-name="'+data[i].name+'" data-gender="'+data[i].gender+'"'+
 		        			      'data-id_type="'+data[i].id_type+'" data-id_num="'+data[i].id_num+'" data-phone="'+data[i].phone+'" data-occupation_category="'+data[i].occupation_category+'" data-guarantee_id="'+data[i].guarantee_id+'" data-remark="'+data[i].remark+'"'+
 		        			      'data-policy_effective_date="'+data[i].policy_effective_date+'" data-policy_expiration_date="'+data[i].policy_expiration_date+'" data-policy_num="'+data[i].policy_num+'"'+
-		        			      'data-id="'+data[i].id+'" id="editPersonBtn"><i class="layui-icon"></i>修改</button>';
-		        			      if(data[i].status==0||data[i].status==1){
-		        			      html +='<button class="layui-btn layui-btn-sm" data-id="'+data[i].id+'" id="cancelPersonBtn"><i class="layui-icon"></i>退保</button>';
-		        			      }
-		        			      if(data[i].status==2){
-		        			    	  html +='<button class="layui-btn layui-btn-sm" data-id="'+data[i].id+'" id="comePersonBtn"><i class="layui-icon"></i>进保</button>';
-		        		}
+		        			      'data-id="'+data[i].id+'" id="editPersonBtn"><i class="layui-icon"></i>修改</a>';
 		        			        html +='</td></tr>';
 		        		}
 		        		var tbody = $personTable.find("tbody")

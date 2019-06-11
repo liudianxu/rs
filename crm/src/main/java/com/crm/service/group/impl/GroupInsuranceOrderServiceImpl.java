@@ -70,7 +70,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		//生成订单号
 				order.set("order_sn",snService.generate(Sn.Type.groupInsuranceOrder));
 				//设置订单状态
-				order.set("status",GroupInsuranceOrder.Status.issuePolicy.ordinal());
+				order.set("status",GroupInsuranceOrder.Status.unfinished.ordinal());
 				order.set("create_time", new Date());
 				order.save();
 				
@@ -146,6 +146,12 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 	public GroupInsuranceOrder findByOrderSn(String groupOrderSn) {
 		return GroupInsuranceOrder.dao.findFirst("select o.*,b.logo as brandLog,b.name as brandName from crm_group_insurance_orders o left join crm_brand b on b.id = o.brand_id where o.order_sn = ?  ", groupOrderSn);
 
+	}
+
+	@Override
+	public boolean isComplete(Long orderId) {
+		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findFirst("select * from crm_group_insurance_orders where id=? and step_one=1 and step_two=1 and step_three=1 and step_four=1 and step_fifth=1  ", orderId);
+		return order==null?false:true;
 	}
 
 }

@@ -174,8 +174,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param id
 	 */
 	public void view() {
-		Long id = getParaToLong("id");
 		//获取品牌集合
+		Long id = getParaToLong("id");
 		setAttr("brands", brandService.selectList());
 		setAttr("groups", groupInfoService.selectList());
 		setAttr("admins", userService.selectList());
@@ -231,6 +231,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			}
 			setAttr("guarantees", resultGuarantees);
 		}
+    	setAttr("id", id);
     	
     	//获取理赔测算
 		//List<ClaimCalculation> calculations = claimCalculationService.findByTypeAndReferId(GROUP_CLAIM_TYPE,id);
@@ -609,6 +610,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			.set("status", 0)
 			.set("name", person.get("namename"))
 			.set("change",person.get("premium"))
+			.set("order_id",hiddenOrderId)
 			.set("policy_effective_date", person.getDate("policy_effective_date"))
 			.set("create_time", new Date()).save();
 		}
@@ -835,6 +837,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		.set("policy_num", person.get("policy_num"))
 		.set("status", 0)
 		.set("name", person.get("name"))
+		.set("order_id", person.getLong("order_id"))
 		.set("change",person.get("premium"))
 		.set("policy_effective_date", person.getDate("policy_effective_date"))
 		.set("create_time", new Date()).save();
@@ -865,6 +868,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		.set("policy_num", person.get("policy_num"))
 		.set("status", 2)
 		.set("name", person.get("name"))
+		.set("order_id", person.getLong("order_id"))
 		.set("change",person.get("premium"))
 		.set("policy_effective_date", person.getDate("policy_effective_date"))
 		.set("create_time", new Date()).save();
@@ -875,10 +879,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	}
 	
 	public void getPersonLog() {
+		Long id = getParaToLong("id");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
-
-		renderJson(GroupInsurancePersonLog.selectPage(page,size));
+		renderJson(GroupInsurancePersonLog.selectPage(page,size,id));
 	}
 	
 	

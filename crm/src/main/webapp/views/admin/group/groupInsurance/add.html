@@ -518,6 +518,11 @@
 					<button class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
 						<i class="layui-icon"></i>删除
 					</button>
+					<button class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
+						<i class="layui-icon"></i>Excel模板
+					</button>
+					<input type="text" style="display:none;" id="logo" name="groupInsuranceOrder.excel_tem" autocomplete="off" class="layui-input" style="width: 250px;">
+					<a   style="display:none;  id="viewLogo" class="layui-btn layui-btn-sm layui-btn-info" target="_blank">查看模板</a>
 				</div>
 			</div>
 				<div class='line-block'>
@@ -793,6 +798,46 @@ var parameterss;
 							 }
 					        });
 						 
+						 layui.use('upload', function(){
+					  		  var upload = layui.upload;
+					  		   var id = $('input[name=hiddenOrderIdForGuarantee]').val();
+					  		  var uploadInst = upload.render({
+					  			    elem: '#exportTem'
+					  			    ,url: '/common/file/uploadTem?id='+id
+					  			    ,accept:'file'
+					  			    ,before: function(obj){
+					  			      //预读本地文件示例，不支持ie8
+					  			      obj.preview(function(index, file, result){
+					  			        //图片链接（base64）
+					  			        console.log(index); //得到文件索引
+					  			        console.log(file); //得到文件对象
+					  			        //console.log(result); //得到文件base64编码，比如图片
+					  			        $("#yudu").html("<span>名字："+file.name+"</span>"+"<span>大小："+file.size+"</span>");
+					  			      });
+					  			    }
+					  			    ,done: function(res){
+					  			        //alert(res.code);
+					  			      //如果上传失败
+					  			      if(res.code > 0){
+					  			        return layer.msg('上传失败');
+					  			      }
+					  			      //上传成功
+					  			      layer.msg("上传成功");
+					  			      $('#logo').val(res.data.filePath);
+					  			      $("#viewLogo").show();
+					  			      $("#viewLogo").attr("href",res.data.filePath);
+					  			    }
+					  			    ,error: function(){
+					  			      //演示失败状态，并实现重传
+					  			      var demoText = $('#demoText');
+					  			      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+					  			      demoText.find('.demo-reload').on('click', function(){
+					  			        uploadInst.upload();
+					  			      });
+					  			    }
+					  			  });
+					  		});
+						 
 						 
 						form.on('checkbox(allChoose)', function(data){
 						    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
@@ -899,7 +944,7 @@ var parameterss;
 								        success: function(data) {
 								        if(data.code==1){
 								        	layer.msg("导入成功");
-								        	reloadPersonTable(data.orderId);
+								        	reloadPersonTable(data.orderId).
 								        	then(function(){       //成功
 								        		form.render()		//再选染
 								        	})
@@ -1274,9 +1319,11 @@ var parameterss;
 					function(res) {
 						layer.msg(res.msg); 
 			    		if(res.code == 1) {
-			    			reloadPersonTable(hiddenOrderId);
-			    				form.render()
-			    				cover.hide()
+			    			reloadPersonTable(hiddenOrderId).
+			    			then(function(){       //成功
+				        		form.render()		//再选染
+				        		cover.hide()
+				        	})
 			    		}
 					}, "json");
 	})
@@ -1460,7 +1507,10 @@ var parameterss;
 	        						function(res) {
 	        							layer.msg(res.msg); 
 	        				    		if(res.code == 1) {
-	        				    			reloadPersonTable(hiddenOrderId);
+	        				    			reloadPersonTable(hiddenOrderId).
+	        				    			then(function(){       //成功
+	        					        		form.render()		//再选染
+	        					        	})
 	        				    		}
 	        						}, "json");
 	        			  
@@ -1493,7 +1543,10 @@ var parameterss;
 				function(res) {
 					layer.msg(res.msg); 
 		    		if(res.code == 1) {
-		    			    reloadPersonTable(hiddenOrderId);
+		    			    reloadPersonTable(hiddenOrderId).then(function(){       //成功
+				        		form.render()		//再选染
+				        	})
+		    			    
 		    		}
 				}, "json");
 	})
@@ -1508,7 +1561,9 @@ var parameterss;
 				function(res) {
 					layer.msg(res.msg); 
 		    		if(res.code == 1) {
-		    			    reloadPersonTable(hiddenOrderId);
+		    			    reloadPersonTable(hiddenOrderId).then(function(){       //成功
+				        		form.render()		//再选染
+				        	})
 		    		}
 				}, "json");
 	})
@@ -1545,7 +1600,9 @@ var parameterss;
 	        success: function(data) {
 	        	layer.msg(data.msg);
 	        	if(data.code==1){
-	        		reloadPersonTable(hiddenOrderId);
+	        		reloadPersonTable(hiddenOrderId).then(function(){       //成功
+		        		form.render()		//再选染
+		        	})
 	        	}
 	        	}
 	        })

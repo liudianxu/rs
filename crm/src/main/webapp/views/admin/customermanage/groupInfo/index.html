@@ -73,7 +73,7 @@
 	      }
 	    ]]
 	  ,done: function(res, page, count){
-			$("[data-field='is_on_sale']").children().each(function(){
+			/* $("[data-field='is_on_sale']").children().each(function(){
 					if($(this).text()=='0'){
 					   $(this).html("<span style='color:red;'>下架<span>");
 					}else if($(this).text()=='1'){
@@ -85,7 +85,7 @@
 				if($(this).text()!="logo"){
 				$(this).html("<img src='"+$(this).text()+"'><img>");
 				}
-		})
+		}) */
 	 }
 	    ,page: true
 	  });
@@ -99,7 +99,10 @@
 	  //监听行工具事件
 	  table.on('tool(test)', function(obj){
 	    var data = obj.data;
-	    if(obj.event === 'put'){
+	    if(obj.event === 'edit'){
+	    	location.href="/admin/customermanage/groupInfo/edit?id="+data.id;
+	    }
+	   /*  if(obj.event === 'put'){
 	    	  $.get('/admin/customermanage/groupInfo/put', {id: data.id},
 	  				function(res) {
 	  					layer.msg(res.message);
@@ -107,10 +110,7 @@
 	  		    			 setTimeout("location.href='/admin/customermanage/groupInfo/index'",500);
 	  		    		}
 	  				}, "json");
-	    } else if(obj.event === 'edit'){
-	    	location.href="/admin/customermanage/groupInfo/edit?id="+data.id;
-	    	//siMenu("product/groupInfo/edit",{id: data.id});
-	    }
+	    } else */ 
 	  });
 	  form.render()
 	  form.on('submit(submit)',function(data){

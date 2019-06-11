@@ -1,0 +1,106 @@
+#@layout() 
+#define main()
+<div class="layui-card">
+	<div class="layui-card-header">查看合同</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+			<!-- 	<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='name' autocomplete='off' class='layui-input'
+						placeholder='保险公司名称' />
+				</div> -->
+				<!-- <div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<table class="layui-hide" id="brandTable" lay-filter="test"></table>
+	</div>
+</div>
+<script type="text/html" id="headBar">
+</script>
+
+<script>
+	layui.use(['table','form','laydate','layer'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,laydate = layui.laydate
+	  ,layer = layui.layer
+	  ,$ = layui.$;
+	  
+	  
+	  table.render({
+	    elem: '#brandTable'
+	    ,url:'/admin/groupInsurance/getPersonLog?id='
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,title: '人员增减记录'
+	    ,cols: [[
+	        {field:'customer_id', title:'客户名'}
+		   ,{field:'policy_num', title:'保单号'}
+	      ,{field:'name', title:'姓名'}
+	      ,{field:'status', title:'操作'}
+	     /*  ,{field:'is_on_sale', title:'状态'} */
+	      ,{field:'create_time', title:'操作时间'}
+	      ,{field:'policy_effective_date', title:'生效日期'}
+	      ,{field:'change', title:'保费变化'}
+	    ]]
+	  ,done: function(res, page, count){
+			$("[data-field='status']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>已承保<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span>保障中<span>");
+					}
+					else if($(this).text()=='2'){
+						   $(this).html("<span>已退保<span>");
+					}
+					else if($(this).text()=='3'){
+						   $(this).html("<span>已失效<span>");
+					}
+				
+			})
+	  }
+	    ,page: true
+	  });
+	  
+	  //头工具栏事件
+	  table.on('toolbar(test)',function(obj){
+		  if(obj.event == 'add'){
+			  location.href="/admin/brand/add";
+		  }
+	  })
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'put'){
+	    	  $.get('/admin/brand/put', {id: data.id},
+	  				function(res) {
+	  					layer.msg(res.message);
+	  		    		if(res.code == 1) {
+	  		    			 setTimeout("location.href='/admin/brand/index'",500);
+	  		    		}
+	  				}, "json");
+	    } else if(obj.event === 'edit'){
+	    	location.href="/admin/brand/edit?id="+data.id;
+	    	//siMenu("product/brand/edit",{id: data.id});
+	    }
+	  });
+	  form.render()
+	  form.on('submit(submit)',function(data){
+		 console.log(JSON.stringify(data.field))
+		 table.reload('brandTable',{
+			 page: {
+				 curr: 1
+			 },
+			 where: data.field
+		 })
+	  })
+	})
+	  
+</script>
+#end

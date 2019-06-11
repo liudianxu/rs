@@ -16,14 +16,14 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 	public static final GroupInsurancePersonLog dao = new GroupInsurancePersonLog();
 
 
-	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size) {
+	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,Long id) {
 		Page<GroupInsurancePersonLog> page = new Page<>();
 		DataGrid<GroupInsurancePersonLog> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select  g.*,c.customer_name as customerName from crm_group_insurance_person_log g ");
 		sql.append("left join crm_customer_info c on c.id =g.customer_id ");
-		sql.append("where 1=1 ");
+		sql.append("where 1=1 and g.order_id = "+id+"");
 		sql.append(" order by g.create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsurancePersonLog.dao.paginate(num, size, sqlPara);

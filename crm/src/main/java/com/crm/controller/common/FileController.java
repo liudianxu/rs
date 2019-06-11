@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 
 import com.alibaba.fastjson.JSONArray;
+import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.util.DateUtil;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.core.Controller;
@@ -53,6 +54,29 @@ public class FileController extends Controller {
 	        }
 	        renderJson(resp);
 	}
+	
+	public void uploadTem() {
+		Long id =getParaToLong("id");
+		BaseResponse resp = new BaseResponse();
+	        try {
+	            UploadFile file = getFile();
+	            System.out.println("--------file--------");
+	            
+	            String path = UUID.randomUUID()+ "." + FilenameUtils.getExtension(file.getOriginalFileName());
+	            //文件重命名
+	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator") +path));
+	            Map<String ,String> map = new HashMap<String, String>();
+	           //文件路径
+	            map.put("filePath", "/upload/"+DateUtil.getDate("yyyyMM")+"/"+path);
+	            GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
+	            order.set("excel_tem", map.get("filePath")).update();
+	            resp.setData(map);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        renderJson(resp);
+	}
+	
 	
 	/**
 	 * 富文本图片上传

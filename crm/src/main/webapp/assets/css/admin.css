@@ -1,3 +1,68 @@
 .layui-body-normal {
-	left : 0px
+	left: 0px
+}
+
+.w-e-toolbar {
+	background-color: #009688 !important;
+}
+
+.w-e-toolbar .w-e-menu i {
+	color: #fff !important;
+}
+
+.w-e-toolbar .w-e-menu i:hover {
+	color: #2a3449 !important;
+}
+
+
+.layui-form-label {
+	min-width: 110px;
+	width: auto !important;
+	box-sizing: border-box;
+	white-space: nowrap;
+}
+
+.border-wrap {
+	position: relative;
+	border-bottom: 1px solid #e6e6e6;
+	padding-left: 64px;
+	padding-left: 8ch;
+}
+
+.sttl {
+	font-size: 16px;
+	color: #000;
+	font-weight: 400;
+	position: absolute;
+	top: 0;
+	left: 8px;
+	line-height: 38px;
+}
+
+.headerttl {
+	position: relative;
+	height: 42px;
+	line-height: 42px;
+	padding: 0 17px;
+	border-bottom: 1px solid #009688;
+	color: #009688;
+	border-radius: 2px 2px 0 0;
+	font-size: 16px;
+}
+
+.layui-table tbody tr {
+	background-color: #fff;
+}
+
+.layui-table tbody tr:hover {
+	background-color: #fff;
+}
+
+.layui-table .tbttl {
+	background-color: #009688;
+	color: #fff;
+}
+
+.layui-table .tbttl:hover {
+	background-color: #009688 !important;
 }

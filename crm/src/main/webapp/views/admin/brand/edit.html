@@ -1,165 +1,158 @@
-#@layout() 
+#@layout()
 #define main()
-<div class="layui-card-header">
-    修改保险公司
+<div class="headerttl">
+	修改保险公司
 </div>
 <div class="layui-card-body">
 	<form class="layui-form" action="/admin/brand/save">
-	     <input type="text" name="brand.id" value="#(brand.id)" style="display:none;">
-		<div class="layui-form-item">
+		<input type="text" name="brand.id" value="#(brand.id)" style="display:none;">
+		<div class="layui-form-item" style="display: inline-block;">
 			<div class="layui-inline theme-required">
-	     		<label class="layui-form-label">公司编号</label>
-	     		<input type="text" name="brand.code" value="#(brand.code)" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   		<div class="layui-inline theme-required">
-	     		<label class="layui-form-label">公司名称</label>
-	      		<input type="text" name="brand.name" value="#(brand.name)" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">简称</label>
-	     		<input type="text" name="brand.short_name" value="#(brand.short_name)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   	</div>
-	   	<div class="layui-inline">
-		     	<label class="layui-form-label">全国统一客服电话</label>
-		     	<input type="text" name="brand.csh" autocomplete="off" value="#(brand.csh)" class="layui-input" style="width: 250px;">
-		   	</div>
-	   	<!-- <div class="layui-form-item">
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">网址</label>
-	     		<input type="text" name="brand.url"  value="#(brand.url)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div> -->
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">英文缩写</label>
-	     		<input type="text" name="brand.english_abbreviation" value="#(brand.english_abbreviation)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">logo</label>
-	     		
-	      		<a  href="#(brand.logo)" #if(!brand.logo??) style="display:none;" #end  id="viewLogo" target="_blank">查看</a>
-	      		
-	            <input type="text" style="display:none;" id="logo" value="#(brand.logo)" name="brand.logo" autocomplete="off" class="layui-input" style="width: 250px;">
-	            <button type="button" class="layui-btn" id="upload">
-           			<i class="layui-icon">&#xe67c;</i>上传图片
-        		</button>
-	   		</div>
-	   	</div>
-	 <!--   	<div class="layui-form-item">
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">国内合作救援公司</label>
-	     		<input type="text" name="brand.domestic_rescue_company" value="#(brand.domestic_rescue_company)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">国内救援公司电话</label>
-	     		<input type="text" name="brand.domestic_rescue_company_phone" value="#(brand.domestic_rescue_company_phone)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div> -->
-	   	<!-- 	<div class="layui-inline">
-		     	<label class="layui-form-label">全国统一客服电话</label>
-		     	<input type="text" name="brand.csh" autocomplete="off" value="#(brand.csh)" class="layui-input" style="width: 250px;">
-		   	</div>
-	   	</div> -->
-	 <!--   	<div class="layui-form-item">
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">国际合作救援公司</label>
-	     		<input type="text" name="brand.international_rescue_cmpany" value="#(brand.international_rescue_cmpany)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   		<div class="layui-inline">
-	     		<label class="layui-form-label">国际救援公司电话</label>
-	     		<input type="text" name="brand.international_rescue_cmpany_phone" value="#(brand.international_rescue_cmpany_phone)" autocomplete="off" class="layui-input" style="width: 250px;">
-	   		</div>
-	   	</div> -->
-	   <div class="layui-form-item">
-	     	<label class="layui-form-label">介绍</label>
-	     	<div class='layui-input-block'>
-	     	 	<div id="editor">#(brand.introduction)</div>
-	    	  <textarea id="introduction" name='brand.introduction' style="display:none;"></textarea>
-	    	</div>
-	   	</div>
-	 	<div class="layui-input-block">
-	   		<button class="layui-btn" lay-submit lay-filter="save">保存</button>
-	   		<button class="layui-btn layui-btn-primary" id="backBtn">返回</button>
+				<label class="layui-form-label">公司编号</label>
+				<input type="text" name="brand.code" value="#(brand.code)" lay-verify="required" autocomplete="off" class="layui-input"
+				 style="width: 250px;">
+			</div>
+		</div>
+		<div class="layui-form-item" style="display: inline-block;">
+			<div class="layui-inline theme-required">
+				<label class="layui-form-label">公司名称</label>
+				<input type="text" name="brand.name" value="#(brand.name)" lay-verify="required" autocomplete="off" class="layui-input"
+				 style="width: 250px;">
+			</div>
+		</div>
+		<div class="layui-form-item" style="display: inline-block;">
+			<div class="layui-inline">
+				<label class="layui-form-label">简称</label>
+				<input type="text" name="brand.short_name" value="#(brand.short_name)" autocomplete="off" class="layui-input" style="width: 250px;">
+			</div>
+		</div>
+		<div class="layui-form-item" style="display: inline-block;">
+			<div class="layui-inline">
+				<label class="layui-form-label">全国统一客服电话</label>
+				<input type="text" name="brand.csh" autocomplete="off" value="#(brand.csh)" class="layui-input" style="width: 250px;">
+			</div>
+		</div>
+		<div class="layui-form-item" style="display: inline-block;">
+			<div class="layui-inline">
+				<label class="layui-form-label">英文缩写</label>
+				<input type="text" name="brand.english_abbreviation" value="#(brand.english_abbreviation)" autocomplete="off" class="layui-input"
+				 style="width: 250px;">
+			</div>
+		</div>
+		<div class="layui-form-item" style="display: inline-block;">
+			<div class="layui-inline">
+				<label class="layui-form-label">logo</label>
+				<a href="#(brand.logo)" #if(!brand.logo??) style="display:none;" #end class="layui-btn" id="viewLogo" target="_blank">查看</a>
+				<input type="text" style="display:none;" id="logo" value="#(brand.logo)" name="brand.logo" autocomplete="off" class="layui-input"
+				 style="width: 250px;">
+				<button type="button" class="layui-btn" id="upload">
+					<i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">介绍</label>
+			<div class='layui-input-block'>
+				<div id="editor">#(brand.introduction)</div>
+				<textarea id="introduction" name='brand.introduction' style="display:none;"></textarea>
+			</div>
+		</div>
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+			<button class="layui-btn layui-btn-primary" id="backBtn">返回</button>
 		</div>
 	</form>
 </div>
 <script type="text/javascript">
-editor.customConfig.onchange = function (html) {
-    // 监控变化，同步更新到 textarea
-    $("#introduction").val(html)
-}
-    editor.create()
+	editor.customConfig.onchange = function(html) {
+		// 监控变化，同步更新到 textarea
+		$("#introduction").val(html)
+	}
+	editor.create()
 
-    
-	layui.use(['form','layer','layedit'], function(){
-    	var form = layui.form,
-    		layer = layui.layer,
-    		layedit = layui.layedit,
-    		$ = layui.$;
-    	
-    	
-    	//监听提交
-    	form.on('submit(save)', function(data){
+
+	layui.use(['form', 'layer', 'layedit'], function() {
+		var form = layui.form,
+			layer = layui.layer,
+			layedit = layui.layedit,
+			$ = layui.$;
+
+
+		//监听提交
+		form.on('submit(save)', function(data) {
 			$.post($(".layui-form").attr('action'), $(".layui-form").serialize(),
 				function(res) {
-					layer.msg(res.message); 
-		    		if(res.code == 1) {
-		    			 setTimeout("location.href='/admin/brand/index'",500);
-		    		}
+					layer.msg(res.message);
+					if (res.code == 1) {
+						setTimeout("location.href='/admin/brand/index'", 500);
+					}
 				}, "json");
-    		
-    		return false;
-    	});
-    	//监听返回
-    	$('#backBtn').on('click', function(data) {
-    		location.href="/admin/brand/index";
+
 			return false;
-    	});
-  	});   
-	layui.use('upload', function(){
-		  var upload = layui.upload;
-		   
-		  var uploadInst = upload.render({
-			    elem: '#upload'
-			    ,url: '/common/file/upload'
-			    ,before: function(obj){
-			      //预读本地文件示例，不支持ie8
-			      obj.preview(function(index, file, result){
-			        //图片链接（base64）
-			        console.log(index); //得到文件索引
-			        console.log(file); //得到文件对象
-			        //console.log(result); //得到文件base64编码，比如图片
-			        $("#yudu").html("<span>名字："+file.name+"</span>"+"<span>大小："+file.size+"</span>");
-			      });
-			    }
-			    ,done: function(res){
-			        //alert(res.code);
-			      //如果上传失败
-			      if(res.code > 0){
-			        return layer.msg('上传失败');
-			      }
-			      //上传成功
-			      layer.msg("上传成功");
-			      $('#logo').val(res.data.filePath);
-			      $("#viewLogo").show();
-			      $("#viewLogo").attr("href",res.data.filePath);
-			    }
-			    ,error: function(){
-			      //演示失败状态，并实现重传
-			      var demoText = $('#demoText');
-			      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-			      demoText.find('.demo-reload').on('click', function(){
-			        uploadInst.upload();
-			      });
-			    }
-			  });
 		});
+		//监听返回
+		$('#backBtn').on('click', function(data) {
+			location.href = "/admin/brand/index";
+			return false;
+		});
+	});
+	layui.use('upload', function() {
+		var upload = layui.upload;
+
+		var uploadInst = upload.render({
+			elem: '#upload',
+			url: '/common/file/upload',
+			before: function(obj) {
+				//预读本地文件示例，不支持ie8
+				obj.preview(function(index, file, result) {
+					//图片链接（base64）
+					console.log(index); //得到文件索引
+					console.log(file); //得到文件对象
+					//console.log(result); //得到文件base64编码，比如图片
+					$("#yudu").html("<span>名字：" + file.name + "</span>" + "<span>大小：" + file.size + "</span>");
+				});
+			},
+			done: function(res) {
+				//alert(res.code);
+				//如果上传失败
+				if (res.code > 0) {
+					return layer.msg('上传失败');
+				}
+				//上传成功
+				layer.msg("上传成功");
+				$('#logo').val(res.data.filePath);
+				$("#viewLogo").show();
+				$("#viewLogo").attr("href", res.data.filePath);
+			},
+			error: function() {
+				//演示失败状态，并实现重传
+				var demoText = $('#demoText');
+				demoText.html(
+					'<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+				demoText.find('.demo-reload').on('click', function() {
+					uploadInst.upload();
+				});
+			}
+		});
+	});
 </script>
 <style>
-.theme-required .layui-form-label:before {display: inline-block;vertical-align: top;margin-right: 3px;
-	width: 6px;
-	height: 6px;
-	border-radius: 50%;
-	background-color: #c00;
-	content: ''
-}
+	.theme-required .layui-form-label:before {
+		display: inline-block;
+		vertical-align: top;
+		margin-right: 3px;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background-color: #c00;
+		content: ''
+	}
+
+	.layui-form-label {
+		box-sizing: border-box;
+		min-width: 110px;
+		max-width: auto;
+		width: auto;
+	}
 </style>
 #end

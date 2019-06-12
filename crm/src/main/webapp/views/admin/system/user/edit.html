@@ -1,62 +1,64 @@
 #@layout()
- #define main()
-<div class="layui-card-header">修改管理员</div>
+#define main()
+<div class="headerttl">修改管理员</div>
 <div class="layui-card-body">
 
 	<div class='layui-tab layui-tab-brief' lay-filter='TabBrief'>
-		<form class="layui-tab-content layui-form"
-				action="/admin/system/user/save">
-				<input name ='user.id' value='#(user.id)' style="display:none;">
-		<div class='layui-tab-item layui-show'>
+		<form class="layui-tab-content layui-form" action="/admin/system/user/save">
+			<input name='user.id' value='#(user.id)' style="display:none;">
+			<div class='layui-tab-item layui-show'>
 				<div class='layui-form-item'>
 					<div class='layui-inline'>
 						<div class='layui-form-label'>用户名:</div>
 						<div class='layui-input-inline'>
-							<input disabled name='user.username' value="#(user.username)" lay-verify='required'
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+							<input disabled name='user.username' value="#(user.username)" lay-verify='required' class='layui-input'
+							 autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
-					<div class='layui-form-item'>
+				<div class='layui-form-item'>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>密码:</div>
 						<div class='layui-input-inline'>
-							<input name='user.password' type="password" 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+							<input name='user.password' type="password" class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
-					<div class='layui-form-item'>
+				<div class='layui-form-item'>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>确认密码:</div>
 						<div class='layui-input-inline'>
-							<input name='user.rePassword' type="password" value="" 
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+							<input name='user.rePassword' type="password" value="" class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
-					<div class='layui-form-item'>
+				<div class='layui-form-item'>
 					<div class='layui-inline theme-required'>
 						<div class='layui-form-label'>邮箱:</div>
 						<div class='layui-input-inline'>
-							<input name='user.email' value="#(user.email)" lay-verify='required'
-								class='layui-input' autocomplete='off' placeholder='请输入' />
+							<input name='user.email' value="#(user.email)" lay-verify='required' class='layui-input' autocomplete='off'
+							 placeholder='请输入' />
 						</div>
 					</div>
 				</div>
-					<div class='layui-form-item'>
+				<div class='layui-form-item'>
 					<div class='layui-inline'>
-						<div class='layui-form-label'>状态</div>
+						<div class='layui-form-label'>启用</div>
 						<div class='layui-input-inline'>
-						<input type="checkbox"  name="status"  #if(user.status==1)checked='checked' #end>是否启用
-					    </div>
+							<input type="checkbox" name="status" lay-skin='switch' lay-text="ON|OFF" #if(user.status==1)checked='checked'
+							 #end>
+						</div>
 					</div>
 				</div>
-					<div class='layui-form-item'>
+				<div class='layui-form-item'>
 					<div class='layui-inline'>
 						<div class='layui-form-label'>角色</div>
 						#for(role:allRoles)
-					<input type="checkbox"  lay-filter="conf" name="roleIds" #for(role2:roles)#if(role.id==role2.id)checked='checked'#end#end value="#(role.id)" />#(role.name)
+						<span style="vertical-align: bottom;">
+							#(role.name)
+						</span>
+						<input type="checkbox" lay-filter="conf" name="roleIds" lay-skin='switch' lay-text="ON|OFF"
+						 #for(role2:roles)#if(role.id==role2.id) checked='checked' #end#end value="#(role.id)" />
 						#end
 					</div>
 				</div>
@@ -64,31 +66,29 @@
 					<div class='layui-inline'>
 						<div class='layui-form-label'>部门</div>
 						<div class='layui-input-inline'>
-	                     <input name='user.department' value="#(user.department)" 
-								class='layui-input' autocomplete='off' placeholder='请输入' />					    </div>
+							<input name='user.department' value="#(user.department)" class='layui-input' autocomplete='off' placeholder='请输入' />
+						</div>
 					</div>
 				</div>
 				<div class='layui-form-item'>
 					<div class='layui-inline'>
 						<div class='layui-form-label'>名字</div>
 						<div class='layui-input-inline'>
-	                    <input name='user.name' value="#(user.name)"
-								class='layui-input' autocomplete='off' placeholder='请输入' />					    </div>
+							<input name='user.name' value="#(user.name)" class='layui-input' autocomplete='off' placeholder='请输入' /> </div>
 					</div>
 				</div>
-				</div>
-					<div class="layui-form-item">
-				<div class="layui-input-block" style='float: right'>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit lay-filter="save">确定</button>
-					<a class="layui-btn layui-btn-primary"
-						href='javascript:history.go(-1);'>返回</a>
+					<a class="layui-btn layui-btn-primary" href='javascript:history.go(-1);'>返回</a>
 				</div>
 			</div>
-				</form>
-				</div>
-				</div>
+		</form>
+	</div>
+</div>
 <style>
-.layui-form-label {
+	.layui-form-label {
 	white-space: nowrap;
 	width: 93px
 }
@@ -123,51 +123,50 @@
 }
 </style>
 <script type="text/javascript">
-var listVal = [];
-$("input[name=roleIds]").each(function() {
-	$(this).attr("checked", true);
-	if($(this).prop("checked")){
-		listVal.push($(this).val()); 
-	}
+	var listVal = [];
+	$("input[name=roleIds]").each(function() {
+		$(this).attr("checked", true);
+		if ($(this).prop("checked")) {
+			listVal.push($(this).val());
+		}
 	});
-layui.use(['form','layer','layedit'], function(){
-    	var form = layui.form,
-    		layer = layui.layer,
-    		layedit = layui.layedit,
-    		$ = layui.$;
-    	  form.render();
-    	  
-    	  form.on('checkbox(conf)',function (data) { 
-    		  console.log("哈哈")
-    		  if (data.elem.checked) 
-    		  { listVal.push(data.value); 
-    		  }
-    		  else { 
-    			  var removeIndex = listVal.indexOf(data.value);
-    			  listVal.splice(removeIndex,1); 
-    			  } 
-    		  })
-    	//监听提交
-    	form.on('submit(save)', function(data){
-    		data.field.roleIds = listVal;
+	layui.use(['form', 'layer', 'layedit'], function() {
+		var form = layui.form,
+			layer = layui.layer,
+			layedit = layui.layedit,
+			$ = layui.$;
+		form.render();
 
-    		 var password =$("input[name='user.password']").val();
-    		 var rePassword = $("input[name='user.rePassword']").val();
-    		 if(password!=rePassword){
-    			 layer.msg("两次密码输入不一致")
-    			 return false;
-    		 }
+		form.on('checkbox(conf)', function(data) {
+			console.log("哈哈")
+			if (data.elem.checked) {
+				listVal.push(data.value);
+			} else {
+				var removeIndex = listVal.indexOf(data.value);
+				listVal.splice(removeIndex, 1);
+			}
+		})
+		//监听提交
+		form.on('submit(save)', function(data) {
+			data.field.roleIds = listVal;
+
+			var password = $("input[name='user.password']").val();
+			var rePassword = $("input[name='user.rePassword']").val();
+			if (password != rePassword) {
+				layer.msg("两次密码输入不一致")
+				return false;
+			}
 			$.post($(".layui-form").attr('action'), data.field,
 				function(res) {
-					layer.msg(res.msg); 
-		    		if(res.state == "ok") {
-		    			 setTimeout("location.href='/admin/system/user'",500);
-		    		}
+					layer.msg(res.msg);
+					if (res.state == "ok") {
+						setTimeout("location.href='/admin/system/user'", 500);
+					}
 				}, "json");
-    		
-    		return false;
-    	});
-  	});  
+
+			return false;
+		});
+	});
 </script>
 
 #end

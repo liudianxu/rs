@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ import com.crm.util.Constant;
 import com.crm.util.DateUtil;
 import com.crm.util.IDCardUtils;
 import com.jfinal.aop.Inject;
+import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
 public class GroupInsuranceController extends BaseController<GroupInsuranceOrder>{
@@ -773,10 +776,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long orderId = getParaToLong("orderId");
 		Map<String, Object> data = new HashMap<>();
 		List<GroupInsurancePerson> persons = groupInsurancePersonService.findByOrderId(orderId);
-		for (GroupInsurancePerson groupInsurancePerson : persons) {
+		/*for (GroupInsurancePerson groupInsurancePerson : persons) {
 			groupInsurancePerson.set("policy_effective_date", DateUtil.formatDate(groupInsurancePerson.getDate("policy_effective_date"), "yyyy-MM-dd"));
 			groupInsurancePerson.set("policy_expiration_date", DateUtil.formatDate(groupInsurancePerson.getDate("policy_expiration_date"), "yyyy-MM-dd"));
-		}
+		}*/
 		if(CollectionUtils.isNotEmpty(persons)) {
 			data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 			data.put("data", persons);
@@ -793,10 +796,11 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param hiddenOrderId
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 */
-	public void importPerson(String filePath, Long hiddenOrderIdForImport) {
+	public void importPerson(@Para("filePath") String filePath) throws Exception {
 		Map<String, Object> data = new HashMap<>();
-          
+		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
         InputStream in =null;  
         List<List<Object>> listob = null;  
 
@@ -830,7 +834,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             if(i == 0) {
             	if(!"序号".equals(String.valueOf(lo.get(0)))) {
                 	data.put("msg", "Excel文件格式不正确，请按模板导入！");
-                	break;
+                	renderJson(data);
+                	return;
                 } else {
                 	continue;
                 }
@@ -838,7 +843,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             //姓名、证件类型、证件号码、保障方案、职位类别中有一项为空就不保存
             if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2))) 
             		|| StringUtils.isBlank(String.valueOf(lo.get(3))) || StringUtils.isBlank(String.valueOf(lo.get(6))) 
-            		|| StringUtils.isBlank(String.valueOf(lo.get(7)))) {
+            		|| StringUtils.isBlank(String.valueOf(lo.get(7)))||
+            		StringUtils.isBlank(String.valueOf(lo.get(8)))||
+            				StringUtils.isBlank(String.valueOf(lo.get(9)))||
+            				StringUtils.isBlank(String.valueOf(lo.get(10)))) {
             	continue;
             }
             GroupInsurancePerson person = new GroupInsurancePerson();
@@ -863,11 +871,60 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			}
             person.set("id_num",String.valueOf(lo.get(3)));
             person.set("occupation_category",String.valueOf(lo.get(6)));
-            person.set("phone",String.valueOf(lo.get(8)));
+            
+            if(order.get("max_occupation_category")!=null&&Integer.parseInt(person.get("occupation_category"))>order.getInt("max_occupation_category"))
+    		{
+    			data.put("msg", "职业类别不能高于"+order.getInt("max_occupation_category")+"类");
+    			renderJson(data);
+    			return;
+    		}
+            
+            
+            person.set("phone",String.valueOf(lo.get(10)));
+            person.set("remark",String.valueOf(lo.get(11)));
+            if(lo.get(12)==null) {
+            	  person.set("policy_num",order.get("policy_num"));
+            }
+            person.set("policy_num",String.valueOf(lo.get(12)));
+            person.set("policy_effective_date",lo.get(8).toString() + " 00:00:00");
+            person.set("policy_expiration_date",lo.get(9).toString() + " 23:59:59");
+            person.set("order_id",hiddenOrderIdForImport);
+            
+            if(order.get("max_insurance_age")!=null){
+				int maxAge = order.get("max_insurance_age");
+				int age = DateUtil.calcAge(person.getDate("birth"), new Date());
+				if(age>maxAge) {
+					data.put("msg", ""+person.getStr("name")+"已超过最大年龄!");
+					renderJson(data);
+					return;
+				}
+			}
+            
             GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
             if(groupInsuranceGuarantee!=null) {
                 person.set("guarantee_id",groupInsuranceGuarantee.get("id"));
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+                long[] getDate = DateUtil.getDatePoor(format.parse(person.get("policy_expiration_date")),format.parse(person.get("policy_effective_date"))); 
+        		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+        		BigDecimal premium = guarantee.getBigDecimal("premium");
+        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+        		person.set("premium", totelPre);
+        		
+        		
+        		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+        		groupInsurancePersonLog
+        		.set("customer_id", order.getLong("insure_customer_id"))
+        		.set("policy_num", person.get("policy_num"))
+        		.set("status", 0)
+        		.set("name", person.get("name"))
+        		.set("order_id", person.getLong("order_id"))
+        		.set("change",person.get("premium"))
+        		.set("policy_effective_date", format.parse(person.get("policy_expiration_date")))
+        		.set("create_time", new Date()).save();
             }
+            
+         
+    		
             person.set("order_id",hiddenOrderIdForImport);
             person.set("create_time", new Date());
             person.save();
@@ -878,6 +935,298 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     	renderJson(data);
     	return;
 	}
+	
+	/**
+	 * 批量增退保模板
+	 * 
+	 * @param filePath
+	 * @param hiddenOrderId
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	public void exportBatchPersonBtn(@Para("filePath") String filePath) throws Exception {
+		Map<String, Object> data = new HashMap<>();
+		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
+        InputStream in =null;  
+        List<List<Object>> listob = null;  
+
+        if(filePath.isEmpty()){  
+           data.put("msg", "文件导入错误！");  
+        } else {
+        	filePath = filePath.substring(filePath.indexOf("/upload"));
+        	String pathPrefix = PathKit.getWebRootPath();
+        	File file = new File(pathPrefix + filePath);
+        	try {
+    			in = new FileInputStream(file);
+    			listob = new ImportExcelUtil().getBankListByExcel(in, file.getName(), 9);  
+    			in.close();  
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}  
+        }
+        
+        if(listob.size() > 514) {
+        	data.put("msg", "一次导入人数请不要超过500条！");
+        	renderJson(data);
+        	return;
+        }
+        
+        GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
+        //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
+        for (int i = 0; i < listob.size(); i++) {  
+            List<Object> lo = listob.get(i);  
+            if(i == 0) {
+            	if(!"序号".equals(String.valueOf(lo.get(0)))) {
+            		data.put("msg", "Excel文件格式不正确，请按模板导入！");
+                	renderJson(data);
+                	return;
+                } else {
+                	continue;
+                }
+            }
+            //姓名、证件类型、证件号码、保障方案、职位类别中有一项为空就不保存
+            if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2))) 
+            		|| StringUtils.isBlank(String.valueOf(lo.get(3)))
+            		||StringUtils.isBlank(String.valueOf(lo.get(7)))
+            		||StringUtils.isBlank(String.valueOf(lo.get(8)))||
+            				StringUtils.isBlank(String.valueOf(lo.get(9)))) {
+            	continue;
+            }
+            String idNum = String.valueOf(lo.get(3));
+
+            if(String.valueOf(lo.get(1)).equals("减保")) {
+                GroupInsurancePerson person = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
+                if(person==null) {
+                	{
+                    	data.put("msg", "未找到"+String.valueOf(lo.get(2))+"的承保信息");
+                    	renderJson(data);
+                    	return;
+                    }
+                }
+                else {
+                	if(!person.getStr("name").equals(String.valueOf(lo.get(2)))) 
+                     {
+                     	data.put("msg", "身份证为"+idNum+"的人员信息不匹配");
+                     	renderJson(data);
+                     	return;
+                     }
+                }
+                GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
+                if(groupInsuranceGuarantee!=null) {
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+                    person.set("guarantee_id",groupInsuranceGuarantee.get("id"));
+                    person.set("remark",String.valueOf(lo.get(10)));
+                    Date policy_expiration_date = format.parse(String.valueOf(lo.get(8)));
+                    Date newDate = DateUtil.addDays(policy_expiration_date, 1);
+                    person.set("policy_expiration_date", newDate);
+                    person.set("status", 2);
+            		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
+            		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+            		BigDecimal premium = guarantee.getBigDecimal("premium");
+            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+            		person.set("premium", totelPre);
+                    
+            		
+            		
+            		person.update();
+                }
+                
+                
+            }
+            else if(String.valueOf(lo.get(1)).equals("加保")){
+            	 GroupInsurancePerson person = new GroupInsurancePerson();
+                 person.set("name",String.valueOf(lo.get(2)));
+                 person.set("id_type",0);
+     					person.set("birth",DateUtil.parseDate(String.valueOf(lo.get(3)).substring(6, 14), new String[]{"yyyyMMdd"}));
+     				if(CommonUtils.isOdd(String.valueOf(lo.get(3)).charAt(String.valueOf(lo.get(3)).length() - 2))) {
+     					person.set("gender",Constant.FEMALE);
+     				} else {
+     					person.set("gender",Constant.MALE);
+     				}
+                 person.set("id_num",String.valueOf(lo.get(3)));
+                 //person.set("occupation_category",String.valueOf(lo.get(6)));
+                 //person.set("phone",String.valueOf(lo.get(10)));
+                 person.set("remark",String.valueOf(lo.get(10)));
+                 person.set("policy_num",order.get("policy_num"));
+                 person.set("policy_effective_date",String.valueOf(lo.get(8)));
+                 person.set("policy_expiration_date",order.get("policy_expiration_date"));
+                 person.set("order_id",hiddenOrderIdForImport);
+                 
+                 if(order.get("max_insurance_age")!=null){
+     				int maxAge = order.get("max_insurance_age");
+     				int age = DateUtil.calcAge(DateUtil.parseDate(String.valueOf(lo.get(3)).substring(6, 14), new String[]{"yyyyMMdd"}), new Date());
+     				if(age>maxAge) {
+     					data.put("msg", ""+person.getStr("name")+"已超过最大年龄!");
+     					renderJson(data);
+     					return;
+     				}
+     			}
+                 
+                 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
+                 if(groupInsuranceGuarantee!=null) {
+                     person.set("guarantee_id",groupInsuranceGuarantee.get("id"));
+                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+                     long[] getDate = DateUtil.getDatePoor(format.parse(person.get("policy_expiration_date").toString()),format.parse(person.get("policy_effective_date").toString())); 
+             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+             		BigDecimal premium = guarantee.getBigDecimal("premium");
+             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+             		person.set("premium", totelPre);
+             		
+             		
+             		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+             		groupInsurancePersonLog
+             		.set("customer_id", order.getLong("insure_customer_id"))
+             		.set("policy_num", person.get("policy_num"))
+             		.set("status", 0)
+             		.set("name", person.get("name"))
+             		.set("order_id", person.getLong("order_id"))
+             		.set("change",person.get("premium"))
+             		.set("policy_effective_date", person.get("policy_expiration_date"))
+             		.set("create_time", new Date()).save();
+                 }
+                 
+              
+         		
+                 person.set("order_id",hiddenOrderIdForImport);
+                 person.set("create_time", new Date());
+                 person.save();
+            }
+            
+        }  
+        data.put("msg", "导入成功");
+        data.put("orderId", hiddenOrderIdForImport);
+        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+    	renderJson(data);
+    	return;
+	}
+	
+	
+	/**
+	 * 批量修改层级模板
+	 * 
+	 * @param filePath
+	 * @param hiddenOrderId
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	public void exportChangePersonBtn(@Para("filePath") String filePath) throws Exception {
+		Map<String, Object> data = new HashMap<>();
+		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
+        InputStream in =null;  
+        List<List<Object>> listob = null;  
+
+        if(filePath.isEmpty()){  
+           data.put("msg", "文件导入错误！");  
+        } else {
+        	filePath = filePath.substring(filePath.indexOf("/upload"));
+        	String pathPrefix = PathKit.getWebRootPath();
+        	File file = new File(pathPrefix + filePath);
+        	try {
+    			in = new FileInputStream(file);
+    			listob = new ImportExcelUtil().getBankListByExcel(in, file.getName(), 8);  
+    			in.close();  
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}  
+        }
+        
+        if(listob.size() > 514) {
+        	data.put("msg", "一次导入人数请不要超过500条！");
+        	renderJson(data);
+        	return;
+        }
+        
+        GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
+        //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
+        for (int i = 0; i < listob.size(); i++) {  
+            List<Object> lo = listob.get(i);  
+            if(i == 0) {
+            	if(!"序号".equals(String.valueOf(lo.get(1)))) {
+            		data.put("msg", "Excel文件格式不正确，请按模板导入！");
+                	renderJson(data);
+                	return;
+                } else {
+                	continue;
+                }
+            }
+            //姓名、证件类型、证件号码、保障方案、职位类别中有一项为空就不保存
+            if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2))) 
+            		|| StringUtils.isBlank(String.valueOf(lo.get(6)))
+            		||StringUtils.isBlank(String.valueOf(lo.get(7)))
+            		||StringUtils.isBlank(String.valueOf(lo.get(8)))||
+            				StringUtils.isBlank(String.valueOf(lo.get(9)))) {
+            	continue;
+            }
+            String idNum = String.valueOf(lo.get(3));
+
+                GroupInsurancePerson person = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
+                if(person==null) {
+                	{
+                    	data.put("msg", "未找到"+String.valueOf(lo.get(2))+"的承保信息");
+                    	renderJson(data);
+                    	return;
+                    }
+                }
+                else {
+                	if(!person.getStr("name").equals(String.valueOf(lo.get(2)))) 
+                     {
+                     	data.put("msg", "身份证为"+idNum+"的人员信息不匹配");
+                     	renderJson(data);
+                     	return;
+                     }
+                }
+                GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
+                GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(8)));
+                if(groupInsuranceGuarantee==null) {
+                	data.put("msg", "未找到方案"+String.valueOf(lo.get(7))+"");
+                 	renderJson(data);
+                 	return;
+                }
+                if(newGroupInsuranceGuarantee!=null) {
+                	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+                     person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
+                     person.set("remark",String.valueOf(lo.get(11)));
+                     Date policy_expiration_date = format.parse(String.valueOf(lo.get(9)));
+                     Date newDate = DateUtil.addDays(policy_expiration_date, 1);
+                     person.set("policy_expiration_date", newDate);
+             		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
+             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+             		BigDecimal premium = guarantee.getBigDecimal("premium");
+             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+             		person.set("premium", totelPre);
+             		person.update();
+             		
+             		
+             		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+            		groupInsurancePersonLog
+            		.set("customer_id", order.getLong("insure_customer_id"))
+            		.set("policy_num", person.get("policy_num"))
+            		.set("status", 4)
+            		.set("name", person.get("name"))
+            		.set("order_id", person.getLong("order_id"))
+            		.set("change",person.get("premium"))
+            		.set("policy_effective_date", person.getDate("policy_effective_date"))
+            		.set("create_time", new Date()).save();
+                }
+                else {
+                	data.put("msg", "未找到变更方案"+String.valueOf(lo.get(7))+"");
+                 	renderJson(data);
+                 	return;
+                }
+        }  
+        data.put("msg", "导入成功");
+        data.put("orderId", hiddenOrderIdForImport);
+        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+    	renderJson(data);
+    	return;
+	}
+	
 	
 	/**
 	 * 保存服务信息
@@ -965,7 +1314,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	}
 	
 	/**
-	 * 进保
+	 * 退保
 	 */
 	public void cancelPerson() {
 		Map<String, Object> data = new HashMap<>();
@@ -985,7 +1334,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		groupInsurancePersonLog
 		.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
 		.set("policy_num", person.get("policy_num"))
-		.set("status", 0)
+		.set("status", 2)
 		.set("name", person.get("name"))
 		.set("order_id", person.getLong("order_id"))
 		.set("change",person.get("premium"))
@@ -997,7 +1346,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	}
 	
 	/**
-	 * 退保
+	 * 进保
 	 */
 	public void comePerson() {
 		Map<String, Object> data = new HashMap<>();
@@ -1016,7 +1365,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		groupInsurancePersonLog
 		.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
 		.set("policy_num", person.get("policy_num"))
-		.set("status", 2)
+		.set("status", 0)
 		.set("name", person.get("name"))
 		.set("order_id", person.getLong("order_id"))
 		.set("change",person.get("premium"))

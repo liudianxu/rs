@@ -358,9 +358,9 @@
 				<input type="hidden" name="hiddenOrderIdForGuarantee" value="#(order.id)" />
 				<div class="bar">
 					<div class="buttonGroup">
-						<button class="layui-btn layui-btn-sm" id='addGuaranteeBtn'>
+						<a class="layui-btn layui-btn-sm" id='addGuaranteeBtn'>
 							<i class="layui-icon layui-icon-add-1"></i>新增保障
-						</button>
+						</a>
 					</div>
 				</div>
 				<div style="overflow-x: auto">
@@ -553,7 +553,7 @@
 							<a class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
 								<i class="layui-icon"></i>删除
 							</a>
-							<a class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
+							<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增人员模板.xls">
 								<i class="layui-icon"></i>Excel模板
 							</a>
 							<input type="text" style="display:none;" id="logo" name="groupInsuranceOrder.excel_tem" autocomplete="off" class="layui-input"
@@ -993,12 +993,12 @@ text-align: center;
 							url: '/admin/groupInsurance/importPerson',
 							data: {
 								hiddenOrderIdForImport: hiddenOrderIdForImport,
-								filePath: res.data.filePath
+								filePath: res.data.filePath.trim()
 							},
 							dataType: "json",
 							success: function(data) {
+								layer.msg(data.msg);
 								if (data.code == 1) {
-									layer.msg("导入成功");
 									reloadPersonTable(data.orderId).
 									then(function() { //成功
 											form.render() //再选染

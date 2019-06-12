@@ -526,17 +526,20 @@
 							<a class="layui-btn layui-btn-sm" id='addPersonBtn'>
 								<i class="layui-icon layui-icon-add-1"></i>新增进保
 							</a>
-							<a class="layui-btn layui-btn-sm" id='exportPersonBtn'>
+							<a class="layui-btn layui-btn-sm" id='exportBatchPersonBtn'>
 								<i class="layui-icon layui-icon-add-1"></i>批量进退保
 							</a>
-							<a class="layui-btn layui-btn-sm" id='exportPersonBtn'>
+							<a class="layui-btn layui-btn-sm" id='exportChangePersonBtn'>
 								<i class="layui-icon layui-icon-add-1"></i>批量变更层级
 							</a>
 							<a class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
 								<i class="layui-icon"></i>删除
 							</a>
-							<a class="layui-btn layui-btn-sm layui-btn-info" id='exportTem'>
-								<i class="layui-icon"></i>Excel模板
+								<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/保全增减员模板.xlsx">
+								<i class="layui-icon"></i>保全增减员模板
+							</a>
+								<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/层级方案变更模板.xlsx">
+								<i class="layui-icon"></i>层级方案变更模板
 							</a>
 							<input type="text" style="display:none;" id="logo" name="groupInsuranceOrder.excel_tem" autocomplete="off" class="layui-input"
 							 style="width: 250px;">
@@ -958,7 +961,7 @@ text-align: center;
 				upload = layui.upload;
 				//指定允许上传的文件类型
 				upload.render({
-					elem: '#exportPersonBtn',
+					elem: '#exportBatchPersonBtn',
 					url: '/common/file/upload',
 					accept: 'file' //普通文件
 						,
@@ -972,15 +975,15 @@ text-align: center;
 						}
 						$.ajax({
 							type: 'POST',
-							url: '/admin/groupInsurance/importPerson',
+							url: '/admin/groupInsurance/exportBatchPersonBtn',
 							data: {
 								hiddenOrderIdForImport: hiddenOrderIdForImport,
 								filePath: res.data.filePath
 							},
 							dataType: "json",
 							success: function(data) {
+								layer.msg(data.msg);
 								if (data.code == 1) {
-									layer.msg("导入成功");
 									reloadPersonTable(data.orderId).
 									then(function() { //成功
 											form.render() //再选染
@@ -996,6 +999,51 @@ text-align: center;
 				})
 			})
 
+			layui.use(['element', 'upload'], function() {
+				upload = layui.upload;
+				//指定允许上传的文件类型
+				upload.render({
+					elem: '#exportChangePersonBtn',
+					url: '/common/file/upload',
+					accept: 'file' //普通文件
+						,
+					multiple: true,
+					done: function(res) {
+						var hiddenOrderIdForImport = $("input[name='hiddenOrderIdForGuarantee3']").val();
+						console.log(hiddenOrderIdForImport);
+						if (hiddenOrderIdForImport == undefined || hiddenOrderIdForImport == null || hiddenOrderIdForImport == "") {
+							layer.msg("请先保存产品保障说明！");
+							return false;
+						}
+						$.ajax({
+							type: 'POST',
+							url: '/admin/groupInsurance/exportChangePersonBtn',
+							data: {
+								hiddenOrderIdForImport: hiddenOrderIdForImport,
+								filePath: res.data.filePath
+							},
+							dataType: "json",
+							success: function(data) {
+								layer.msg(data.msg);
+								if (data.code == 1) {
+									reloadPersonTable(data.orderId).
+									then(function() { //成功
+											form.render() //再选染
+										})
+										.catch(function(err) { //失败
+											console.error('The code from queryPersonByOrderId = ' + err)
+										})
+								}
+
+							}
+						});
+					}
+				})
+			})
+			
+			
+			
+			
 			form.on('submit(submit1)',
 				function(data) {
 					$.post($(".layui-form1").attr('action'), $(".layui-form1").serialize(),

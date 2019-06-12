@@ -630,7 +630,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			return;
 		}
 		
-		if(person.getInt("occupation_category")>groupInsuranceOrder.getInt("max_occupation_category"))
+		if(groupInsuranceOrder.get("max_occupation_category")!=null&&person.getInt("occupation_category")>groupInsuranceOrder.getInt("max_occupation_category"))
 		{
 			data.put("msg", "职业类别不能高于"+groupInsuranceOrder.getInt("max_occupation_category")+"类");
 			renderJson(data);

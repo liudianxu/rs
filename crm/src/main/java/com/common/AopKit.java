@@ -15,6 +15,7 @@ import com.crm.service.groupinfo.impl.GroupInfoServiceImpl;
 import com.crm.service.system.AdminAuthService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.AreaService;
+import com.crm.service.system.EmailService;
 import com.crm.service.system.OperateLogService;
 import com.crm.service.system.PermissionService;
 import com.crm.service.system.RoleService;
@@ -23,6 +24,7 @@ import com.crm.service.system.UserService;
 import com.crm.service.system.impl.AdminAuthServiceImpl;
 import com.crm.service.system.impl.AdminLoginServiceImpl;
 import com.crm.service.system.impl.AreaServiceImpl;
+import com.crm.service.system.impl.EmailServiceImpl;
 import com.crm.service.system.impl.OperateLogServiceImpl;
 import com.crm.service.system.impl.PermissionServiceImpl;
 import com.crm.service.system.impl.RoleServiceImpl;
@@ -40,6 +42,8 @@ public class AopKit {
 		Aop.addMapping(PermissionService.class,PermissionServiceImpl.class);
 		Aop.addMapping(RoleService.class, RoleServiceImpl.class);
 		Aop.addMapping(UserService.class, UserServiceImpl.class);
+		Aop.addMapping(EmailService.class, EmailServiceImpl.class);
+
 		
 		Aop.addMapping(BrandService.class, BrandServiceImpl.class);
 		Aop.addMapping(CustomerInfoService.class, CustomerInfoServiceImpl.class);

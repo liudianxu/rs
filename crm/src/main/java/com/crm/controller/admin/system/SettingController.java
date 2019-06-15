@@ -1,12 +1,15 @@
 package com.crm.controller.admin.system;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.crm.model.system.Setting;
+import com.crm.service.group.GroupInsurancePersonService;
+import com.crm.service.system.EmailService;
 import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
@@ -14,8 +17,10 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.ehcache.CacheKit;
 
 public class SettingController extends Controller{
-    
-	
+    @Inject
+    EmailService emailService;
+	@Inject
+	GroupInsurancePersonService personService;
 	  /**
 	   * 去编辑页面
 	   * @param id
@@ -70,4 +75,11 @@ public class SettingController extends Controller{
 		response.setMessage("发送成功");
 		renderJson(response);	
 		return;	}
+	
+	 public void sendEmail() throws IOException {
+		 emailService.sendChangePersonEmail(personService.findByOrderId(86L));
+		 renderJson("hah");
+		 return;
+	 }
+	   
 }

@@ -16,14 +16,23 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 	public static final GroupInsurancePersonLog dao = new GroupInsurancePersonLog();
 
 
-	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,Long id) {
+	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,String customerName,
+			String policyNum,String name) {
 		Page<GroupInsurancePersonLog> page = new Page<>();
 		DataGrid<GroupInsurancePersonLog> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select  g.*,c.customer_name as customerName from crm_group_insurance_person_log g ");
-		sql.append("left join crm_customer_info c on c.id =g.customer_id ");
-		sql.append("where 1=1 and g.order_id = "+id+"");
+		sql.append("left join crm_customer_info c on c.id =g.customer_id where 1=1");
+		if(StringUtils.isNotBlank(customerName)){
+			sql.append(" and c.customer_name like '%").append(customerName + "%' ");
+		}
+		if(StringUtils.isNotBlank(policyNum)){
+			sql.append(" and g.policy_num like '%").append(policyNum + "%' ");
+		}
+		if(StringUtils.isNotBlank(name)){
+			sql.append(" and g.name like '%").append(name + "%' ");
+		}
 		sql.append(" order by g.create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsurancePersonLog.dao.paginate(num, size, sqlPara);

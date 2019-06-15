@@ -1377,11 +1377,21 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		renderJson(data);
 	}
 	
+	/**
+	 * 人员增删记录页面
+	 */
+	public void personLog() {
+		render("personLog.html");
+	}
+	
 	public void getPersonLog() {
-		Long id = getParaToLong("id");
+		//Long id = getParaToLong("id");
+		String customerName = getPara("customer_name");
+		String policyNum = getPara("policy_num");
+		String name = getPara("name");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
-		renderJson(GroupInsurancePersonLog.selectPage(page,size,id));
+		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name));
 	}
 	
 	

@@ -1,21 +1,29 @@
 #@layout() 
 #define main()
 <div class="layui-card">
-	<div class="headerttl">查看合同</div>
+	<div class="headerttl">人员增删记录列表</div>
 	<div class="layui-card-body">
 		<div class='layui-form' lay-filter='form_pro'>
 			<div class='layui-row layui-col-space5'>
-			<!-- 	<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='customer_name' autocomplete='off' class='layui-input'
+						placeholder='客户名' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='policy_num' autocomplete='off' class='layui-input'
+						placeholder='保单号' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
 					<input name='name' autocomplete='off' class='layui-input'
-						placeholder='保险公司名称' />
-				</div> -->
-				<!-- <div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+						placeholder='姓名' />
+				</div>
+				 <div class='layui-input-inline layui-col-sm4 layui-col-md2'>
 					<div class="layui-btn-container">
 						<button class="layui-btn" lay-submit='' lay-filter='submit'>
 							<i class="layui-icon layui-icon-search"></i>查询
 						</button>
 					</div>
-				</div> -->
+				</div> 
 			</div>
 		</div>
 		<table class="layui-hide" id="brandTable" lay-filter="test"></table>
@@ -40,7 +48,7 @@
 	    ,toolbar: '#headBar'
 	    ,title: '人员增减记录'
 	    ,cols: [[
-	        {field:'customer_id', title:'客户名'}
+	        {field:'customerName', title:'客户名'}
 		   ,{field:'policy_num', title:'保单号'}
 	      ,{field:'name', title:'姓名'}
 	      ,{field:'status', title:'操作'}
@@ -68,7 +76,7 @@
 	    ,page: true
 	  });
 	  
-	  //头工具栏事件
+	  /* //头工具栏事件
 	  table.on('toolbar(test)',function(obj){
 		  if(obj.event == 'add'){
 			  location.href="/admin/brand/add";
@@ -89,7 +97,7 @@
 	    	location.href="/admin/brand/edit?id="+data.id;
 	    	//siMenu("product/brand/edit",{id: data.id});
 	    }
-	  });
+	  }); */
 	  form.render()
 	  form.on('submit(submit)',function(data){
 		 console.log(JSON.stringify(data.field))

@@ -1385,14 +1385,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	}
 	
 	public void getPersonLog() {
-		//Long id = getParaToLong("id");
 		String customerName = getPara("customer_name");
 		String policyNum = getPara("policy_num");
 		String name = getPara("name");
+		String createTime = getPara("create_time");
+		String policyEffectiveDate = getPara("policy_effective_date");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
-		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name));
+		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate));
 	}
-	
 	
 }

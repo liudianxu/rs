@@ -19,9 +19,23 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 
 
 	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,String customerName,
-			String policyNum,String name) {
+			String policyNum,String name,String createTime,String policyEffectiveDate) {
 		Page<GroupInsurancePersonLog> page = new Page<>();
 		DataGrid<GroupInsurancePersonLog> dataGrid = new DataGrid<>();
+		String createBeginTime = null;
+		String createEndTime = null;
+		String policyEffectiveBeginDate = null;
+		String policyEffectiveEndDate = null;
+		if(StringUtils.isNotBlank(createTime)){
+			String[] createTimeStr = createTime.split("~");
+			createBeginTime = createTimeStr[0]+"00:00:00";
+			createEndTime = createTimeStr[1]+" 23:59:59";
+		}
+		if(StringUtils.isNotBlank(policyEffectiveDate)){
+			String[] policyEffectiveDateStr = policyEffectiveDate.split("~");
+			policyEffectiveBeginDate = policyEffectiveDateStr[0]+"00:00:00";
+			policyEffectiveEndDate = policyEffectiveDateStr[1]+" 23:59:59";
+		}
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select  g.*,c.customer_name as customerName from crm_group_insurance_person_log g ");
@@ -34,6 +48,12 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 		}
 		if(StringUtils.isNotBlank(name)){
 			sql.append(" and g.name like '%").append(name + "%' ");
+		}
+		if(StringUtils.isNotBlank(createBeginTime)&&StringUtils.isNotBlank(createEndTime)){
+			sql.append(" and g.create_time > '"+createBeginTime+"' and g.create_time <'"+createEndTime+"'");
+		}
+		if(StringUtils.isNotBlank(policyEffectiveBeginDate)&&StringUtils.isNotBlank(policyEffectiveEndDate)){
+			sql.append(" and g.policy_effective_date > '"+policyEffectiveBeginDate+"' and g.policy_effective_date <'"+policyEffectiveEndDate+"'");
 		}
 		sql.append(" order by g.create_time desc ");
 		sqlPara.setSql(sql.toString());

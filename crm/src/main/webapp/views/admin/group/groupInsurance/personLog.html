@@ -17,7 +17,15 @@
 					<input name='name' autocomplete='off' class='layui-input'
 						placeholder='姓名' />
 				</div>
-				 <div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+						<input name='create_time' autocomplete='off' class="layui-input" id="createTime"
+							placeholder="操作日期">
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+						<input name='policy_effective_date' autocomplete='off' class="layui-input" id="policyEffectiveDate"
+							placeholder="生效日期">
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
 					<div class="layui-btn-container">
 						<button class="layui-btn" lay-submit='' lay-filter='submit'>
 							<i class="layui-icon layui-icon-search"></i>查询
@@ -40,10 +48,18 @@
 	  ,layer = layui.layer
 	  ,$ = layui.$;
 	  
+	  laydate.render({
+		    elem: '#createTime'
+		    ,range: '~'
+		  });
+	  laydate.render({
+		    elem: '#policyEffectiveDate'
+		    ,range: '~'
+		  });
 	  
 	  table.render({
 	    elem: '#brandTable'
-	    ,url:'/admin/groupInsurance/getPersonLog?id='
+	    ,url:'/admin/groupInsurance/getPersonLog'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,title: '人员增减记录'
@@ -69,6 +85,9 @@
 					}
 					else if($(this).text()=='3'){
 						   $(this).html("<span>已失效<span>");
+					}
+					else if($(this).text()=='4'){
+						   $(this).html("<span>变更层级<span>");
 					}
 				
 			})

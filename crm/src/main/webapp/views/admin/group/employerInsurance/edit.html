@@ -1,8 +1,8 @@
 #@layout() #define main()
-<div class="headerttl">添加雇主保单</div>
+<div class="headerttl">修改雇主保单</div>
 <div class='layui-tab-item layui-show'>
 	<form class="layui-tab-content layui-form layui-form1" action="/admin/groupInsurance/saveBaseInfo">
-		<input name='groupInsuranceOrder.id' style="display: none;">
+		<input name='groupInsuranceOrder.id' style="display: none;" value="#(groupInsuranceOrder.id)">
 		<div class=" wrap">
 			<div class="overflow">
 				<div class="half fl">
@@ -10,7 +10,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>保单号</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.policy_num' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.policy_num' value='#(groupInsuranceOrder.policy_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -37,7 +37,7 @@
 								 lay-verify>
 									<option value=''>请选择</option>
 									#for(customer:customers)
-									<option value='#(customer.id)'>#(customer.customer_name)</option>
+									<option value='#(customer.id)' #if(groupInsuranceOrder.insure_customer_id==customer.id)selected #end>#(customer.customer_name)</option>
 									#end
 								</select>
 							</div>
@@ -52,7 +52,7 @@
 								<select name='groupInsuranceOrder.brand_id' id="brandId" lay-verify='required' lay-search lay-verify>
 									<option value=''>请选择</option>
 									#for(brand:brands)
-									<option value='#(brand.id)'>#(brand.name )</option>
+									<option value='#(brand.id)' #if(groupInsuranceOrder.brand_id==brand.id)selected #end>#(brand.name )</option>
 									#end
 								</select>
 							</div>
@@ -64,7 +64,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>总人数</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.total_person_sum' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.total_person_sum' value='#(groupInsuranceOrder.total_person_sum)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -74,7 +74,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>首次投保人数</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.person_num' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.person_num' value='#(groupInsuranceOrder.person_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -84,7 +84,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>身故赔偿限额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.death_compensation' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.death_compensation' value='#(groupInsuranceOrder.death_compensation)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -94,7 +94,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>残疾赔偿限额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.disability_compensation' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.disability_compensation' value='#(groupInsuranceOrder.disability_compensation)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -104,7 +104,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>医疗补偿限额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.medical_compensation' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.medical_compensation' value='#(groupInsuranceOrder.medical_compensation)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -114,7 +114,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>住院津贴赔偿限额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.hospitalization_compensation' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.hospitalization_compensation' value='#(groupInsuranceOrder.hospitalization_compensation)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -124,7 +124,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>误工赔偿限额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.tardy_job_compensation' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.tardy_job_compensation' value='#(groupInsuranceOrder.tardy_job_compensation)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -134,7 +134,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>法律费用赔偿限额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.law_compensation' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.law_compensation' value='#(groupInsuranceOrder.law_compensation)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -144,7 +144,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>免赔额</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.deductibles' class='layui-input' autocomplete='off' placeholder='请输入' />
+								<input name='groupInsuranceOrder.deductibles' value='#(groupInsuranceOrder.deductibles)' class='layui-input' autocomplete='off' placeholder='请输入' />
 							</div>
 						</div>
 					</div>
@@ -154,7 +154,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>每人年保费</div>
 							<div class='layui-input-block overflow'>
-								<input name='groupInsuranceOrder.annual_premium' lay-verify='required' class='layui-input' autocomplete='off'
+								<input name='groupInsuranceOrder.annual_premium' value='#(groupInsuranceOrder.annual_premium)' lay-verify='required' class='layui-input' autocomplete='off'
 								 placeholder='请输入' />
 							</div>
 						</div>
@@ -165,7 +165,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>保险起期</div>
 							<div class='layui-input-block overflow'>
-								<input type="text" class="form-control layui-input" lay-verify='required' name="groupInsuranceOrder.policy_effective_date"
+								<input type="text" class="form-control layui-input" value='#(groupInsuranceOrder.policy_effective_date)' lay-verify='required' name="groupInsuranceOrder.policy_effective_date"
 								 id="policy_effective_date">
 							</div>
 						</div>
@@ -176,7 +176,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>保险止期</div>
 							<div class='layui-input-block overflow'>
-								<input type="text" class="form-control layui-input" lay-verify='required' name="groupInsuranceOrder.policy_expiration_date"
+								<input type="text" class="form-control layui-input" value='#(groupInsuranceOrder.policy_expiration_date)' lay-verify='required' name="groupInsuranceOrder.policy_expiration_date"
 								 id="policy_expiration_date">
 							</div>
 						</div>
@@ -188,7 +188,7 @@
 					<div class='layui-block theme-required'>
 						<div class='layui-form-label fl'>特别约定</div>
 						<div class='layui-input-block'>
-							<div id="editor1">
+							<div id="editor1">#(groupInsuranceOrder.special_agreement)
 							</div>
 							<textarea id="editorTextarea1" name='groupInsuranceOrder.special_agreement' style="display:none;"></textarea>
 						</div>
@@ -200,7 +200,7 @@
 					<div class='layui-block theme-required'>
 						<div class='layui-form-label fl'>附加条款</div>
 						<div class='layui-input-block overflow'>
-							<div id="editor2">
+							<div id="editor2">#(groupInsuranceOrder.additional_clauses)
 							</div>
 							<textarea id="editorTextarea2" name='groupInsuranceOrder.additional_clauses' style="display:none;"></textarea>
 						</div>
@@ -212,7 +212,7 @@
 					<div class='layui-block theme-required'>
 						<div class='layui-form-label fl'>备注</div>
 						<div class='layui-input-block overflow'>
-							<div id="editor3">
+							<div id="editor3">#(groupInsuranceOrder.remark)
 							</div>
 							<textarea id="editorTextarea3" name='groupInsuranceOrder.remark' style="display:none;"></textarea>
 						</div>
@@ -224,7 +224,7 @@
 					<div class='layui-block theme-required'>
 						<div class='layui-form-label fl'>通知邮箱</div>
 						<div class='layui-input-block overflow'>
-							<input name='groupInsuranceOrder.brand_service_emial' class='layui-input' autocomplete='off' placeholder='请输入' />
+							<input name='groupInsuranceOrder.brand_service_emial' value='#(groupInsuranceOrder.brand_service_emial)' class='layui-input' autocomplete='off' placeholder='请输入' />
 						</div>
 					</div>
 				</div>
@@ -332,6 +332,7 @@
 			$('#editorTextarea' + id).val(html)
 		}
 		editor.create()
+		$('#editorTextarea' + id).val(editor.txt.html())
 	}
 
 

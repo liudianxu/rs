@@ -1,26 +1,26 @@
 #@layout() #define main()
 <div class="layui-card">
-	<div class="headerttl">合同列表</div>
+	<div class="headerttl">雇主保单列表</div>
 	<div class="layui-card-body">
 		<div class='layui-form' lay-filter='form_pro'>
 			<div class='layui-row layui-col-space5'>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-					<input name='company_name' autocomplete='off' class='layui-input'
+					<input name='customer_name' autocomplete='off' class='layui-input'
 						placeholder='客户名' />
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-						<input name='create_time' autocomplete='off' class="layui-input" id="createTime"
+						<input name='policy_effective_date' autocomplete='off' class="layui-input" id="policy_effective_date"
 							placeholder="合同起期">
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-						<input name='policy_effective_date' autocomplete='off' class="layui-input" id="policyEffectiveDate"
+						<input name='policy_expiration_date' autocomplete='off' class="layui-input" id="policy_expiration_date"
 							placeholder="合同止期">
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-					<select name='type' lay-search>
+					<select name='status' lay-search>
 						<option value=''>合同状态</option>
-						<option value='0'>线上</option>
-						<option value='1'>线下</option>
+						<option value='3'>保障中</option>
+						<option value='4'>已失效</option>
 					</select>
 				</div>
 				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
@@ -45,11 +45,14 @@
 	</script>
 
 <script type="text/html" id="actionBar">
-#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/edit"))
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/employerInsurance/edit"))
 	<a class="layui-btn  layui-btn-xs" lay-event="edit">修改</a>
 #end#end
-#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/view"))
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/employerInsurance/view"))
     <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+#end#end
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/employerInsurance/copy"))
+    <a class="layui-btn  layui-btn-xs" lay-event="copy">复制</a>
 #end#end
 		</script>
 <script>
@@ -59,30 +62,31 @@
 	  ,layedit = layui.layedit
 	  ,laydate = layui.laydate;
 	  
+	  laydate.render({
+			elem: '#policy_effective_date' //指定元素
+				,trigger: 'click'
+		});
+
+		laydate.render({
+			elem: '#policy_expiration_date' //指定元素
+				,trigger: 'click'
+		});
+	  
 	 var branchTable =  table.render({
 	    elem: '#branchTable'
-	    ,url:'/admin/groupInsurance/selectByPage'
+	    ,url:'/admin/employerInsurance/selectByPage'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,defaultToolbar: ['filter','print','exports']
 	    ,title: ''
 	    ,cols: [[
-		  // {field:'status', title:'状态'},
-	      {field:'policy_num', title:'合同号'}
-	      ,{field:'plan_name', title:'客户名'}
-	      ,{field:'customerName', title:'单位名称'}
-	      ,{field:'policy_num', title:'保单号'}
-	      ,{field:'insurance_type', title:'险种类型'}
-	      ,{field:'type', title:'订单类型'}
-	     // ,{field:'contacts', title:'联系人'}
-	     // ,{field:'email', title:'联系邮箱'}
-	      //,{field:'phone', title:'联系电话'}
-	      ,{field:'BrandName', title:'保险公司'}
-	      ,{field:'premium', title:'保费'}
-	      ,{field:'remark', title:'备注'}
-	      ,{field:'policy_effective_date', title:'保单生效日期'}
-	      ,{field:'policy_expiration_date', title:'保单终止日期'}
-	      ,{field:'premium', title:'总保费'}
+	       {field:'policy_num', title:'合同号'}
+	      ,{field:'customerName', title:'客户名'}
+	      ,{field:'person', title:'在保人数/总人数'}
+	      ,{field:'policy_effective_date', title:'合同起期'}
+	      ,{field:'policy_expiration_date', title:'合同止期'}
+	      ,{field:'totalPremium', title:'总保费'}
+	      ,{field:'status', title:'状态'}
 	    
 	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
 	    ]]
@@ -109,8 +113,9 @@
 						   $(this).html("<span>已取消<span>");
 					}
 				
-			}),
-			$("[data-field='insurance_type']").children().each(function(){
+			})
+			/* $("[data-field='insurance_type']").children().each(function(){
+				 $(this).html("<span>"+雇主责任险+"<span>");
 				if($(this).text()=='0'){
 					   $(this).html("<span>雇主责任险<span>");
 					}else if($(this).text()=='1'){
@@ -125,14 +130,7 @@
 					else if($(this).text()=='4'){
 						   $(this).html("<span>其他<span>");
 					}
-			}),
-			$("[data-field='type']").children().each(function(){
-				if($(this).text()=='0'){
-					   $(this).html("<span>线上<span>");
-					}else if($(this).text()=='1'){
-						   $(this).html("<span>线下<span>");
-					}
-			})
+			}) */
 	 }
 	    ,page: true
 	  });
@@ -161,14 +159,14 @@
 	      });
 	    } else if(obj.event === 'edit'){
 	    	console.log('edit')
-			  location.href="/admin/groupInsurance/edit?id="+data.id;
+			  location.href="/admin/employerInsurance/edit?id="+data.id;
 	    }
-	    else if(obj.event === 'preserve'){
-			  location.href="/admin/groupInsurance/preserve?id="+data.id;
+	    else if(obj.event === 'copy'){
+			  location.href="/admin/employerInsurance/copy?id="+data.id;
 	    }
 	    else if(obj.event === 'view'){
 	    	console.log('view')
-			  location.href="/admin/groupInsurance/view?id="+data.id;
+			  location.href="/admin/employerInsurance/view?id="+data.id;
 	    }
 	  });
 	  form.render();

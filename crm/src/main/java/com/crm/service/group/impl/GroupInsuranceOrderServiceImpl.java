@@ -57,6 +57,15 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		if(StringUtils.isNotBlank(map.get("insurance_type"))){
 			sql.append(" and o.insurance_type = "+map.get("insurance_type"));
 		}
+		if(StringUtils.isNotBlank(map.get("customer_name"))){
+			sql.append(" and c.customer_name like '%").append(map.get("customer_name")).append("%' ");
+		}
+		if(StringUtils.isNotBlank(map.get("policy_effective_date"))){
+			sql.append(" and o.policy_effective_date = "+"'"+map.get("policy_effective_date")+" 00:00:00'");
+		}
+		if(StringUtils.isNotBlank(map.get("policy_expiration_date"))){
+			sql.append(" and o.policy_expiration_date = "+"'"+map.get("policy_expiration_date")+" 23:59:59'");
+		}
 		sql.append(" order by o.create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsuranceOrder.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);

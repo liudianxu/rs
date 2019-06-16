@@ -1,91 +1,120 @@
 #define layout()
 <html lang="zh-CN" xml:lang="zh-CN">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="renderer" content="webkit">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>CRM后台管理平台</title>
+		<title>CRM后台管理平台</title>
 
-<link rel="stylesheet" href="../../../assets/layui/css/layui.css">
-<link rel="stylesheet" href="../../../assets/css/admin.css">
-<script src="../../../assets/layui/layui.js"></script>
-<script src="../../../assets/js/jquery3.21.js"></script>
-<script src="../../../assets/js/JQ_Select.js"></script>
-<script src="../../../assets/js/webuploader.js"></script>
-<script src="../../../assets/js/jquery.lSelect.js"></script>
-<script src="../../../assets/wangEditor/wangEditor.min.js"></script>
-</head>
-<script type="text/javascript">
-var E = window.wangEditor
-var editor = new E('#editor')
-//或者 var editor = new E( document.getElementById('editor') )
-editor.customConfig.uploadFileName = 'file';
-editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
-editor.customConfig.uploadImgMaxLength = 5;  
-editor.customConfig.uploadImgServer = '/common/file/wangUpload'  // 上传图片到服务器
-editor.customConfig.uploadImgHooks = {
-customInsert: function (insertImg, result, editor) {
-                // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
-                // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
-                // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
-                var url =result.data.src;
-                insertImg(url);
-                // result 必须是一个 JSON 格式字符串！！！否则报错
-            }
-        }
-</script>
-<body class="layui-layout-body">
-	<div class="layui-layout layui-layout-admin">
-		<div class="layui-header">
-			<div class="layui-logo">CRM后台管理系统</div>
-			<ul class="layui-nav layui-layout-left">
-				#for(permission:permissions)
-				#set(childrens=permission.list)
-				<li class="layui-nav-item"><a href="javascript:;">#(permission.name)</a>
-					<dl class="layui-nav-child">
-					#for(children:childrens)
-					<dd>
-							<a href="#(children.url)">#(children.name)</a>
-						</dd>
+		<link rel="stylesheet" href="../../../assets/layui/css/layui.css">
+		<link rel="stylesheet" href="../../../assets/css/admin.css">
+		<link rel="stylesheet" type="text/css" href="../../../assets/css/run-card.css"/>
+		<script src="../../../assets/layui/layui.js"></script>
+		<script src="../../../assets/js/jquery3.21.js"></script>
+		<script src="../../../assets/js/JQ_Select.js"></script>
+		<script src="../../../assets/js/webuploader.js"></script>
+		<script src="../../../assets/js/jquery.lSelect.js"></script>
+		<script src="../../../assets/wangEditor/wangEditor.min.js"></script>
+	</head>
+	<script type="text/javascript">
+		var E = window.wangEditor
+		var editor = new E('#editor')
+		//或者 var editor = new E( document.getElementById('editor') )
+		editor.customConfig.uploadFileName = 'file';
+		editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+		editor.customConfig.uploadImgMaxLength = 5;
+		editor.customConfig.uploadImgServer = '/common/file/wangUpload' // 上传图片到服务器
+		editor.customConfig.uploadImgHooks = {
+			customInsert: function(insertImg, result, editor) {
+				// 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+				// insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+				// 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+				var url = result.data.src;
+				insertImg(url);
+				// result 必须是一个 JSON 格式字符串！！！否则报错
+			}
+		}
+	</script>
+	<body class="layui-layout-body">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<div class="layui-logo">CRM后台管理系统</div>
+				<!-- <ul class="layui-nav layui-layout-left">
+					#for(permission:permissions)
+					#set(childrens=permission.list)
+					<li class="layui-nav-item">
+						<a href="javascript:;">#(permission.name)</a>
+						<dl class="layui-nav-child">
+							#for(children:childrens)
+							<dd>
+								<a href="#(children.url)">#(children.name)</a>
+							</dd>
+							#end
+						</dl>
+					</li>
 					#end
-				</dl></li>
-				#end
-			</ul>
-			<ul class="layui-nav layui-layout-right">
-				<li class="layui-nav-item"><a href="javascript:;"> <img
-						src="http://t.cn/RCzsdCq" class="layui-nav-img">#(loginAdmin.username)
-				</a>
-					<dl class="layui-nav-child">
-						<dd>
-							<a href="">基本资料</a>
-						</dd>
-						<dd>
-							<a href="">修改密码</a>
-						</dd>
-					</dl></li>
-				<li class="layui-nav-item"><a href="/admin/logout">注销</a></li>
-			</ul>
-		</div>
-		
-		<div class="layui-body layui-body-normal">
-    		<!-- 内容主体区域 -->
-			<div id="container">
-				#@main()
+				</ul> -->
+				<ul class="layui-nav layui-layout-right">
+					<li class="layui-nav-item"><a href="javascript:;"> <img src="http://t.cn/RCzsdCq" class="layui-nav-img">#(loginAdmin.username)
+						</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="">基本资料</a>
+							</dd>
+							<dd>
+								<a href="">修改密码</a>
+							</dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item"><a href="/admin/logout">注销</a></li>
+				</ul>
+			</div>
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll">
+					<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px;">
+						#for(permission:permissions)
+						#set(childrens=permission.list)
+						<li class="layui-nav-item layui-nav-itemed">
+							<a href="javascript:;">#(permission.name)</a>
+							#if(childrens.size()>0)
+								<dl class="layui-nav-child">
+									#for(children:childrens)
+									<dd><a href="#(children.url)">#(children.name)</a></dd>
+									#end
+								</dl>
+							#end
+						</li>
+						#end
+						<!-- <li class="layui-nav-item">
+							<a href="javascript:;">解决方案</a>
+							<dl class="layui-nav-child">
+					A			<dd><a href="">移动模块</a></dd>
+								<dd><a href="">后台模版</a></dd>
+								<dd><a href="">电商平台</a></dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item"><a href="">云市场</a></li>
+						<li class="layui-nav-item"><a href="">社区</a></li> -->
+					</ul>
+				</div>
+			</div>
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<div id="container">
+					#@main()
+				</div>
 			</div>
 		</div>
-	</div>
-		
-	
-	<script>
-	//JavaScript代码区域
+		<script>
+			//JavaScript代码区域
 
-	layui.use('element', function(){
-	  var element = layui.element;
-	  
-	});
-	</script>
-	### 模板函数安全调用，找到 js() 模板函数则调用，找不到则直接跳过 ### 适合于部分页面在 layout.html 提供的 js文件之外，还需额外添加 js 资源的应用场景 #@js?()
-</body>
+			layui.use('element', function() {
+				var element = layui.element;
+
+			});
+		</script>
+		### 模板函数安全调用，找到 js() 模板函数则调用，找不到则直接跳过 ### 适合于部分页面在 layout.html 提供的 js文件之外，还需额外添加 js 资源的应用场景 #@js?()
+	</body>
 </html>
 #end

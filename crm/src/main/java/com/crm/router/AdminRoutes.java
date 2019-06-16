@@ -6,6 +6,7 @@ import com.crm.controller.admin.brand.BrandController;
 import com.crm.controller.admin.customerinfo.CustomerInfoController;
 import com.crm.controller.admin.group.EmployerInsuranceController;
 import com.crm.controller.admin.group.GroupInsuranceController;
+import com.crm.controller.admin.group.GroupInsurancePersonController;
 import com.crm.controller.admin.groupinfo.GroupInfoController;
 import com.crm.controller.admin.system.PermissionController;
 import com.crm.controller.admin.system.RoleController;
@@ -35,6 +36,7 @@ public class AdminRoutes extends Routes {
 		add("admin/system/permission", PermissionController.class, "/system/permission");
 		add("admin/setting", SettingController.class, "/setting");
 		add("admin/groupInsurance", GroupInsuranceController.class, "/group/groupInsurance");
+		add("admin/groupInsurancePerson", GroupInsurancePersonController.class, "/group/groupInsurancePerson");
 		add("admin/employerInsurance", EmployerInsuranceController.class, "/group/employerInsurance");
 		add("admin/brand", BrandController.class, "/brand");
 		add("admin/customermanage/customerInfo", CustomerInfoController.class, "/customermanage/customerInfo");

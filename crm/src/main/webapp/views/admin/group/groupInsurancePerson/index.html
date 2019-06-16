@@ -1,0 +1,115 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="headerttl">人员管理列表</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='name' autocomplete='off' class='layui-input'
+						placeholder='姓名' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='id_num' autocomplete='off' class='layui-input'
+						placeholder='身份证' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='customer_name' autocomplete='off' class='layui-input'
+						placeholder='客户名' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='policy_num' autocomplete='off' class='layui-input'
+						placeholder='保单号' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<select name='status' lay-search>
+						<option value=''>状态</option>
+						<option value='0'>承保</option>
+						<option value='2'>退保</option>
+						<option value='3'>失效</option>
+					</select>
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
+	</div>
+</div>
+<!-- <script type="text/html" id="actionBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurancePerson/view"))
+    <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+#end#end
+		</script>
+-->
+
+ <script type="text/html" id="actionBar">
+    <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+		</script>
+<script>
+	layui.use(['table','layedit','laydate','form'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	 var branchTable =  table.render({
+	    elem: '#branchTable'
+	    ,url:'/admin/groupInsurancePerson/selectByPage'
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,defaultToolbar: ['filter','print','exports']
+	    ,title: ''
+	    ,cols: [[
+		  // {field:'status', title:'状态'},
+	      {field:'name', title:'姓名'}
+	      ,{field:'id_num', title:'身份证'}
+	      ,{field:'policy_num', title:'保单号'}
+	      ,{field:'customerName', title:'客户名称'}
+	      ,{field:'premium', title:'保费'}
+	      ,{field:'job_type', title:'工种'}
+	      ,{field:'status', title:'状态'}
+	    
+	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
+	    ]]
+	 ,done: function(res, page, count){
+			$("[data-field='status']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>承保<span>");
+					}else if($(this).text()=='2'){
+						   $(this).html("<span>退保<span>");
+					}
+					else if($(this).text()=='3'){
+						   $(this).html("<span>失效<span>");
+					}
+			})
+	 }
+	    ,page: true
+	  });
+	  
+
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data; if(obj.event === 'view'){
+	    	console.log('view')
+			  location.href="/admin/groupInsurancePerson/view?id="+data.id;
+	    }
+	  });
+	  form.render();
+	  form.on('submit(submit)',function(data){
+		  
+		  branchTable.reload({
+			  page:{
+				  curr: 1
+			  },
+			  where: data.field
+		  })
+		  console.log(data.field)
+	  })
+	});
+	</script>
+#end

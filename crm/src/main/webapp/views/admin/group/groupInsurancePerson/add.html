@@ -1,0 +1,149 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="headerttl">保单列表</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='company_name' autocomplete='off' class='layui-input'
+						placeholder='客户名' />
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+						<input name='create_time' autocomplete='off' class="layui-input" id="createTime"
+							placeholder="合同起期">
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+						<input name='policy_effective_date' autocomplete='off' class="layui-input" id="policyEffectiveDate"
+							placeholder="合同止期">
+				</div>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<select name='type' lay-search>
+						<option value=''>合同状态</option>
+						<option value='0'>线上</option>
+						<option value='1'>线下</option>
+					</select>
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
+	</div>
+</div>
+
+<script type="text/html" id="actionBar">
+	<a class="layui-btn  layui-btn-xs" lay-event="addPerson">人员增减</a>
+		</script>
+<script>
+	layui.use(['table','layedit','laydate','form'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	 var branchTable =  table.render({
+	    elem: '#branchTable'
+	    ,url:'/admin/groupInsurance/selectByPage'
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,defaultToolbar: ['filter','print','exports']
+	    ,title: ''
+	    ,cols: [[
+		  // {field:'status', title:'状态'},
+	      {field:'policy_num', title:'合同号'}
+	      ,{field:'plan_name', title:'客户名'}
+	      ,{field:'customerName', title:'单位名称'}
+	      ,{field:'policy_num', title:'保单号'}
+	      ,{field:'insurance_type', title:'险种类型'}
+	      ,{field:'type', title:'订单类型'}
+	     // ,{field:'contacts', title:'联系人'}
+	     // ,{field:'email', title:'联系邮箱'}
+	      //,{field:'phone', title:'联系电话'}
+	      ,{field:'BrandName', title:'保险公司'}
+	      ,{field:'premium', title:'保费'}
+	      ,{field:'remark', title:'备注'}
+	      ,{field:'policy_effective_date', title:'保单生效日期'}
+	      ,{field:'policy_expiration_date', title:'保单终止日期'}
+	      ,{field:'premium', title:'总保费'}
+	    
+	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
+	    ]]
+	 ,done: function(res, page, count){
+			$("[data-field='status']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>投保单未完成<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span>待支付<span>");
+					}
+					else if($(this).text()=='2'){
+						   $(this).html("<span>已出单<span>");
+					}
+					else if($(this).text()=='3'){
+						   $(this).html("<span>保障中<span>");
+					}
+					else if($(this).text()=='4'){
+						   $(this).html("<span>已失效<span>");
+					}
+					else if($(this).text()=='5'){
+						   $(this).html("<span>已退保<span>");
+					}
+					else if($(this).text()=='6'){
+						   $(this).html("<span>已取消<span>");
+					}
+				
+			}),
+			$("[data-field='insurance_type']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>雇主责任险<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span>年金保险<span>");
+					}
+					else if($(this).text()=='2'){
+						   $(this).html("<span>补充医疗<span>");
+					}
+					else if($(this).text()=='3'){
+						   $(this).html("<span>团体意外险<span>");
+					}
+					else if($(this).text()=='4'){
+						   $(this).html("<span>其他<span>");
+					}
+			}),
+			$("[data-field='type']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>线上<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span>线下<span>");
+					}
+			})
+	 }
+	    ,page: true
+	  });
+	  
+
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	     if(obj.event === 'addPerson'){
+	    	console.log('view')
+			  location.href="/admin/groupInsurancePerson/addPerson?id="+data.id;
+	    }
+	  });
+	  form.render();
+	  form.on('submit(submit)',function(data){
+		  
+		  branchTable.reload({
+			  page:{
+				  curr: 1
+			  },
+			  where: data.field
+		  })
+		  console.log(data.field)
+	  })
+	});
+	</script>
+#end

@@ -1,10 +1,17 @@
 package com.crm.service.group.impl;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.crm.component.DataGrid;
+import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.SqlPara;
 
 /**
  * 
@@ -49,6 +56,41 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 	@Override
 	public void deleteByOrderId(Long hiddenOrderIdForGuarantee3) {
 		Db.delete("delete from crm_group_insurance_person where order_id = ? ", hiddenOrderIdForGuarantee3);
+	}
+
+	@Override
+	public DataGrid<GroupInsurancePerson> selectPage(Map<String, String> map, Page<GroupInsurancePerson> page) {
+		DataGrid<GroupInsurancePerson> dataGrid = new DataGrid<>();
+		SqlPara sqlPara = new SqlPara();
+		StringBuffer sql = new StringBuffer();
+		sql.append("select p.*,c.customer_name as customerName from crm_group_insurance_person p ");
+		sql.append("left join crm_group_insurance_orders o on o.id=p.order_id ");
+		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
+		sql.append("where 1=1 ");
+		if(StringUtils.isNotBlank(map.get("name"))){
+			sql.append(" and p.name like '%").append(map.get("name")).append("%' ");
+		}
+		if(StringUtils.isNotBlank(map.get("id_num"))){
+			sql.append(" and p.id_num like '%").append(map.get("id_num")).append("%' ");
+		}
+		if(StringUtils.isNotBlank(map.get("status"))){
+			sql.append(" and p.status = "+map.get("status"));
+		}
+		if(StringUtils.isNotBlank(map.get("customer_name"))){
+			sql.append(" and c.customer_name like '%").append(map.get("customer_name")).append("%' ");
+		}
+		if(StringUtils.isNotBlank(map.get("policy_num"))){
+			sql.append(" and p.policy_num like '%").append(map.get("policy_num")).append("%' ");
+		}
+		if(StringUtils.isNotBlank(map.get("orderId"))){
+			sql.append(" and o.id= "+map.get("orderId"));
+		}
+		sql.append(" order by o.create_time desc ");
+		sqlPara.setSql(sql.toString());
+		page = GroupInsurancePerson.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
+		dataGrid.setCount(page.getTotalRow());
+		dataGrid.setData(page.getList());
+	return dataGrid;
 	}
 
 }

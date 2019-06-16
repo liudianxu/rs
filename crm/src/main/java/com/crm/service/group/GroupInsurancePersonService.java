@@ -1,8 +1,12 @@
 package com.crm.service.group;
 
 import java.util.List;
+import java.util.Map;
 
+import com.crm.component.DataGrid;
+import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
+import com.jfinal.plugin.activerecord.Page;
 
 /**
  * 
@@ -41,5 +45,7 @@ public interface GroupInsurancePersonService {
 	GroupInsurancePerson findByIdNumAndOrderId(String idNum, Object orderId);
 
 	void deleteByOrderId(Long hiddenOrderIdForGuarantee3);
+
+	DataGrid<GroupInsurancePerson> selectPage(Map<String, String> params, Page<GroupInsurancePerson> page);
 
 }

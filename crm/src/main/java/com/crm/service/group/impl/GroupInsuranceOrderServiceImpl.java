@@ -118,7 +118,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 
 	@Override
 	public GroupInsuranceOrder findById(Long id) {
-		return GroupInsuranceOrder.dao.findFirst("select o.*,c.name as companyName,b.logo as companyLogo,b.name as brandName from crm_group_insurance_orders o left join crm_group_insurance_company c on c.id =o.company_id left join crm_brand b on b.id=o.brand_id  where o.id = ? ", id);
+		return GroupInsuranceOrder.dao.findFirst("select o.*,i.customer_name,b.logo as companyLogo,b.name as brandName from crm_group_insurance_orders o  left join crm_brand b on b.id=o.brand_id left join crm_customer_info i on i.id = o.insure_customer_id  where o.id = ? ", id);
 	}
 
 	@Override

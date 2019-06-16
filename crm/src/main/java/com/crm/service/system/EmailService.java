@@ -7,5 +7,5 @@ import com.crm.model.group.GroupInsurancePerson;
 
 public interface EmailService {
 
-	public void sendChangePersonEmail(List<GroupInsurancePerson> persons) throws IOException;
+	public void sendChangePersonEmail(Long id) throws IOException;
 }

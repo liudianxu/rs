@@ -1,5 +1,7 @@
 package com.crm.model.group;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.crm.component.DataGrid;
@@ -39,5 +41,10 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 		dataGrid.setCount(page.getTotalRow());
 		dataGrid.setData(page.getList());
 		return dataGrid;
+	}
+
+
+	public static List<GroupInsurancePersonLog> findByOrderId(Long id) {
+		return GroupInsurancePersonLog.dao.find("select l.*,p.id_num as id_num,p.job_type as job_type,p.gender as gender from crm_group_insurance_person_log l left join crm_group_insurance_person p on p.id =l.person_id where l.order_id = ?",id);
 	}
 }

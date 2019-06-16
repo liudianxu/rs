@@ -77,7 +77,7 @@ public class SettingController extends Controller{
 		return;	}
 	
 	 public void sendEmail() throws IOException {
-		 emailService.sendChangePersonEmail(personService.findByOrderId(86L));
+		 emailService.sendChangePersonEmail(96L);
 		 renderJson("hah");
 		 return;
 	 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="author" content="YLZInfo Team" />
+<meta name="copyright" content="YLZInfo" />
+
+<style>
+    .emailContent{
+        width: 800px;
+        padding: 50px;
+    }
+    .emailContent h2{
+        font-size: 18px;
+        color: #ee4700;
+        text-align: center;
+    }
+    .emailContent h3{
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .emailContent .rowDiv p{
+        color: #959595;
+        font-size: 14px;
+        width: 600px;
+        margin-left: 105px;
+    }
+    .emailContent table{
+        width: 100%;
+        text-align: center;
+        border-right:1px solid #cacaca;
+        border-bottom:1px solid #cacaca
+    }
+    .emailContent table td{
+        height: 50px;
+        color: #6f7675;
+        border-left:1px solid #cacaca;
+        border-top:1px solid #cacaca
+    }
+    .emailContent .bottom{
+        text-align: right;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+    .emailContent .bottom span{
+        font-weight: 500;
+        margin-right: 20px;
+    }
+    .emailContent .bottom a{
+        font-size: 14px;
+        color: #ee4700;
+        text-decoration: none;
+    }
+    .emailContent .last{
+        font-size: 14px;
+        color: #c1c1c1;
+    }
+</style>
+
+</head>
+<body>
+	<div class="emailContent">
+        <h2>
+        </h2>
+
+        <div class="rowDiv">
+            <table class="insuranceTable">
+                <tbody>
+                <tr class="title">
+                <td class="sorting_4" rowspan="1" colspan="4">现将贵司雇主责任险保单项下的雇员变动情况申报如下</td>
+                </tr>
+                <tr class="title">
+                    <td class="sorting_4" rowspan="1" colspan="1">被保险人</td>
+                    <td class="sorting_5" rowspan="1" colspan="1">#(insurance_name)</td>
+                    <td class="sorting_1" rowspan="1" colspan="1">保单号</td>
+                    <td class="sorting_3">#(policy_num)</td>
+                </tr>
+                <tr>
+                    <td class="sorting_1" rowspan="1" colspan="1">保单止期</td>
+                    <td class="sorting_2">#(policy_expiration_date)</td>
+                    <td class="sorting_3">年保费/人</td>
+                    <td class="sorting_4" rowspan="1" colspan="1">#(annual_premium)</td>
+                </tr>
+                 <tr>
+                    <td class="sorting_1" rowspan="1" colspan="1">批改日期</td>
+                    <td class="sorting_2">#(update_time)</td>
+                    <td class="sorting_3">生效日期</td>
+                    <td class="sorting_4" rowspan="1" colspan="1">#(policy_effective_date)</td>
+                </tr>
+                 <tr>
+                    <td class="sorting_1" rowspan="1" colspan="1">保费变化</td>
+                    <td class="sorting_2" colspan="3">-27.96</td>
+                </tr>
+                 <tr>
+                    <td class="sorting_1" rowspan="1" colspan="1">增保人数</td>
+                    <td class="sorting_2">0</td>
+                    <td class="sorting_3">减保人数</td>
+                    <td class="sorting_4" rowspan="1" colspan="1">4</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="rowDiv2" style="margin-bottom: -100px;">
+           <table class="insuranceTable" style="margin-bottom: -100px;">
+                <tbody>
+                <tr class="title">
+                    <td class="sorting_4" rowspan="1" colspan="1">雇员姓名</td>
+                    <td class="sorting_5" rowspan="1" colspan="1">身份证号码</td>
+                    <td class="sorting_1" rowspan="1" colspan="1">工种</td>
+                    <td class="sorting_3">操作</td>
+                    <td class="sorting_3">原保费</td>
+                    <td class="sorting_3">操作后保费</td>
+                    <td class="sorting_3">变化</td>
+                </tr>
+                #for(person:persons)
+                <tr>
+                 <td class="sorting_4" rowspan="1" colspan="1">#(person.name)</td>
+                    <td class="sorting_5" rowspan="1" colspan="1">#(person.id_num)</td>
+                    <td class="sorting_1" rowspan="1" colspan="1">#(person.job_type)</td>
+                    <td class="sorting_3">#(person.status==1?"增保":"减保")</td>
+                    <td class="sorting_3">原保费</td>
+                    <td class="sorting_3">操作后保费</td>
+                    <td class="sorting_3">#(person.change)</td>
+                </tr>
+                #end
+                </tbody>
+            </table>
+               </div>
+    </div>
+</body>
+</html>

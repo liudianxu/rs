@@ -64,24 +64,29 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 			render("index.html");
 			return;
 		}
-		Area area = Area.dao.findById(groupInfo.get("address").toString());
-		Area city = new Area();
-		Area province = new Area();
-		if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("2")){
-			city = Area.dao.findById(area.get("parent_id").toString());
-		}else{
-			city=area;
-			area = new Area(); 
-		}
-		if(city.get("grade").toString()!=null&&city.get("grade").toString().equals("1")){
-			province = Area.dao.findById(city.get("parent_id").toString());
+		if(groupInfo.get("address")!=null) {
+			Area area = Area.dao.findById(groupInfo.get("address").toString());
+			Area city = new Area();
+			Area province = new Area();
+			if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("2")){
+				city = Area.dao.findById(area.get("parent_id").toString());
+			}else if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("0")){
+				province = area;
+				area = new Area(); 
+			}else{
+				city=area;
+				area = new Area(); 
+			}
+			if(city.get("grade")!=null){
+				province = Area.dao.findById(city.get("parent_id").toString());
+			}
+			setAttr("province", province);
+			setAttr("city", city);
+			setAttr("area", area);
 		}
 		List<Area> roots = areaService.findRoots();
 		setAttr("roots", roots);
 		setAttr("groupInfo", groupInfo);
-		setAttr("province", province);
-		setAttr("city", city);
-		setAttr("area", area);
 		render("edit.html");
 	}
 	
@@ -143,6 +148,16 @@ public class GroupInfoController extends BaseController<GroupInfo> {
   	  		}else if(getPara("provinceId")!=null&&!getPara("provinceId").equals("")){
   	  		    groupInfo.set("address", getPara("provinceId"));
   	  		    if(groupInfoService.update(groupInfo) == null) {
+	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+	  				response.setMessage("编辑失败！");
+	  			} else {
+	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+	  				response.setMessage("编辑成功！");
+	  			}
+				renderJson(response);
+  	  		}else {
+  	  			groupInfo.set("address",null);
+	  	  		if(groupInfoService.update(groupInfo) == null) {
 	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
 	  				response.setMessage("编辑失败！");
 	  			} else {

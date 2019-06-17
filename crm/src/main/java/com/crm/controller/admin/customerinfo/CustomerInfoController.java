@@ -85,11 +85,14 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		Area province = new Area();
 		if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("2")){
 			city = Area.dao.findById(area.get("parent_id").toString());
+		}else if(area.get("grade").toString()!=null&&area.get("grade").toString().equals("0")){
+			province = area;
+			area = new Area(); 
 		}else{
 			city=area;
 			area = new Area(); 
 		}
-		if(city.get("grade").toString()!=null&&city.get("grade").toString().equals("1")){
+		if(city.get("grade")!=null){
 			province = Area.dao.findById(city.get("parent_id").toString());
 		}
 		setAttr("province", province);

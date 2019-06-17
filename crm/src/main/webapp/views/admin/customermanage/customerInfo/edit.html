@@ -167,6 +167,56 @@
 
 			return false;
 		});
+		function init() { 
+			if($("select[name='provinceId']").val()!=""){
+					$.ajax({
+						type: "get",
+						url: '/common/area/query',
+						async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
+						data: {
+							parentId: $("select[name='provinceId']").val(),
+						},
+						success: function(result) {
+							//$("#areaId").val(data.value);
+							var options = "<option value=" + ">请选择<option>"
+							for (var i = 0; i < result.length; i++) {
+								if($("select[name='cityId']").val()!="" && $("select[name='cityId']").val()==result[i].value){
+									options += "<option value=" + result[i].value + " selected>" + result[i].name + "<option>";
+								}else{
+									options += "<option value=" + result[i].value + ">" + result[i].name + "<option>";
+								}
+							}
+							$("select[name='cityId']").html(options);
+							form.render();
+						}
+					});
+				if($("select[name='cityId']").val()!=""){
+					$.ajax({
+						type: "get",
+						url: '/common/area/query',
+						async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
+						data: {
+							parentId: $("select[name='cityId']").val(),
+						},
+						success: function(result) {
+							//$("#areaId").val(data.value);
+							var options = "<option value=" + ">请选择<option>"
+							for (var i = 0; i < result.length; i++) {
+								if($("select[name='areaId']").val()!="" && $("select[name='areaId']").val()==result[i].value){
+									options += "<option value=" + result[i].value + " selected>" + result[i].name + "<option>";
+								}else{
+									options += "<option value=" + result[i].value + ">" + result[i].name + "<option>";
+								}
+							}
+							$("select[name='areaId']").html(options);
+							form.render();
+						}
+					});
+				}
+			}
+			
+	    };
+		init();
 		form.on('select(province)', function(data) {
 			if (data.value != "") {
 				$.ajax({

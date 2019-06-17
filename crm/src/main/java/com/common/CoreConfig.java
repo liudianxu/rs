@@ -20,6 +20,7 @@ import com.jfinal.json.MixedJsonFactory;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.server.undertow.UndertowServer;
@@ -88,6 +89,9 @@ public class CoreConfig extends JFinalConfig {
 		arp.setShowSql(p.getBoolean("devMode", false));
 		
 		me.add(new EhCachePlugin());
+		
+        Cron4jPlugin cp = new Cron4jPlugin(PropKit.use("quarter.properties"), "cron4j");
+		me.add(cp);
 	}
 
 	

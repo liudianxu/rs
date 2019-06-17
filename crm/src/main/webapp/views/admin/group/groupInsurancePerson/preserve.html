@@ -54,22 +54,13 @@
 	    ,defaultToolbar: ['filter','print','exports']
 	    ,title: ''
 	    ,cols: [[
-		  // {field:'status', title:'状态'},
-	      {field:'policy_num', title:'合同号'}
-	      ,{field:'plan_name', title:'客户名'}
-	      ,{field:'customerName', title:'单位名称'}
-	      ,{field:'policy_num', title:'保单号'}
-	      ,{field:'insurance_type', title:'险种类型'}
-	      ,{field:'type', title:'订单类型'}
-	     // ,{field:'contacts', title:'联系人'}
-	     // ,{field:'email', title:'联系邮箱'}
-	      //,{field:'phone', title:'联系电话'}
-	      ,{field:'BrandName', title:'保险公司'}
-	      ,{field:'premium', title:'保费'}
-	      ,{field:'remark', title:'备注'}
-	      ,{field:'policy_effective_date', title:'保单生效日期'}
-	      ,{field:'policy_expiration_date', title:'保单终止日期'}
-	      ,{field:'premium', title:'总保费'}
+	    	  {field:'policy_num', title:'合同号'}
+		      ,{field:'customerName', title:'客户名'}
+		      ,{field:'person', title:'在保人数/总人数'}
+		      ,{field:'policy_effective_date', title:'合同起期'}
+		      ,{field:'policy_expiration_date', title:'合同止期'}
+		      ,{field:'totalPremium', title:'总保费'}
+		      ,{field:'status', title:'状态'}
 	    
 	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
 	    ]]

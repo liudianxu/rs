@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceGuarantee;
@@ -26,6 +27,7 @@ import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.group.GroupInsurancePersonLog;
 import com.crm.model.group.Guarantee;
+import com.crm.model.group.GuaranteeDetail;
 import com.crm.poi.ImportExcelUtil;
 import com.crm.service.brand.BrandService;
 import com.crm.service.customerinfo.CustomerInfoService;
@@ -33,6 +35,7 @@ import com.crm.service.group.GroupInsuranceGuaranteeService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.groupinfo.GroupInfoService;
+import com.crm.service.system.EmailService;
 import com.crm.service.system.UserService;
 import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
@@ -57,6 +60,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	private GroupInfoService groupInfoService;
 	@Inject
 	private UserService userService;
+	@Inject
+	private EmailService emailService;
 	
 	//团险理赔类型
 	public static final int GROUP_CLAIM_TYPE =1;
@@ -86,7 +91,19 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
        params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
 		
-		renderJson(groupInsuranceOrderService.selectPage(params, getPage()));
+       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage());
+       List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
+       for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
+    	   groupInsuranceOrder.put("person", groupInsuranceOrder.get("person_num")+"/"+groupInsuranceOrder.get("total_person_sum"));
+    	   if((groupInsuranceOrder.get("annual_premium")!=null)
+    			   &&(groupInsuranceOrder.get("annual_premium")!="")
+    			   &&(groupInsuranceOrder.get("person_num")!=null)
+    			   &&(groupInsuranceOrder.get("person_num")!="")){
+    		   groupInsuranceOrder.put("totalPremium", Integer.parseInt(groupInsuranceOrder.get("annual_premium").toString())*Integer.parseInt(groupInsuranceOrder.get("person_num").toString()));
+    	   }
+       }
+       dataGrid.setData(groupInsuranceOrders);
+		renderJson(dataGrid);
 	}
 	
 	/**
@@ -351,6 +368,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Date policyEffectiveDate = DateUtil.parseDate(DateUtil.formatDate(order.get("policy_effective_date"),"yyyy-MM-dd") + " 00:00:00");
 		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(order.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
 		
+		order.set("status",GroupInsuranceOrder.Status.unfinished.ordinal());
+		//是雇主责任险 直接为已出单
+		if(order.getInt("insurance_type")==0) {
+			order.set("status", 2);
+		}
+		//已过生效时间
+		Date date = new Date();
+		if(date.getTime()>policyEffectiveDate.getTime()) {
+			order.set("status", 3);
+		}
 		//设置生效时间
 		order.set("policy_effective_date",policyEffectiveDate);
 		//设置终止时间
@@ -359,11 +386,44 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		order.set("step_one", 1);
 		if(order.get("id")==null) {
 			GroupInsuranceOrder createdOrder = groupInsuranceOrderService.create(order);
+			
+			JSONArray newAray = new JSONArray();
+			if(order.getInt("insurance_type")==0) {
+			newAray.add(new GuaranteeDetail("身故赔偿限额",order.get("death_compensation")));
+			newAray.add(new GuaranteeDetail("残疾赔偿限额",order.get("disability_compensation")));
+			newAray.add(new GuaranteeDetail("医疗补偿限额",order.get("medical_compensation")));
+			newAray.add(new GuaranteeDetail("住院津贴赔偿限额",order.get("hospitalization_compensation")));
+			newAray.add(new GuaranteeDetail("误工赔偿限额",order.get("tardy_job_compensation")));
+			newAray.add(new GuaranteeDetail("法律费用赔偿限额",order.get("law_compensation")));
+			GroupInsuranceGuarantee guarant = new GroupInsuranceGuarantee();
+			guarant.set("name",Constant.GUARANTEE_PLAN_NAME_PREFIX + 1);
+			guarant.set("order_id",createdOrder.getLong("id"));
+			guarant.set("create_time", new Date());
+			guarant.set("premium", order.get("annual_premium"));
+			guarant.set("details", newAray.toString()).save();
+			}
 			data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 			data.put("msg", "新增成功");
 			data.put("orderId", createdOrder.get("id"));
 		}
 		else {
+			groupInsuranceGuaranteeService.deleteByOrderId(order.get("id"));
+			JSONArray newAray = new JSONArray();
+			if(order.getInt("insurance_type")==0) {
+			newAray.add(new GuaranteeDetail("身故赔偿限额",order.get("death_compensation")));
+			newAray.add(new GuaranteeDetail("残疾赔偿限额",order.get("disability_compensation")));
+			newAray.add(new GuaranteeDetail("医疗补偿限额",order.get("medical_compensation")));
+			newAray.add(new GuaranteeDetail("住院津贴赔偿限额",order.get("hospitalization_compensation")));
+			newAray.add(new GuaranteeDetail("误工赔偿限额",order.get("tardy_job_compensation")));
+			newAray.add(new GuaranteeDetail("法律费用赔偿限额",order.get("law_compensation")));
+			GroupInsuranceGuarantee guarant = new GroupInsuranceGuarantee();
+			guarant.set("name",Constant.GUARANTEE_PLAN_NAME_PREFIX + 1);
+			guarant.set("order_id",order.get("id"));
+			guarant.set("create_time", new Date());
+			guarant.set("premium", order.get("annual_premium"));
+			guarant.set("details", newAray.toString()).save();
+			}
+			
 			data.put("orderId", order.get("id"));
 			order.update();
 			data.put("msg", "更新成功");
@@ -975,6 +1035,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         }
         
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
+        
+        List<GroupInsurancePersonLog> logs = new ArrayList<>();
         //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
         for (int i = 0; i < listob.size(); i++) {  
             List<Object> lo = listob.get(i);  
@@ -1019,6 +1081,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
                     person.set("guarantee_id",groupInsuranceGuarantee.get("id"));
                     person.set("remark",String.valueOf(lo.get(10)));
+                    person.set("job_type",String.valueOf(lo.get(4)));
                     Date policy_expiration_date = format.parse(String.valueOf(lo.get(8)));
                     Date newDate = DateUtil.addDays(policy_expiration_date, 1);
                     person.set("policy_expiration_date", newDate);
@@ -1028,12 +1091,28 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		BigDecimal premium = guarantee.getBigDecimal("premium");
             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
             		person.set("premium", totelPre);
-                    
-            		
-            		
             		person.update();
+            		
+            		   GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+                 		groupInsurancePersonLog
+                 		.set("customer_id", order.getLong("insure_customer_id"))
+                 		.set("policy_num", person.get("policy_num"))
+                 		.set("status", 2)
+                 		.set("name", person.get("name"))
+                 		.set("order_id", person.getLong("order_id"))
+                 		.set("person_id", person.getLong("id"))
+                 		.set("job_type",String.valueOf(lo.get(4)))
+                 		.set("change",person.get("premium"))
+                 		.set("policy_effective_date", person.get("policy_expiration_date"))
+                 		.set("create_time", new Date()).save();
+                 		groupInsurancePersonLog.put("id_num",person.get("id_num"));
+                  		groupInsurancePersonLog.put("job_type",person.get("job_type"));
+                  		groupInsurancePersonLog.put("gender",person.get("gender"));
+                  		groupInsurancePersonLog.put("premium",person.get("premium"));
+
+                 		logs.add(groupInsurancePersonLog);
                 }
-                
+              
                 
             }
             else if(String.valueOf(lo.get(1)).equals("加保")){
@@ -1050,6 +1129,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                  //person.set("occupation_category",String.valueOf(lo.get(6)));
                  //person.set("phone",String.valueOf(lo.get(10)));
                  person.set("remark",String.valueOf(lo.get(10)));
+                 person.set("job_type",String.valueOf(lo.get(4)));
                  person.set("policy_num",order.get("policy_num"));
                  person.set("policy_effective_date",String.valueOf(lo.get(8)));
                  person.set("policy_expiration_date",order.get("policy_expiration_date"));
@@ -1076,16 +1156,6 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
              		person.set("premium", totelPre);
              		
              		
-             		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
-             		groupInsurancePersonLog
-             		.set("customer_id", order.getLong("insure_customer_id"))
-             		.set("policy_num", person.get("policy_num"))
-             		.set("status", 0)
-             		.set("name", person.get("name"))
-             		.set("order_id", person.getLong("order_id"))
-             		.set("change",person.get("premium"))
-             		.set("policy_effective_date", person.get("policy_expiration_date"))
-             		.set("create_time", new Date()).save();
                  }
                  
               
@@ -1093,9 +1163,37 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                  person.set("order_id",hiddenOrderIdForImport);
                  person.set("create_time", new Date());
                  person.save();
+                 
+                 GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+          		groupInsurancePersonLog
+          		.set("customer_id", order.getLong("insure_customer_id"))
+          		.set("policy_num", person.get("policy_num"))
+          		.set("status", 0)
+          		.set("name", person.get("name"))
+          		.set("order_id", person.getLong("order_id"))
+          		.set("person_id", person.getLong("id"))
+          		.set("change",person.get("premium"))
+          		.set("policy_effective_date", person.get("policy_expiration_date"))
+          		.set("create_time", new Date()).save();
+          		groupInsurancePersonLog.put("id_num",person.get("id_num"));
+          		groupInsurancePersonLog.put("job_type",person.get("job_type"));
+          		groupInsurancePersonLog.put("gender",person.get("gender"));
+          		groupInsurancePersonLog.put("premium",person.get("premium"));
+          		logs.add(groupInsurancePersonLog);
             }
             
         }  
+        new Thread(new Runnable(){
+			public void run() {
+		        try {
+					emailService.sendChangePersonEmail(hiddenOrderIdForImport,logs);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			}).start();
+        
+        //发送邮件
         data.put("msg", "导入成功");
         data.put("orderId", hiddenOrderIdForImport);
         data.put("code", Constant.RESPONSE_CODE_SUCCESS);

@@ -76,10 +76,5 @@ public class SettingController extends Controller{
 		renderJson(response);	
 		return;	}
 	
-	 public void sendEmail() throws IOException {
-		 emailService.sendChangePersonEmail(96L);
-		 renderJson("hah");
-		 return;
-	 }
 	   
 }

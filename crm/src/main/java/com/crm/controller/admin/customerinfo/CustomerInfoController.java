@@ -79,6 +79,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 			render("index.html");
 			return;
 		}
+		if(customerInfo.get("address")!=null) {
 		Area area = Area.dao.findById(customerInfo.get("address").toString());
 		Area city = new Area();
 		Area province = new Area();
@@ -91,13 +92,15 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		if(city.get("grade").toString()!=null&&city.get("grade").toString().equals("1")){
 			province = Area.dao.findById(city.get("parent_id").toString());
 		}
+		setAttr("province", province);
+		setAttr("city", city);
+		setAttr("area", area);
+		}
 		List<Area> roots = areaService.findRoots();
 		List<GroupInfo> groups = groupInfoService.selectList();
 		setAttr("groups", groups);
 		setAttr("roots", roots);
-		setAttr("province", province);
-		setAttr("city", city);
-		setAttr("area", area);
+		
 		setAttr("customerInfo", customerInfo);
 		render("edit.html");
 	}
@@ -165,10 +168,18 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	  				response.setMessage("编辑成功！");
 	  			}
 				renderJson(response);
+  	  		}else {
+  	  			customerInfo.set("address",null);
+	  	  		if(customerInfoService.update(customerInfo) == null) {
+	  				response.setCode(Constant.RESPONSE_CODE_FAIL);
+	  				response.setMessage("编辑失败！");
+	  			} else {
+	  				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+	  				response.setMessage("编辑成功！");
+	  			}
+				renderJson(response);
   	  		}
   		}
-  		
-  		renderJson(response);
 	}
 	
 	  

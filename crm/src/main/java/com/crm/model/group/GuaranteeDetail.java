@@ -24,6 +24,14 @@ public class GuaranteeDetail implements Serializable {
 	 */
 	private static final long serialVersionUID = 1775496158430948948L;
 
+	
+	
+	public GuaranteeDetail(String item, String value) {
+		super();
+		this.item = item;
+		this.value = value;
+	}
+
 	/**
 	 * 保障项目
 	 */

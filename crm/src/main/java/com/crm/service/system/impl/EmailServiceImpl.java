@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -19,14 +20,17 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.alibaba.fastjson.JSONObject;
+import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.group.GroupInsurancePersonLog;
 import com.crm.model.system.Setting;
+import com.crm.service.group.GroupInsuranceGuaranteeService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.impl.GroupInsurancePersonServiceImpl;
 import com.crm.service.system.EmailService;
 import com.crm.util.Constant;
+import com.crm.util.DateUtil;
 import com.crm.util.MailUtil;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.PathKit;
@@ -36,8 +40,10 @@ import com.jfinal.render.RenderManager;
 public class EmailServiceImpl implements EmailService{
    @Inject
    private GroupInsuranceOrderService groupInsuranceOrderService;
+   @Inject
+   private GroupInsuranceGuaranteeService groupInsuranceGuaranteeService;
 	@Override
-	public void sendChangePersonEmail(Long id) throws IOException {
+	public void sendChangePersonEmail(Long id,List<GroupInsurancePersonLog> logs) throws IOException {
 		 GroupInsuranceOrder order = groupInsuranceOrderService.findById(id);
 		try {
 			FileInputStream template  = new FileInputStream( PathKit.getWebRootPath()+"/excel/保全申请书.xlsx");
@@ -53,13 +59,28 @@ public class EmailServiceImpl implements EmailService{
 			cellFont.setFontHeight((short) 300);
 			cellStyle.setFont(cellFont);
 
-			
+			int add=0;
+			int subtract=0;
+			BigDecimal amout=BigDecimal.ZERO;
+			BigDecimal origin = BigDecimal.ZERO;
+			for (GroupInsurancePersonLog groupInsurancePersonLog : logs) {
+				
+				amout = amout.add(groupInsurancePersonLog.getBigDecimal("change"));
+				if(groupInsurancePersonLog.getInt("status")==0) {
+					add++;
+				}
+				else if(groupInsurancePersonLog.getInt("status")==2) {
+					subtract++;
+				}
+			}
 
 			
 			
-			List<GroupInsurancePersonLog> persons = GroupInsurancePersonLog.findByOrderId(id);
-		
-			order.put("persons",persons);
+			//List<GroupInsurancePersonLog> persons = GroupInsurancePersonLog.findByOrderId(id);
+			order.put("add",add);
+			order.put("subtract",subtract);
+			order.put("amout",amout);
+			order.put("persons",logs);
 			String json = order.toJson();
 			String content = RenderManager.me().getEngine().getTemplate("/mail/protection.html").renderToString((java.util.Map<?, ?>) JSONObject.parseObject(json, Map.class));
 
@@ -69,23 +90,36 @@ public class EmailServiceImpl implements EmailService{
 			    row.getCell(4).setCellValue(order.getStr("policy_num"));
 			    XSSFRow row2=sheet.getRow(3);
 			    row2.getCell(1).setCellValue(order.getStr("policy_expiration_date"));
-			    row2.getCell(4).setCellValue(order.getStr("order_sn"));
+			    row2.getCell(4).setCellValue(order.getStr("annual_premium"));
 			    XSSFRow row3=sheet.getRow(4);
 			    row3.getCell(1).setCellValue(order.getStr("update_time"));
-			    row3.getCell(4).setCellValue(order.getStr("order_sn"));
-			    XSSFRow row4=sheet.getRow(7);
-			    row4.getCell(1).setCellValue(order.getStr("premium"));
-			    XSSFRow row5=sheet.getRow(8);
-			    row5.getCell(1).setCellValue(1);
-			    row5.getCell(4).setCellValue(2);
+			    row3.getCell(4).setCellValue(DateUtil.formatDate(DateUtil.addDays(logs.get(0).getDate("policy_effective_date"), 1), "yyyy-MM-dd HH:mm:ss"));
+			    
+			    if(order.getInt("insurance_type")==0) {
+			    	 XSSFRow row5=sheet.getRow(5);
+					    row5.getCell(1).setCellValue(order.getStr("death_compensation"));
+					    row5.getCell(4).setCellValue(order.getStr("disability_compensation"));
+					    XSSFRow row6=sheet.getRow(6);
+					    row6.getCell(1).setCellValue(order.getStr("medical_compensation"));
+					    row6.getCell(4).setCellValue(order.getStr("hospitalization_compensation"));
+					    XSSFRow row7=sheet.getRow(7);
+					    row7.getCell(1).setCellValue(order.getStr("tardy_job_compensation"));
+					    row7.getCell(4).setCellValue(order.getStr("law_compensation"));
+			    }
+			    
+			    XSSFRow row8=sheet.getRow(8);
+			    row8.getCell(1).setCellValue(amout.toString());
+			    XSSFRow row9=sheet.getRow(9);
+			    row9.getCell(1).setCellValue(""+add+"");
+			    row9.getCell(4).setCellValue(""+subtract+"");
 			    
 			    XSSFCellStyle borderStyle = (XSSFCellStyle)workBook.createCellStyle();  
 			    borderStyle.setBorderBottom(BorderStyle.THIN);   
 	            borderStyle.setBorderTop(BorderStyle.THIN);   
 	            borderStyle.setBorderLeft(BorderStyle.THIN);   
 	            borderStyle.setBorderRight(BorderStyle.THIN);   
-			    int i =13;
-				for (GroupInsurancePersonLog groupInsurancePersonLog : persons) {
+			    int i =14;
+				for (GroupInsurancePersonLog groupInsurancePersonLog : logs) {
 					XSSFRow rows=sheet.createRow(i);
 					XSSFCell cell0 =rows.createCell(0);
 					cell0.setCellStyle(borderStyle);
@@ -121,7 +155,11 @@ public class EmailServiceImpl implements EmailService{
 				  byte[] bt = baos.toByteArray();
 				  InputStream is = new ByteArrayInputStream(bt, 0, bt.length);
 				  MailUtil mailUtil=new MailUtil(smtpHost,smtpUsername,smtpPassword);
-				  mailUtil.sendMail("保全申请书", "825562306@qq.com", content ,"保全申请书.xlsx", is,null);
+				  
+				  CustomerInfo customerInfo = CustomerInfo.dao.findById(order.getLong("insure_customer_id"));
+				  mailUtil.sendMail("保全申请书", customerInfo.get("email"), content ,"保全申请书.xlsx", is,null);
+				  mailUtil.sendMail("保全申请书", order.get("brand_service_emial"), content ,"保全申请书.xlsx", is,null);
+				  
 				//}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

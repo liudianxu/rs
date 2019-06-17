@@ -79,7 +79,6 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		//生成订单号
 				order.set("order_sn",snService.generate(Sn.Type.groupInsuranceOrder));
 				//设置订单状态
-				order.set("status",GroupInsuranceOrder.Status.unfinished.ordinal());
 				order.set("create_time", new Date());
 				order.save();
 				

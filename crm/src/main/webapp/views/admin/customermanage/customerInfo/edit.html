@@ -71,6 +71,12 @@
 						 style="width: 186px;">
 					</div>
 				</div>
+					<div class="layui-form-item" style="display: inline-block;">
+					<div class="layui-inline">
+						<label class="layui-form-label">电子邮箱</label>
+						<input type="text" name="customerInfo.email" autocomplete="off" value="#(customerInfo.email)" class="layui-input" style="width: 186px;">
+					</div>
+				</div>
 				<div class="layui-form-item" style="display: inline-block;">
 					<div style="display: inline-block;">
 						<label class="layui-form-label">公司性质</label>
@@ -92,20 +98,24 @@
 						<select name="provinceId" lay-filter="province">
 							<option value="">请选择</option>
 							#for(root:roots)
-							<option value="#(root.id)" #if(province.id==root.id)selected#end>#(root.name)</option>
+							<option value="#(root.id)" #if(province??&&province.id==root.id)selected#end>#(root.name)</option>
 							#end
 						</select>
 					</div>
 					<div class="layui-inline">
 						<select name="cityId" lay-filter="city">
 							<option></option>
-							<option value="#(city.id)" #if(city.id!=null)selected#end>#(city.name)</option>
+							#if(city??)
+							<option value="#(city.id)" #if(city.id!=null) selected#end>#(city.name)</option>
+							#end
 						</select>
 					</div>
 					<div class="layui-inline">
 						<select name="areaId" lay-filter="area">
 							<option></option>
-							<option value="#(area.id)" #if(area.id!=null)selected#end>#(area.name)</option>
+							#if(area??)
+							<option value="#(area.id)" #if(area.id!=null) selected#end>#(area.name)</option>
+							#end
 						</select>
 					</div>
 					<div class="layui-inline">

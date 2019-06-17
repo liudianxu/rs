@@ -75,7 +75,7 @@
 					<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px;">
 						#for(permission:permissions)
 						#set(childrens=permission.list)
-						<li class="layui-nav-item layui-nav-itemed">
+						<li class="layui-nav-item">
 							<a href="javascript:;">#(permission.name)</a>
 							#if(childrens.size()>0)
 								<dl class="layui-nav-child">

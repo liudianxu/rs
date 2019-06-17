@@ -131,20 +131,8 @@ text-align: center;
 							<a class="layui-btn layui-btn-sm" id="exportPersonBtn" lay-event='exportPersonBtn'>
 								<i class="layui-icon layui-icon-add-1"></i>新增人员导入
 							</a>
-                             <a class="layui-btn layui-btn-sm" id='exportBatchPersonBtn'>
-								<i class="layui-icon layui-icon-add-1"></i>保全人员导入
-							</a>
-	                        <a class="layui-btn layui-btn-sm" id='exportChangePersonBtn'>
-								<i class="layui-icon layui-icon-add-1"></i>批量变更层级
-							</a>
 							<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增人员模板.xls">
 								<i class="layui-icon"></i>新增人员Excel模板
-							</a>
-		                 <a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/保全人员模板.xlsx">
-								<i class="layui-icon"></i>保全增减员模板
-							</a>
-								<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/层级方案变更模板.xlsx">
-								<i class="layui-icon"></i>层级方案变更模板
 							</a>
 					</div>
 </script>
@@ -157,6 +145,7 @@ text-align: center;
 {{#  } else if(d.status==2){ }}
     <a class="layui-btn layui-btn-xs" lay-event="come">进保</a>
   {{#  } }}
+<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 ]]#
 		</script>
 <script>

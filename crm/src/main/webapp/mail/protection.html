@@ -72,7 +72,7 @@
                 </tr>
                 <tr class="title">
                     <td class="sorting_4" rowspan="1" colspan="1">被保险人</td>
-                    <td class="sorting_5" rowspan="1" colspan="1">#(insurance_name)</td>
+                    <td class="sorting_5" rowspan="1" colspan="1">#(customer_name)</td>
                     <td class="sorting_1" rowspan="1" colspan="1">保单号</td>
                     <td class="sorting_3">#(policy_num)</td>
                 </tr>
@@ -90,13 +90,13 @@
                 </tr>
                  <tr>
                     <td class="sorting_1" rowspan="1" colspan="1">保费变化</td>
-                    <td class="sorting_2" colspan="3">-27.96</td>
+                    <td class="sorting_2" colspan="3">#(amout)</td>
                 </tr>
                  <tr>
                     <td class="sorting_1" rowspan="1" colspan="1">增保人数</td>
-                    <td class="sorting_2">0</td>
+                    <td class="sorting_2">#(add)</td>
                     <td class="sorting_3">减保人数</td>
-                    <td class="sorting_4" rowspan="1" colspan="1">4</td>
+                    <td class="sorting_4" rowspan="1" colspan="1">#(subtract)</td>
                 </tr>
                 </tbody>
             </table>
@@ -119,8 +119,8 @@
                     <td class="sorting_5" rowspan="1" colspan="1">#(person.id_num)</td>
                     <td class="sorting_1" rowspan="1" colspan="1">#(person.job_type)</td>
                     <td class="sorting_3">#(person.status==1?"增保":"减保")</td>
-                    <td class="sorting_3">原保费</td>
-                    <td class="sorting_3">操作后保费</td>
+                    <td class="sorting_3">#(person.premium)</td>
+                    <td class="sorting_3">#(person.premium+person.change)</td>
                     <td class="sorting_3">#(person.change)</td>
                 </tr>
                 #end

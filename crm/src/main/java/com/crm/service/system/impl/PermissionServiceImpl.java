@@ -71,9 +71,71 @@ public class PermissionServiceImpl implements PermissionService {
 	}
 
 	/**
+	 * 递归权限树
+	 */
+	public AuthTree<Permission> selectAuthTree2(Long roleId){
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from sys_permission  ");
+		List<Permission> permissions =  Permission.dao.find(sql.toString());
+		List<Permission> list = new ArrayList<>();
+		for (int i = 0; i < permissions.size(); i++) {
+			// 一级菜单没有pid
+			if (permissions.get(i).get("pid")==null) {
+				list.add(permissions.get(i));
+			}
+		}
+		
+		//已选权限
+		List<Permission> rolePermissions = new ArrayList<>();
+		if(roleId!=null) {
+			rolePermissions =  Permission.dao.find("select s.* from sys_role_permission sr left join sys_permission s on s.id=sr.permissionid    where sr.roleid = ? ",roleId);
+		} 
+		// 为一级菜单设置子菜单，list是递归调用的
+		for (Permission permission : list) {
+			permission.put("list",getChild(permission.getLong("id"), permissions,rolePermissions));
+		}
+		
+		 AuthTree<Permission> authTree = new AuthTree<>();
+		 Map<String,List<Permission>> map = new HashMap<>();
+		 map.put("trees", list);
+		 authTree.setData(map);
+		return authTree;
+		
+	}
+	
+	private List<Permission> getChild(Long id, List<Permission> rootMenu,List<Permission> rolePermissions) {
+		// 子菜单
+		List<Permission> childList = new ArrayList<>();
+		for (Permission permission : rootMenu) {
+			// 遍历所有节点，将父菜单id与传过来的id比较
+			if (permission.get("pid")!=null) {
+				if (permission.get("pid").equals(id)) {
+					childList.add(permission);
+				}
+			}
+			//判断权限是否选中
+			for (Permission rolePermission : rolePermissions) {// 
+				if(permission.getLong("id").equals(rolePermission.getLong("id"))) {
+					permission.put("checked", true);
+				}
+				}
+		}
+		// 把子菜单的子菜单再循环一遍
+		for (Permission permission : childList) {// 
+				// 递归
+			permission.put("list",getChild(permission.get("id"), rootMenu,rolePermissions));
+			
+		} // 递归退出条件
+		if (childList.size() == 0) {
+			return null;
+		}
+		return childList;
+	}
+	
+	/**
 	 * @author ldx
 	 * 获取权限树
-	 */
+	 *//*
 	@Override
 	public AuthTree<Permission> selectAuthTree(Long roleId) {
 		StringBuffer sql = new StringBuffer();
@@ -93,7 +155,7 @@ public class PermissionServiceImpl implements PermissionService {
 		return authTree;
 	}
 
-	/**
+	*//**
 	 * @author ldx
 	  * 递归调用
 	 * @param cid
@@ -101,7 +163,7 @@ public class PermissionServiceImpl implements PermissionService {
 	 * @param rolePermission
 	 *        角色权限
 	 * @return
-	 */
+	 *//*
 	public Permission recursiveTree(Long cid,List<Permission> rolePermission) {
 		 List<Permission> list = new ArrayList<>();
 		Permission node = Permission.dao.findById(cid);
@@ -109,7 +171,7 @@ public class PermissionServiceImpl implements PermissionService {
 	    List<Permission> childTreeNodes  = getChildTreeById(cid,rolePermission);
 	    for(Permission child : childTreeNodes){
 	    	Permission n = recursiveTree(child.getLong("id"),rolePermission);
-	    	if(child.getLong("id")==n.getLong("id")) {
+	    	if(child.getLong("id").equals(n.getLong("id"))) {
 	    		n.put("checked",child.get("checked"));
 	    	}
 	    	if(rolePermission!=null) {
@@ -135,11 +197,11 @@ public class PermissionServiceImpl implements PermissionService {
 	    if(null != permissions){
 	        for (Permission d : permissions) {
 	            if(null != cid){
-	                if (cid==d.getLong("pid")) {
+	                if (cid.equals(d.getLong("pid"))) {
 	                	if(rolePermission!=null) {
 	                		for (Permission permission : rolePermission) {
 	                			//编辑时默认选中
-	                			  if (cid==permission.getLong("pid")) {
+	                			  if (cid.equals(permission.getLong("pid"))) {
 	                				  d.put("checked",true);
 	                			  }
 							}
@@ -150,7 +212,7 @@ public class PermissionServiceImpl implements PermissionService {
 	        }
 	    }
 	    return list;
-	}
+	}*/
 
 	@Override
 	public int deletePermissionByRoleId(Long roleId) {

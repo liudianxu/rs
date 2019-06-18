@@ -36,7 +36,7 @@ public class PermissionController extends BaseController<Permission> {
 	 */
 	public void selectAuthTree() {
 		Long roleId = getParaToLong("roleId");
-		renderJson(service.selectAuthTree(roleId));
+		renderJson(service.selectAuthTree2(roleId));
 	}
 	
    //	@Before(PermissionSaveValidator.class)

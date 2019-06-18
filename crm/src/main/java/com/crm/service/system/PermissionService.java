@@ -24,7 +24,7 @@ public interface PermissionService {
 
 	boolean existChildren(Long id);
 
-	AuthTree<Permission> selectAuthTree(Long roleId);
+	AuthTree<Permission> selectAuthTree2(Long roleId);
 
 	int deletePermissionByRoleId(Long long1);
 
@@ -33,5 +33,7 @@ public interface PermissionService {
 	List<Permission> findChildren(Long id);
 
 	Ret update(Permission permission);
+
+	//AuthTree<Permission> selectAuthTree(Long roleId);
 	
 }

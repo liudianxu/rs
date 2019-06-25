@@ -30,6 +30,11 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 	public List<GroupInsurancePerson> findByOrderId(Long orderId) {
 		return GroupInsurancePerson.dao.find("select p.*,o.name as guaranteeName from crm_group_insurance_person p left join crm_group_insurance_guarantee o on p.guarantee_id=o.id where p.order_id=? ",orderId);
 	}
+	
+	@Override
+	public List<GroupInsurancePerson> findByPolicyNum(String policyNum) {
+		return GroupInsurancePerson.dao.find("select * from crm_group_insurance_person where policy_num=? ",policyNum);
+	}
 
 	@Override
 	public boolean existsGuatantee(Long hiddenOrderIdForGuarantee) {

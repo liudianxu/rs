@@ -51,6 +51,13 @@ public interface GroupInsuranceOrderService {
 	 * @return
 	 */
 	List<GroupInsuranceOrder> queryByCompanyId(Long id);
+	
+	/**
+	 * 根据customerId查找订单
+	 * @param id
+	 * @return
+	 */
+	List<GroupInsuranceOrder> queryByCustomerId(Long id);
 
 	/**
 	 * 分页列表

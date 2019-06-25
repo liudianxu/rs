@@ -3,6 +3,7 @@ package com.crm.router;
 import com.crm.controller.admin.AdminController;
 import com.crm.controller.admin.AdminLoginController;
 import com.crm.controller.admin.brand.BrandController;
+import com.crm.controller.admin.claimreport.ClaimReportController;
 import com.crm.controller.admin.customerinfo.CustomerInfoController;
 import com.crm.controller.admin.group.EmployerInsuranceController;
 import com.crm.controller.admin.group.GroupInsuranceController;
@@ -41,6 +42,7 @@ public class AdminRoutes extends Routes {
 		add("admin/brand", BrandController.class, "/brand");
 		add("admin/customermanage/customerInfo", CustomerInfoController.class, "/customermanage/customerInfo");
 		add("admin/customermanage/groupInfo", GroupInfoController.class, "/customermanage/groupInfo");
+		add("admin/claimReport", ClaimReportController.class, "/claimReport");
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.crm.component.DataGrid;
-import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.jfinal.plugin.activerecord.Page;
 
@@ -22,6 +21,8 @@ import com.jfinal.plugin.activerecord.Page;
 public interface GroupInsurancePersonService {
 
 	List<GroupInsurancePerson> findByOrderId(Long orderId);
+	
+	List<GroupInsurancePerson> findByPolicyNum(String policyNum);
 
 	boolean existsGuatantee(Long hiddenOrderIdForGuarantee);
 

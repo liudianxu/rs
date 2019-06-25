@@ -1,6 +1,7 @@
 package com.common;
 
 import com.crm.model.brand.Brand;
+import com.crm.model.claimreport.ClaimReport;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceGuarantee;
 import com.crm.model.group.GroupInsuranceOrder;
@@ -42,6 +43,7 @@ public class MappingKit {
 		arp.addMapping("crm_group_info", GroupInfo.class);
 		arp.addMapping("crm_group_insurance_person_log", GroupInsurancePersonLog.class);
 		arp.addMapping("crm_area", Area.class);
+		arp.addMapping("crm_claim_report", ClaimReport.class);
 	}
 	
 }

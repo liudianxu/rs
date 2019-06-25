@@ -162,4 +162,9 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		return order==null?false:true;
 	}
 
+	@Override
+	public List<GroupInsuranceOrder> queryByCustomerId(Long id) {
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_customer_id = ?",id);
+	}
+
 }

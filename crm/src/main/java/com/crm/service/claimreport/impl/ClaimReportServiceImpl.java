@@ -25,7 +25,7 @@ public class ClaimReportServiceImpl implements ClaimReportService {
 	public DataGrid<ClaimReport> selectPage(Map<String, String> params, Page<ClaimReport> page) {
 		DataGrid<ClaimReport> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select r.*,c.customer_name as customerName from crm_claim_report r");
+		sql.append("select r.*,c.customer_name as customerName from crm_claim_report r ");
 		sql.append("left join crm_customer_info c on c.id=r.customer_id ");
 		sql.append("where 1=1 ");
 		if(StringUtils.isNotBlank(params.get("customerName"))){
@@ -43,7 +43,7 @@ public class ClaimReportServiceImpl implements ClaimReportService {
 		if(StringUtils.isNotBlank(params.get("status"))){
 			sql.append(" and r.status ="+params.get("status"));
 		}
-		sql.append(" order by create_time desc ");
+		sql.append(" order by r.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<ClaimReport> claimReports = ClaimReport.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);

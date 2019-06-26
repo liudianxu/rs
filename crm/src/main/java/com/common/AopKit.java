@@ -2,6 +2,8 @@ package com.common;
 
 import com.crm.service.brand.BrandService;
 import com.crm.service.brand.impl.BrandServiceImpl;
+import com.crm.service.claimreport.ClaimReportService;
+import com.crm.service.claimreport.impl.ClaimReportServiceImpl;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.customerinfo.impl.CustomerInfoServiceImpl;
 import com.crm.service.group.GroupInsuranceGuaranteeService;
@@ -55,5 +57,8 @@ public class AopKit {
 		Aop.addMapping(GroupInsuranceGuaranteeService.class, GroupInsuranceGuaranteeServiceImpl.class);
 		Aop.addMapping(GroupInsuranceOrderService.class, GroupInsuranceOrderServiceImpl.class);
 		Aop.addMapping(GroupInsurancePersonService.class, GroupInsurancePersonServiceImpl.class);
+		
+		Aop.addMapping(ClaimReportService.class, ClaimReportServiceImpl.class);
+		
 	}
 }

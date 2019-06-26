@@ -116,6 +116,26 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 	}
 	
 	/**
+	 * 去查看页面
+	 */
+	public void view() {
+		Long id = getParaToLong("id");
+		if(id==null) {
+			render("index.html");
+			return;
+		}
+		ClaimReport claimReport = ClaimReport.dao.findById(id);
+		if(claimReport==null) {
+			render("index.html");
+			return;
+		}
+		List<CustomerInfo> customerInfos = customerInfoService.selectList();
+		setAttr("customerInfos", customerInfos);
+		setAttr("claimReport", claimReport);
+		render("view.html");
+	}
+	
+	/**
 	 * 保存
 	 */
 	public void save(){
@@ -151,6 +171,7 @@ public class ClaimReportController extends BaseController<ClaimReport> {
  				renderJson(response);
  			}
  			claimReport.set("create_time", DateUtil.getDateTime(null));
+ 			claimReport.set("status", "0");
  			if(claimReportService.add(claimReport) == null) {
  				response.setCode(Constant.RESPONSE_CODE_FAIL);
  				response.setMessage("添加失败！");

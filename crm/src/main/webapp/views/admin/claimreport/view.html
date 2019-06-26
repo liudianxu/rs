@@ -64,7 +64,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>受伤部位</div>
 							<div class='layui-input-block '>
-								<select name='claimReport.injure_body' lay-verify='required' id="injureBody" lay-search
+								<select name='claimReport.injure_body' lay-verify='required' id="insuranceType" lay-search
 								 lay-verify>
 									<option value='0' #if(claimReport.injure_body=='0')selected #end>脑</option>
 									<option value='1' #if(claimReport.injure_body=='1')selected #end>颅骨</option>
@@ -101,47 +101,25 @@
 					</div>
 				</div>
 				<div class="half fl">
-                    <div class='layui-form-item'>
-                        <div class='layui-block'>
-                            <div class='layui-form-label fl'>事故分类</div>
-                            <div class='layui-input-block '>
-                                <select name='claimReport.accident_category' lay-verify='required' id="accidentCategory" lay-search
-                                 lay-verify>
-                                    <option value='0' #if(claimReport.accident_category=='0')selected #end>打磨机伤害</option>
-                                    <option value='1' #if(claimReport.accident_category=='1')selected #end>物体打击</option>
-                                    <option value='2' #if(claimReport.accident_category=='2')selected #end>车辆伤害</option>
-                                    <option value='3' #if(claimReport.accident_category=='3')selected #end>机械伤害</option>
-                                    <option value='4' #if(claimReport.accident_category=='4')selected #end>起重伤害</option>
-                                    <option value='5' #if(claimReport.accident_category=='5')selected #end>触电</option>
-                                    <option value='6' #if(claimReport.accident_category=='6')selected #end>淹溺</option>
-                                    <option value='7' #if(claimReport.accident_category=='7')selected #end>灼烫</option>
-                                    <option value='8' #if(claimReport.accident_category=='8')selected #end>火灾</option>
-                                    <option value='9' #if(claimReport.accident_category=='9')selected #end>高处坠落</option>
-                                    <option value='10' #if(claimReport.accident_category=='10')selected #end>坍塌</option>
-                                    <option value='11' #if(claimReport.accident_category=='11')selected #end>冒顶片帮</option>
-                                    <option value='12' #if(claimReport.accident_category=='12')selected #end>透水</option>
-                                    <option value='13' #if(claimReport.accident_category=='13')selected #end>放炮</option>
-                                    <option value='14' #if(claimReport.accident_category=='14')selected #end>火药爆炸</option>
-                                    <option value='15' #if(claimReport.accident_category=='15')selected #end>锅炉爆炸</option>
-                                    <option value='16' #if(claimReport.accident_category=='16')selected #end>容器爆炸</option>
-                                    <option value='17' #if(claimReport.accident_category=='17')selected #end>其他爆炸</option>
-                                    <option value='18' #if(claimReport.accident_category=='18')selected #end>中毒窒息</option>
-                                    <option value='19' #if(claimReport.accident_category=='19')selected #end>其他伤害</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>出险日期</div>
+							<div class='layui-input-block overflow'>
+								<input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" value="#(claimReport.risk_date)" id="riskDate">
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="half fl">
 					<div class='layui-form-item'>
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>是否住院</div>
 							<div class='layui-input-block '>
-							<select name='claimReport.is_hospitalized' lay-verify='required' id="isHospitalized" lay-search
-                                 lay-verify>
-                                    <option value='0' #if(claimReport.is_hospitalized=='0')selected #end>是</option>
-                                    <option value='1' #if(claimReport.is_hospitalized=='1')selected #end>否</option>
-                                </select>
+								<select name='claimReport.is_hospitalized' lay-verify='required' id="insuranceType" lay-search
+								 lay-verify>
+									<option value='0' #if(claimReport.is_hospitalized=='0')selected #end>是</option>
+									<option value='1' #if(claimReport.is_hospitalized=='1')selected #end>否</option>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -177,15 +155,37 @@
 					</div>
 				</div>
 				<div class="half fl">
-                    <div class='layui-form-item'>
-                        <div class='layui-block'>
-                            <div class='layui-form-label fl'>出险日期</div>
-                            <div class='layui-input-block overflow'>
-                                <input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" value="#(claimReport.risk_date)" id="riskDate">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>事故分类</div>
+							<div class='layui-input-block '>
+								<select name='claimReport.accident_category' lay-verify='required' id="insuranceType" lay-search
+								 lay-verify>
+									<option value='0' #if(claimReport.accident_category=='0')selected #end>打磨机伤害</option>
+									<option value='1' #if(claimReport.accident_category=='1')selected #end>物体打击</option>
+									<option value='2' #if(claimReport.accident_category=='2')selected #end>车辆伤害</option>
+									<option value='3' #if(claimReport.accident_category=='3')selected #end>机械伤害</option>
+									<option value='4' #if(claimReport.accident_category=='4')selected #end>起重伤害</option>
+									<option value='5' #if(claimReport.accident_category=='5')selected #end>触电</option>
+									<option value='6' #if(claimReport.accident_category=='6')selected #end>淹溺</option>
+									<option value='7' #if(claimReport.accident_category=='7')selected #end>灼烫</option>
+									<option value='8' #if(claimReport.accident_category=='8')selected #end>火灾</option>
+									<option value='9' #if(claimReport.accident_category=='9')selected #end>高处坠落</option>
+									<option value='10' #if(claimReport.accident_category=='10')selected #end>坍塌</option>
+									<option value='11' #if(claimReport.accident_category=='11')selected #end>冒顶片帮</option>
+									<option value='12' #if(claimReport.accident_category=='12')selected #end>透水</option>
+									<option value='13' #if(claimReport.accident_category=='13')selected #end>放炮</option>
+									<option value='14' #if(claimReport.accident_category=='14')selected #end>火药爆炸</option>
+									<option value='15' #if(claimReport.accident_category=='15')selected #end>锅炉爆炸</option>
+									<option value='16' #if(claimReport.accident_category=='16')selected #end>容器爆炸</option>
+									<option value='17' #if(claimReport.accident_category=='17')selected #end>其他爆炸</option>
+									<option value='18' #if(claimReport.accident_category=='18')selected #end>中毒窒息</option>
+									<option value='19' #if(claimReport.accident_category=='19')selected #end>其他伤害</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="half fl">
 					<div class='layui-form-item'>
 						<div class='layui-block'>
@@ -219,7 +219,6 @@
 				</div>
 			</div>
 		<div class="layui-form-item" style="text-align: center;">
-			<button class="layui-btn" lay-submit lay-filter="save">保存</button>
 			<a class="layui-btn layui-btn-primary" href='/admin/claimreport'>返回</a>
 		</div>
 	</form>
@@ -321,7 +320,7 @@
 			$('#editorTextarea' + id).val(html)
 		}
 		editor.create()
-		$('#editorTextarea' + id).val(editor.txt.html())
+		editor.$textElem.attr('contenteditable', false)
 	}
 
 	for (var i = 1; i < 4; i++) {
@@ -337,10 +336,9 @@
 				var element = layui.element;
 				form = layui.form;
 				var layedit = layui.layedit, $ = layui.$;
-				laydate.render({
-					elem : '#riskDate',
-					type : 'datetime'
-				});
+				$("select").attr('disabled','disabled');
+	            $("input").attr('readonly','readonly');
+	            form.render();
 
 				form.on('submit(save)', function(data) {
 		            $.post($(".layui-form").attr('action'), $(".layui-form").serialize(),
@@ -402,65 +400,6 @@
 		            }
                 }
 		        init();
-				form.on('select(customerId)', function(data) {
-		            if (data.value != "") {
-		                $.ajax({
-		                    type: "get",
-		                    url: '/admin/claimreport/getPolicyNum',
-		                    async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
-		                    data: {
-		                    	customer_id: data.value,
-		                    },
-		                    success: function(result) {
-		                        $("select[name='claimReport.policy_num']").val("");
-		                        var options = "<option>请选择<option>"
-		                        for (var i = 0; i < result.length; i++) {
-		                            options += "<option value=" + result[i].policy_num + ">" + result[i].policy_num + "<option>";
-		                        }
-		                        $("select[name='claimReport.policy_num']").html(options);
-		                        form.render();
-		                    }
-		                });
-		            }
-		        });
-				form.on('select(policyNum)', function(data) {
-                    if (data.value != "") {
-                        $.ajax({
-                            type: "get",
-                            url: '/admin/claimreport/getPersion',
-                            async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
-                            data: {
-                            	policy_num: data.value,
-                            },
-                            success: function(result) {
-                                $("select[name='claimReport.person_id']").val("");
-                                var options = "<option>请选择<option>"
-                                for (var i = 0; i < result.length; i++) {
-                                    options += "<option value=" + result[i].id + ">" + result[i].name + "<option>";
-                                }
-                                $("select[name='claimReport.person_id']").html(options);
-                                form.render();
-                            }
-                        });
-                    }
-                });
-				form.on('select(personId)', function(data) {
-                    if (data.value != "") {
-                        $.ajax({
-                            type: "get",
-                            url: '/admin/claimreport/getCertNo',
-                            async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
-                            data: {
-                                id: data.value,
-                            },
-                            success: function(result) {
-                                $("input[name='claimReport.cert_no']").val(result.id_num);
-                                form.render();
-                            }
-                        });
-                    }
-                });
-
 			})
 </script>
 <style>

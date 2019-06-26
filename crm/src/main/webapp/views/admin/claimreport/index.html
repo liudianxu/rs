@@ -164,6 +164,10 @@
 	    	console.log('edit')
 			  location.href="/admin/claimreport/edit?id="+data.id;
 	    }
+	    else if(obj.event === 'view'){
+            console.log('view')
+              location.href="/admin/claimreport/view?id="+data.id;
+        }
 	    else if(obj.event === 'push'){
 	    	html ="<div class='layui-form-item'>"+
 					"<div class='layui-block'>"+

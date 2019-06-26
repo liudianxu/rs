@@ -142,7 +142,7 @@
 	  table.on('toolbar(test)', function(obj){
 	    switch(obj.event){
 	      case 'add': 
-			  location.href="/admin/employerInsurance/add";
+			  location.href="/admin/claimreport/add";
 	      break;
 	    };
 	  });
@@ -152,20 +152,17 @@
 	    var data = obj.data;
 	    if(obj.event === 'del'){
 	      layer.confirm('真的要删除该条记录吗？', function(index){
-	    	  $.get('/admin/groupInsurance/deleteOrder', {id: data.id},
+	    	  $.get('/admin/claimreport/deleteOrder', {id: data.id},
 	  				function(res) {
 	  					layer.msg(res.msg);
 	  		    		if(res.code == 1) {
-	  		    			 setTimeout("location.href='/admin/groupInsurance/list'",500);
+	  		    			 setTimeout("location.href='/admin/claimreport/list'",500);
 	  		    		}
 	  				}, "json");
 	      });
 	    } else if(obj.event === 'edit'){
 	    	console.log('edit')
-			  location.href="/admin/employerInsurance/edit?id="+data.id;
-	    }
-	    else if(obj.event === 'copy'){
-			  location.href="/admin/employerInsurance/copy?id="+data.id;
+			  location.href="/admin/claimreport/edit?id="+data.id;
 	    }
 	    else if(obj.event === 'push'){
 	    	html ="<div class='layui-form-item'>"+

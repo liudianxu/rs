@@ -42,7 +42,7 @@ public class AdminRoutes extends Routes {
 		add("admin/brand", BrandController.class, "/brand");
 		add("admin/customermanage/customerInfo", CustomerInfoController.class, "/customermanage/customerInfo");
 		add("admin/customermanage/groupInfo", GroupInfoController.class, "/customermanage/groupInfo");
-		add("admin/claimReport", ClaimReportController.class, "/claimReport");
+		add("admin/claimreport", ClaimReportController.class, "/claimreport");
 	}
 
 }

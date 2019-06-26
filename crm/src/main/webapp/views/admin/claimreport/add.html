@@ -1,0 +1,425 @@
+#@layout() #define main()
+<div class="headerttl">查看雇主保单</div>
+<div class='layui-tab-item layui-show'>
+	<form class="layui-tab-content layui-form layui-form1" action="/admin/groupInsurance/saveBaseInfo">
+		<input name='groupInsuranceOrder.id' style="display: none;" value="#(groupInsuranceOrder.id)">
+		<div class="bd_wrap">
+			<div class="t_half fl">
+				<div class='layui-form-item'>
+					<div class='layui-block'>
+						<div class='layui-form-label fl'>客户名称</div>
+						<div class='layui-input-block '>
+							<select name='groupInsuranceOrder.insurance_type' lay-verify='required' id="insuranceType" lay-search
+							 lay-verify>
+								<option value='0'>打磨机伤害</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="t_half fl">
+				<div class='layui-form-item'>
+					<div class='layui-block'>
+						<div class='layui-form-label fl'>保单号</div>
+						<div class='layui-input-block '>
+							<select name='groupInsuranceOrder.insurance_type' lay-verify='required' id="insuranceType" lay-search
+							 lay-verify>
+								<option value='0'>打磨机伤害</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="t_half fl">
+				<div class='layui-form-item'>
+					<div class='layui-block'>
+						<div class='layui-form-label fl'>伤者姓名</div>
+						<div class='layui-input-block '>
+							<select name='groupInsuranceOrder.insurance_type' lay-verify='required' id="insuranceType" lay-search
+							 lay-verify>
+								<option value='0'>打磨机伤害</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class=" wrap">
+			<div class="overflow">
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>伤者身份证号</div>
+							<div class='layui-input-block overflow'>
+								<input name='groupInsuranceOrder.policy_num' value='#(groupInsuranceOrder.policy_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>受伤部位</div>
+							<div class='layui-input-block '>
+								<select name='groupInsuranceOrder.insurance_type' lay-verify='required' id="insuranceType" lay-search
+								 lay-verify>
+									<option value='0'>脑</option>
+									<option value='1'>颅骨</option>
+									<option value='2'>头皮</option>
+									<option value='3'>面额部</option>
+									<option value='4'>眼部</option>
+									<option value='5'>鼻</option>
+									<option value='6'>耳</option>
+									<option value='7'>口</option>
+									<option value='8'>颈部</option>
+									<option value='9'>胸部</option>
+									<option value='10'>腹部</option>
+									<option value='11'>腰部</option>
+									<option value='12'>脊柱</option>
+									<option value='13'>肩胛部</option>
+									<option value='14'>上臂</option>
+									<option value='15'>肘部</option>
+									<option value='16'>前臂</option>
+									<option value='17'>腕部</option>
+									<option value='18'>掌</option>
+									<option value='19'>指</option>
+									<option value='20'>髋部</option>
+									<option value='21'>股部</option>
+									<option value='22'>膝部</option>
+									<option value='23'>小腿</option>
+									<option value='24'>踝部</option>
+									<option value='25'>跟部</option>
+									<option value='26'>距骨/舟部</option>
+									<option value='27'>脚趾</option>
+									<option value='28'>其他</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>出险日期</div>
+							<div class='layui-input-block overflow'>
+								<input type="text" class="form-control layui-input" value='#(groupInsuranceOrder.policy_expiration_date)' lay-verify='required' name="groupInsuranceOrder.policy_expiration_date" id="policy_expiration_date">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>是否住院</div>
+							<div class='layui-input-block '>
+								<select name='groupInsuranceOrder.insurance_type' lay-verify='required' id="insuranceType" lay-search
+								 lay-verify>
+									<option value='0'>是</option>
+									<option value='1'>否</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>出险时间</div>
+							<div class='layui-input-block overflow'>
+								<input type="text" class="layui-input" id="test4" placeholder="HH:mm:ss">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>医疗机构</div>
+							<div class='layui-input-block overflow'>
+								<input name='groupInsuranceOrder.policy_num' value='#(groupInsuranceOrder.policy_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>出险地点</div>
+							<div class='layui-input-block overflow'>
+								<input name='groupInsuranceOrder.policy_num' value='#(groupInsuranceOrder.policy_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>报案人</div>
+							<div class='layui-input-block overflow'>
+								<input name='groupInsuranceOrder.policy_num' value='#(groupInsuranceOrder.policy_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>事故分类</div>
+							<div class='layui-input-block '>
+								<select name='groupInsuranceOrder.insurance_type' lay-verify='required' id="insuranceType" lay-search
+								 lay-verify>
+									<option value='0'>打磨机伤害</option>
+									<option value='1'>物体打击</option>
+									<option value='2'>车辆伤害</option>
+									<option value='3'>机械伤害</option>
+									<option value='4'>起重伤害</option>
+									<option value='5'>触电</option>
+									<option value='6'>淹溺</option>
+									<option value='7'>灼烫</option>
+									<option value='8'>火灾</option>
+									<option value='9'>高处坠落</option>
+									<option value='10'>坍塌</option>
+									<option value='11'>冒顶片帮</option>
+									<option value='12'>透水</option>
+									<option value='13'>放炮</option>
+									<option value='14'>火药爆炸</option>
+									<option value='15'>锅炉爆炸</option>
+									<option value='16'>容器爆炸</option>
+									<option value='17'>其他爆炸</option>
+									<option value='18'>中毒窒息</option>
+									<option value='19'>其他伤害</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="half fl">
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>报案人电话</div>
+							<div class='layui-input-block overflow'>
+								<input name='groupInsuranceOrder.policy_num' value='#(groupInsuranceOrder.policy_num)' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<div class="layui-form-item">
+					<div class='layui-block'>
+						<div class='layui-form-label fl'>其他描述</div>
+						<div class='layui-input-block'>
+							<div id="editor1">#(groupInsuranceOrder.special_agreement)
+							</div>
+							<textarea id="editorTextarea1" name='groupInsuranceOrder.special_agreement' style="display:none;"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item" style="text-align: center;">
+			<button class="layui-btn" lay-submit lay-filter="submit1">保存</button>
+			<a class="layui-btn layui-btn-primary" href='/admin/employerInsurance'>返回</a>
+		</div>
+	</form>
+</div>
+<style>
+	.cover{
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 999;
+			background-color: rgba(0,0,0,0.3)
+		}
+		.yzr_dialog{
+			width: 660px;
+			position: fixed;
+			z-index: 99999;
+			top: 50%;
+			left: 50%;
+			transform: translate3d(-50%,-50%,0)
+		}
+		.cover .title{
+		padding: 0 80px 0 20px;
+		height: 42px;
+		line-height: 42px;
+		border-bottom: 1px solid #eee;
+		font-size: 14px;
+		color: #333;
+		overflow: hidden;
+		background-color: #F8F8F8;
+		border-radius: 2px 2px 0 0;
+		}
+		.cover .content{
+		background-color: #fff;
+		text-align: center
+		}
+		.cover .btns{
+			text-align: right;
+			padding: 0 15px 12px;
+			user-select: none;
+			-webkit-user-select: none;
+			background: #fff;
+		}
+		.cover .btns .a{
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #1E9FFF;
+		background-color: #1e9fff;
+		color: #fff;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+		}
+		.cover .btns .c{
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #dedede;
+		background-color: #fff;
+		color: #333;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+		}
+		
+		</style>
+<script type="text/javascript">
+	function wangedit(id) {
+		var E = window.wangEditor
+		var editor = new E('#editor' + id)
+		//或者 var editor = new E( document.getElementById('editor') )
+		editor.customConfig.uploadFileName = 'file';
+		editor.customConfig.uploadImgMaxSize = 2 * 800 * 800;
+		editor.customConfig.uploadImgMaxLength = 4;
+		editor.customConfig.uploadImgServer = '/common/file/wangUpload' // 上传图片到服务器
+		editor.customConfig.uploadImgHooks = {
+			customInsert: function(insertImg, result, editor) {
+				// 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+				// insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+				// 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+				var url = result.data.src;
+				insertImg(url);
+				// result 必须是一个 JSON 格式字符串！！！否则报错
+			}
+		}
+		editor.customConfig.onchange = function(html) {
+			// 监控变化，同步更新到 textarea
+			$('#editorTextarea' + id).val(html)
+		}
+		editor.create()
+		editor.$textElem.attr('contenteditable', false)
+	}
+
+
+
+	for (var i = 1; i < 4; i++) {
+		wangedit(i);
+	}
+
+	var form;
+	var laydate;
+	layui.use(['table', 'element', 'form', 'laydate', 'layedit', 'upload'],
+		function() {
+			var table = layui.table
+			laydate = layui.laydate;
+			var element = layui.element;
+			form = layui.form;
+			var layedit = layui.layedit,
+				$ = layui.$;
+			 // $("select").attr('disabled','disabled');
+			 // $("input").attr('readonly','readonly');
+			 form.render();
+	})
+
+</script>
+<style>
+	.layui-form-label {
+		white-space: nowrap;
+		width: 93px
+	}
+
+	.layui-tab-content {
+		padding: 20px 10px 10px 0
+	}
+
+	.layui-form-item .layui-inline {
+		margin-bottom: 0
+	}
+
+	/*
+			.theme-required .layui-form-label:before{position: absolute;display: block;width: 5px;height:5px;border-radius: 50%;top:50%;left:0px;transform:translate3d(0,-50%,0);background-color: #c00;content:''}
+			*/
+	.theme-required .layui-form-label:before {
+		display: inline-block;
+		vertical-align: top;
+		margin-right: 3px;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background-color: #c00;
+		content: ''
+	}
+
+	.layui-elem-quote .layui-form-item:last-of-type {
+		margin-bottom: 0
+	}
+
+	.w-e-toolbar {
+		background-color: #009688 !important;
+	}
+
+	.w-e-toolbar .w-e-menu i {
+		color: #fff;
+	}
+
+	.half {
+		width: 50%;
+		padding: 0 15px;
+		box-sizing: border-box;
+	}
+	
+	.t_half {
+		width: 33.3%;
+		padding: 0 15px;
+		box-sizing: border-box;
+	}
+
+	.fl {
+		float: left;
+	}
+
+	.overflow {
+		overflow: hidden;
+	}
+	
+	.bd_wrap{
+		padding: 15px;
+		overflow: hidden;
+		border-top: 1px #A5A8A8 dashed;
+		border-bottom: 1px #A5A8A8 dashed;
+	}
+
+	.wrap {
+		padding: 15px;
+		overflow: hidden;
+	}
+
+	@media (max-width: 800px) {
+		.half {
+			width: 100%;
+		}
+	}
+</style>
+#end

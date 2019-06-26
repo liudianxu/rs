@@ -1,0 +1,166 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="headerttl">报案管理列表</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<select name='status' lay-search>
+						<option value=''>状态</option>
+						<option value='0'>报案</option>
+						<option value='1'>待审核</option>
+						<option value='2'>结案</option>
+						<option value='3'>注销</option>
+					</select>
+				</div>
+				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
+	</div>
+</div>
+
+<script type="text/html" id="headBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/add"))
+  		<div class='layui-btn-container'>
+			 <button class="layui-btn layui-btn-sm" lay-event='add'><i class="layui-icon layui-icon-add-1"></i>添加</button>
+		</div>
+#end#end
+	</script>
+
+<script type="text/html" id="actionBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/employerInsurance/edit"))
+	<a class="layui-btn  layui-btn-xs" lay-event="edit">修改</a>
+#end#end
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/employerInsurance/view"))
+    <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+#end#end
+		</script>
+<script>
+	layui.use(['table','layedit','laydate','form'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	 var branchTable =  table.render({
+	    elem: '#branchTable'
+	    ,url:'/admin/claimreport/list'
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,defaultToolbar: ['filter','print','exports']
+	    ,title: ''
+	    ,cols: [[
+	       {field:'customerName', title:'客户名'}
+	      ,{field:'policy_num', title:'保单号'}
+	      ,{field:'persion_name', title:'伤者姓名'}
+	      ,{field:'cert_no', title:'伤者身份证号'}
+	      ,{field:'risk_date', title:'出险日期'}
+	      ,{field:'risk_time', title:'出险时间'}
+	      ,{field:'reporter_phone', title:'报案人电话'}
+	      ,{field:'create_time', title:'报案时间'}
+	      ,{field:'status', title:'索赔时间'}
+	      ,{field:'status', title:'结案时间'}
+	      ,{field:'status', title:'状态'}
+	    
+	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
+	    ]]
+	 ,done: function(res, page, count){
+			$("[data-field='status']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>投保单未完成<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span>待支付<span>");
+					}
+					else if($(this).text()=='2'){
+						   $(this).html("<span>已出单<span>");
+					}
+					else if($(this).text()=='3'){
+						   $(this).html("<span>保障中<span>");
+					}
+					else if($(this).text()=='4'){
+						   $(this).html("<span>已失效<span>");
+					}
+					else if($(this).text()=='5'){
+						   $(this).html("<span>已退保<span>");
+					}
+					else if($(this).text()=='6'){
+						   $(this).html("<span>已取消<span>");
+					}
+				
+			})
+			/* $("[data-field='insurance_type']").children().each(function(){
+				 $(this).html("<span>"+雇主责任险+"<span>");
+				if($(this).text()=='0'){
+					   $(this).html("<span>雇主责任险<span>");
+					}else if($(this).text()=='1'){
+						   $(this).html("<span>年金保险<span>");
+					}
+					else if($(this).text()=='2'){
+						   $(this).html("<span>补充医疗<span>");
+					}
+					else if($(this).text()=='3'){
+						   $(this).html("<span>团体意外险<span>");
+					}
+					else if($(this).text()=='4'){
+						   $(this).html("<span>其他<span>");
+					}
+			}) */
+	 }
+	    ,page: true
+	  });
+	  
+	  //头工具栏事件
+	  table.on('toolbar(test)', function(obj){
+	    switch(obj.event){
+	      case 'add': 
+			  location.href="/admin/employerInsurance/add";
+	      break;
+	    };
+	  });
+
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'del'){
+	      layer.confirm('真的要删除该条记录吗？', function(index){
+	    	  $.get('/admin/groupInsurance/deleteOrder', {id: data.id},
+	  				function(res) {
+	  					layer.msg(res.msg);
+	  		    		if(res.code == 1) {
+	  		    			 setTimeout("location.href='/admin/groupInsurance/list'",500);
+	  		    		}
+	  				}, "json");
+	      });
+	    } else if(obj.event === 'edit'){
+	    	console.log('edit')
+			  location.href="/admin/employerInsurance/edit?id="+data.id;
+	    }
+	    else if(obj.event === 'copy'){
+			  location.href="/admin/employerInsurance/copy?id="+data.id;
+	    }
+	    else if(obj.event === 'view'){
+	    	console.log('view')
+			  location.href="/admin/employerInsurance/view?id="+data.id;
+	    }
+	  });
+	  form.render();
+	  form.on('submit(submit)',function(data){
+		  
+		  branchTable.reload({
+			  page:{
+				  curr: 1
+			  },
+			  where: data.field
+		  })
+		  console.log(data.field)
+	  })
+	});
+	</script>
+#end

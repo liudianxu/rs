@@ -22,6 +22,41 @@
 				</div>
 			</div>
 		</div>
+		<script type="text/html" id="tplDemo">
+				<div class='layui-form-item'>
+					<div class='layui-block'>
+						<div class='layui-form-label fl'>前进到阶段:</div>
+						<div class='layui-input-block '>
+							<select name='' lay-verify='required' id="" lay-search
+							 lay-verify lay-filter="customerId">
+						<option value='0'>报案</option>
+						<option value='1'>待审核</option>
+						<option value='2'>结案</option>
+						<option value='3'>注销</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>下次联系:</div>
+							<div class='layui-input-block'>
+								<input name='claimReport.cert_no' class='layui-input'  placeholder="时间" autocomplete='off' />
+							</div>
+								<div class='layui-input-block'>
+								<input name='claimReport.cert_no' class='layui-input' placeholder="内容" autocomplete='off'/>
+							</div>
+						</div>
+					</div>
+					<div class='layui-form-item'>
+						<div class='layui-block'>
+							<div class='layui-form-label fl'>阶段描述:</div>
+							<div class='layui-input-block'>
+							<textarea rows="10" cols="40"></textarea>
+							</div>
+						</div>
+					</div>
+	</script>
 		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
 	</div>
 </div>
@@ -132,9 +167,26 @@
 	    else if(obj.event === 'copy'){
 			  location.href="/admin/employerInsurance/copy?id="+data.id;
 	    }
-	    else if(obj.event === 'view'){
-	    	console.log('view')
-			  location.href="/admin/employerInsurance/view?id="+data.id;
+	    else if(obj.event === 'push'){
+	    	html ="<div class='layui-form-item'>"+
+					"<div class='layui-block'>"+
+						"<div class='layui-form-label fl'>前进到阶段:</div>"+
+						"<div class='layui-input-block '>"+
+							"<select>"+
+							"	<option value=''>请选择</option>"+
+							"</select>"+
+						"</div>"+
+						"<div class='layui-form-label'>下次联系时间:</div>"+
+							"<input name='claimReport.cert_no' class='layui-input' autocomplete='off' />"+
+						"</div>"+
+					"</div>"+
+				"</div>"
+	    	layer.open({
+	    		  title: '推进信息'
+	    		  ,content: $("#tplDemo").html()
+	    		  ,area: ['500px', '500px']
+	    		});     
+	    		  
 	    }
 	  });
 	  form.render();

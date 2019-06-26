@@ -109,9 +109,9 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 			render("index.html");
 			return;
 		}
-		CustomerInfo customerInfo = CustomerInfo.dao.findById(claimReport.get("customer_id"));
+		List<CustomerInfo> customerInfos = customerInfoService.selectList();
+		setAttr("customerInfos", customerInfos);
 		setAttr("claimReport", claimReport);
-		setAttr("customerInfo",customerInfo);
 		render("edit.html");
 	}
 	

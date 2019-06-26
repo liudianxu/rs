@@ -8,6 +8,8 @@ import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.claimreport.ClaimReport;
 import com.crm.model.cuntomerinfo.CustomerInfo;
+import com.crm.model.group.GroupInsuranceOrder;
+import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.system.User;
 import com.crm.service.claimreport.ClaimReportService;
 import com.crm.service.customerinfo.CustomerInfoService;
@@ -68,7 +70,8 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 	 */
 	public void getPolicyNum() {
 		Long customerId = getParaToLong("customer_id");
-		groupInsuranceOrderService.queryByCustomerId(customerId);
+		List<GroupInsuranceOrder> groupInsuranceOrders = groupInsuranceOrderService.queryByCustomerId(customerId);
+		renderJson(groupInsuranceOrders);
 		
 	}
 	
@@ -77,7 +80,18 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 	 */
 	public void getPersion() {
 		String policyNum = getPara("policy_num");
-		personService.findByPolicyNum(policyNum);
+		List<GroupInsurancePerson> groupInsurancePersons = personService.findByPolicyNum(policyNum);
+		renderJson(groupInsurancePersons);
+		
+	}
+	
+	/**
+	 * 查询人员身份证号码
+	 */
+	public void getCertNo() {
+		String id = getPara("id");
+		GroupInsurancePerson groupInsurancePerson = GroupInsurancePerson.dao.findById(id);
+		renderJson(groupInsurancePerson);
 		
 	}
 	
@@ -116,16 +130,18 @@ public class ClaimReportController extends BaseController<ClaimReport> {
  		}
  		if(StrKit.isBlank(claimReport.getStr("policy_num"))) {
  			response.setCode(Constant.RESPONSE_CODE_FAIL);
- 			response.setMessage("保存失败！保单号客户保险公司名称不能为空");
+ 			response.setMessage("保存失败！保单号不能为空");
  			renderJson(response);
  			return;
  		}
- 		if(StrKit.isBlank(claimReport.getStr("persion_name"))) {
+ 		if(StrKit.isBlank(claimReport.getStr("person_id"))) {
  			response.setCode(Constant.RESPONSE_CODE_FAIL);
- 			response.setMessage("保存失败！伤者姓名客户保险公司名称不能为空");
+ 			response.setMessage("保存失败！伤者姓名不能为空");
  			renderJson(response);
  			return;
  		}
+ 		GroupInsurancePerson groupInsurancePerson = GroupInsurancePerson.dao.findById(claimReport.getStr("person_id"));
+ 		claimReport.set("persion_name", groupInsurancePerson.get("name"));
  		//新增操作
  		if(claimReport.getLong("id") == null) {
  			User admin = adminLoginService.getLoginAdminWithSessionId(getCookie(Constant.COOKIE_SESSION_ID_NAME));

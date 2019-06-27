@@ -96,15 +96,37 @@
 					</div>
 				</div>
 				<div class="half fl">
-					<div class='layui-form-item'>
-						<div class='layui-block'>
-							<div class='layui-form-label fl'>出险日期</div>
-							<div class='layui-input-block overflow'>
-								<input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" id="riskDate">
-							</div>
-						</div>
-					</div>
-				</div>
+                    <div class='layui-form-item'>
+                        <div class='layui-block'>
+                            <div class='layui-form-label fl'>事故分类</div>
+                            <div class='layui-input-block '>
+                                <select name='claimReport.accident_category' lay-verify='required' id="insuranceType" lay-search
+                                 lay-verify>
+                                    <option value='0'>打磨机伤害</option>
+                                    <option value='1'>物体打击</option>
+                                    <option value='2'>车辆伤害</option>
+                                    <option value='3'>机械伤害</option>
+                                    <option value='4'>起重伤害</option>
+                                    <option value='5'>触电</option>
+                                    <option value='6'>淹溺</option>
+                                    <option value='7'>灼烫</option>
+                                    <option value='8'>火灾</option>
+                                    <option value='9'>高处坠落</option>
+                                    <option value='10'>坍塌</option>
+                                    <option value='11'>冒顶片帮</option>
+                                    <option value='12'>透水</option>
+                                    <option value='13'>放炮</option>
+                                    <option value='14'>火药爆炸</option>
+                                    <option value='15'>锅炉爆炸</option>
+                                    <option value='16'>容器爆炸</option>
+                                    <option value='17'>其他爆炸</option>
+                                    <option value='18'>中毒窒息</option>
+                                    <option value='19'>其他伤害</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 				<div class="half fl">
 					<div class='layui-form-item'>
 						<div class='layui-block'>
@@ -150,37 +172,15 @@
 					</div>
 				</div>
 				<div class="half fl">
-					<div class='layui-form-item'>
-						<div class='layui-block'>
-							<div class='layui-form-label fl'>事故分类</div>
-							<div class='layui-input-block '>
-								<select name='claimReport.accident_category' lay-verify='required' id="insuranceType" lay-search
-								 lay-verify>
-									<option value='0'>打磨机伤害</option>
-									<option value='1'>物体打击</option>
-									<option value='2'>车辆伤害</option>
-									<option value='3'>机械伤害</option>
-									<option value='4'>起重伤害</option>
-									<option value='5'>触电</option>
-									<option value='6'>淹溺</option>
-									<option value='7'>灼烫</option>
-									<option value='8'>火灾</option>
-									<option value='9'>高处坠落</option>
-									<option value='10'>坍塌</option>
-									<option value='11'>冒顶片帮</option>
-									<option value='12'>透水</option>
-									<option value='13'>放炮</option>
-									<option value='14'>火药爆炸</option>
-									<option value='15'>锅炉爆炸</option>
-									<option value='16'>容器爆炸</option>
-									<option value='17'>其他爆炸</option>
-									<option value='18'>中毒窒息</option>
-									<option value='19'>其他伤害</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
+                    <div class='layui-form-item'>
+                        <div class='layui-block'>
+                            <div class='layui-form-label fl'>出险日期</div>
+                            <div class='layui-input-block overflow'>
+                                <input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" id="riskDate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 				<div class="half fl">
 					<div class='layui-form-item'>
 						<div class='layui-block'>
@@ -316,6 +316,7 @@
 			$('#editorTextarea' + id).val(html)
 		}
 		editor.create()
+		$('#editorTextarea' + id).val(editor.txt.html())
 	}
 
 	for (var i = 1; i < 4; i++) {

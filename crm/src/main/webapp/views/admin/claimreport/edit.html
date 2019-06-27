@@ -139,8 +139,8 @@
 							<div class='layui-input-block '>
 							<select name='claimReport.is_hospitalized' lay-verify='required' id="isHospitalized" lay-search
                                  lay-verify>
-                                    <option value='0' #if(claimReport.is_hospitalized=='0')selected #end>是</option>
-                                    <option value='1' #if(claimReport.is_hospitalized=='1')selected #end>否</option>
+                                    <option value='0' #if(claimReport.is_hospitalized==0)selected #end>是</option>
+                                    <option value='1' #if(claimReport.is_hospitalized==1)selected #end>否</option>
                                 </select>
 							</div>
 						</div>
@@ -181,7 +181,7 @@
                         <div class='layui-block'>
                             <div class='layui-form-label fl'>出险日期</div>
                             <div class='layui-input-block overflow'>
-                                <input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" value="#(claimReport.risk_date)" id="riskDate">
+                                <input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" value="#(com.crm.util.DateUtil::formatDate(claimReport.risk_date,'yyyy-MM-dd HH:mm:ss'))" id="riskDate">
                             </div>
                         </div>
                     </div>
@@ -413,6 +413,7 @@
 		                    },
 		                    success: function(result) {
 		                        $("select[name='claimReport.policy_num']").val("");
+		                        $("select[name='claimReport.person_id']").val("");
 		                        var options = "<option>请选择<option>"
 		                        for (var i = 0; i < result.length; i++) {
 		                            options += "<option value=" + result[i].policy_num + ">" + result[i].policy_num + "<option>";

@@ -101,15 +101,37 @@
 					</div>
 				</div>
 				<div class="half fl">
-					<div class='layui-form-item'>
-						<div class='layui-block'>
-							<div class='layui-form-label fl'>出险日期</div>
-							<div class='layui-input-block overflow'>
-								<input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" value="#(claimReport.risk_date)" id="riskDate">
-							</div>
-						</div>
-					</div>
-				</div>
+                    <div class='layui-form-item'>
+                        <div class='layui-block'>
+                            <div class='layui-form-label fl'>事故分类</div>
+                            <div class='layui-input-block '>
+                                <select name='claimReport.accident_category' lay-verify='required' id="insuranceType" lay-search
+                                 lay-verify>
+                                    <option value='0' #if(claimReport.accident_category=='0')selected #end>打磨机伤害</option>
+                                    <option value='1' #if(claimReport.accident_category=='1')selected #end>物体打击</option>
+                                    <option value='2' #if(claimReport.accident_category=='2')selected #end>车辆伤害</option>
+                                    <option value='3' #if(claimReport.accident_category=='3')selected #end>机械伤害</option>
+                                    <option value='4' #if(claimReport.accident_category=='4')selected #end>起重伤害</option>
+                                    <option value='5' #if(claimReport.accident_category=='5')selected #end>触电</option>
+                                    <option value='6' #if(claimReport.accident_category=='6')selected #end>淹溺</option>
+                                    <option value='7' #if(claimReport.accident_category=='7')selected #end>灼烫</option>
+                                    <option value='8' #if(claimReport.accident_category=='8')selected #end>火灾</option>
+                                    <option value='9' #if(claimReport.accident_category=='9')selected #end>高处坠落</option>
+                                    <option value='10' #if(claimReport.accident_category=='10')selected #end>坍塌</option>
+                                    <option value='11' #if(claimReport.accident_category=='11')selected #end>冒顶片帮</option>
+                                    <option value='12' #if(claimReport.accident_category=='12')selected #end>透水</option>
+                                    <option value='13' #if(claimReport.accident_category=='13')selected #end>放炮</option>
+                                    <option value='14' #if(claimReport.accident_category=='14')selected #end>火药爆炸</option>
+                                    <option value='15' #if(claimReport.accident_category=='15')selected #end>锅炉爆炸</option>
+                                    <option value='16' #if(claimReport.accident_category=='16')selected #end>容器爆炸</option>
+                                    <option value='17' #if(claimReport.accident_category=='17')selected #end>其他爆炸</option>
+                                    <option value='18' #if(claimReport.accident_category=='18')selected #end>中毒窒息</option>
+                                    <option value='19' #if(claimReport.accident_category=='19')selected #end>其他伤害</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 				<div class="half fl">
 					<div class='layui-form-item'>
 						<div class='layui-block'>
@@ -155,37 +177,15 @@
 					</div>
 				</div>
 				<div class="half fl">
-					<div class='layui-form-item'>
-						<div class='layui-block'>
-							<div class='layui-form-label fl'>事故分类</div>
-							<div class='layui-input-block '>
-								<select name='claimReport.accident_category' lay-verify='required' id="insuranceType" lay-search
-								 lay-verify>
-									<option value='0' #if(claimReport.accident_category=='0')selected #end>打磨机伤害</option>
-									<option value='1' #if(claimReport.accident_category=='1')selected #end>物体打击</option>
-									<option value='2' #if(claimReport.accident_category=='2')selected #end>车辆伤害</option>
-									<option value='3' #if(claimReport.accident_category=='3')selected #end>机械伤害</option>
-									<option value='4' #if(claimReport.accident_category=='4')selected #end>起重伤害</option>
-									<option value='5' #if(claimReport.accident_category=='5')selected #end>触电</option>
-									<option value='6' #if(claimReport.accident_category=='6')selected #end>淹溺</option>
-									<option value='7' #if(claimReport.accident_category=='7')selected #end>灼烫</option>
-									<option value='8' #if(claimReport.accident_category=='8')selected #end>火灾</option>
-									<option value='9' #if(claimReport.accident_category=='9')selected #end>高处坠落</option>
-									<option value='10' #if(claimReport.accident_category=='10')selected #end>坍塌</option>
-									<option value='11' #if(claimReport.accident_category=='11')selected #end>冒顶片帮</option>
-									<option value='12' #if(claimReport.accident_category=='12')selected #end>透水</option>
-									<option value='13' #if(claimReport.accident_category=='13')selected #end>放炮</option>
-									<option value='14' #if(claimReport.accident_category=='14')selected #end>火药爆炸</option>
-									<option value='15' #if(claimReport.accident_category=='15')selected #end>锅炉爆炸</option>
-									<option value='16' #if(claimReport.accident_category=='16')selected #end>容器爆炸</option>
-									<option value='17' #if(claimReport.accident_category=='17')selected #end>其他爆炸</option>
-									<option value='18' #if(claimReport.accident_category=='18')selected #end>中毒窒息</option>
-									<option value='19' #if(claimReport.accident_category=='19')selected #end>其他伤害</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
+                    <div class='layui-form-item'>
+                        <div class='layui-block'>
+                            <div class='layui-form-label fl'>出险日期</div>
+                            <div class='layui-input-block overflow'>
+                                <input type="text" class="form-control layui-input" lay-verify='required' name="claimReport.risk_date" value="#(com.crm.util.DateUtil::formatDate(claimReport.risk_date,'yyyy-MM-dd HH:mm:ss'))" id="riskDate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 				<div class="half fl">
 					<div class='layui-form-item'>
 						<div class='layui-block'>

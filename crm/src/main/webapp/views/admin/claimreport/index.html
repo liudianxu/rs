@@ -23,11 +23,13 @@
 			</div>
 		</div>
 		<script type="text/html" id="tplDemo">
+               <form class="layui-tab-content layui-form layui-form1">
+<input name="claimReportPush.claim_report_id" id= "report_id" style="display:none;">
 				<div class='layui-form-item'>
 					<div class='layui-block'>
 						<div class='layui-form-label fl'>前进到阶段:</div>
 						<div class='layui-input-block '>
-							<select name='' id="pushSelect">
+							<select name='claimReportPush.status' id="pushSelect">
 							</select>
 						</div>
 					</div>
@@ -36,21 +38,22 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>下次联系:</div>
 							<div class='layui-input-block'>
-								<input name='claimReport.cert_no' id="next_contact" class='layui-input'  placeholder="时间" autocomplete='off' />
+								<input name='claimReportPush.next_contact' id="next_contact" class='layui-input'  placeholder="时间" autocomplete='off' />
 							</div>
 								<div class='layui-input-block'>
-								<input name='claimReport.cert_no' class='layui-input' placeholder="内容" autocomplete='off'/>
+								<input name='claimReportPush.info' id="info" class='layui-input' placeholder="内容" autocomplete='off'/>
 							</div>
 						</div>
-					</div>
+					</div>      
 					<div class='layui-form-item'>
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>阶段描述:</div>
 							<div class='layui-input-block'>
-							<textarea rows="10" cols="40"></textarea>
+							<textarea rows="10" cols="40" id="describe" name="claimReportPush.describe"></textarea>
 							</div>
 						</div>
 					</div>
+</form>
 	</script>
 		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
 	</div>
@@ -65,7 +68,11 @@
 	</script>
 
 <script type="text/html" id="actionBar">
+#[[
+{{#if(d.status==0){ }}
 	<a class="layui-btn  layui-btn-xs" lay-event="edit">修改</a>
+ {{#  } }}
+]]#
     <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
 #[[
 {{#if(d.status!=3){ }}
@@ -76,14 +83,14 @@
 <script>
 var form;
 var laydate;
-
+var branchTable;
 	layui.use(['table','layedit','laydate','form'], function(){
 	  var table = layui.table;
 	  form = layui.form
 	  var layedit = layui.layedit;
 	  laydate = layui.laydate;
 	  
-	 var branchTable =  table.render({
+	  branchTable =  table.render({
 	    elem: '#branchTable'
 	    ,url:'/admin/claimreport/list'
 	    ,cellMinWidth: 80
@@ -175,7 +182,26 @@ var laydate;
 	    		  title: '推进信息'
 	    		  ,content: $("#tplDemo").html()
 	    		  ,area: ['500px', '500px']
-	    		});     
+	    	     ,yes: function(index, layero){
+	    	    	 var id = data.id;
+	    	    	 $("#report_id").val(id);
+	    	    	 var status = 
+	    	    	 $.post("/admin/claimreport/push",$(".layui-form1").serialize(),
+	 						function(res) {
+	 							layer.msg(res.message);
+	 							if (res.code == 1) {
+	 								 branchTable.reload({
+	 									  page:{
+	 										  curr: 1
+	 									  },
+	 									  where: data.field
+	 								  })
+	 							}
+	 						}, "json");
+	    	    }
+	    		});  
+	    	
+	    	
 	    	var status = data.status;
 	    	var option1="<option value='1'>待审核</option>";
 	    	var option2="<option value='2'>结案</option>";
@@ -193,8 +219,8 @@ var laydate;
         	form.render();
 			laydate.render({
 				elem: '#next_contact',
-				format: 'yyyy-MM-dd',
 				trigger: 'click'
+					,type: 'datetime'
 			});
 	    }
 	  });

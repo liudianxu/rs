@@ -1,5 +1,6 @@
 package com.crm.controller.admin.claimreport;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.claimreport.ClaimReport;
+import com.crm.model.claimreport.ClaimReportPush;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
@@ -220,5 +222,34 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 		}
 	  
 	  
+	  /**
+	   * 理赔推进
+	   */
+	  public void push() {
+		  BaseResponse response = new BaseResponse();
+		  ClaimReportPush claimReportPush = getModel(ClaimReportPush.class);
+		  Long  reportId = claimReportPush.getLong("claim_report_id");
+		  ClaimReport report =  ClaimReport.dao.findById(reportId);
+		  try {
+			  //结案
+			  if(claimReportPush.getInt("status")==2) {
+				  report.set("finish_time", new Date());
+			  }
+		  report.set("status", claimReportPush.getInt("status")).update();
+		  claimReportPush.set("create_time", new Date());
+		  claimReportPush.save();
+		  }
+		  catch (Exception e) {
+			  e.printStackTrace();
+			  response.setCode(Constant.RESPONSE_CODE_FAIL);
+			  response.setMessage(e.getMessage());
+			  renderJson(response);
+			  return;
+		}
+		  response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+		  response.setMessage("推进成功");
+		  renderJson(response);
+		  return;
+	  }
 	  
 }

@@ -49,7 +49,7 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
     			   &&(groupInsuranceOrder.get("annual_premium")!="")
     			   &&(groupInsuranceOrder.get("person_num")!=null)
     			   &&(groupInsuranceOrder.get("person_num")!="")){
-    		   groupInsuranceOrder.put("totalPremium", Integer.parseInt(groupInsuranceOrder.get("annual_premium").toString())*Integer.parseInt(groupInsuranceOrder.get("person_num").toString()));
+    		   groupInsuranceOrder.put("totalPremium", Integer.parseInt(groupInsuranceOrder.get("annual_premium").toString())*Integer.parseInt(groupInsuranceOrder.get("total_person_sum").toString()));
     	   }
        }
        dataGrid.setData(groupInsuranceOrders);

@@ -99,7 +99,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     			   &&(groupInsuranceOrder.get("annual_premium")!="")
     			   &&(groupInsuranceOrder.get("person_num")!=null)
     			   &&(groupInsuranceOrder.get("person_num")!="")){
-    		   groupInsuranceOrder.put("totalPremium", Integer.parseInt(groupInsuranceOrder.get("annual_premium").toString())*Integer.parseInt(groupInsuranceOrder.get("person_num").toString()));
+    		   groupInsuranceOrder.put("totalPremium",groupInsuranceOrder.getBigDecimal("annual_premium").multiply(new BigDecimal(groupInsuranceOrder.getStr("person_num"))));
     	   }
        }
        dataGrid.setData(groupInsuranceOrders);
@@ -709,7 +709,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			return;
 		}
 		
-		
+		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(person.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
+		person.set("policy_expiration_date", policyExpirationDate);
 		
 		if(groupInsuranceOrder.get("max_review_time")!=null) {
 			Integer maxTime = groupInsuranceOrder.get("max_review_time");
@@ -774,7 +775,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//计算保费
 		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"), person.getDate("policy_effective_date")); 
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
-		BigDecimal premium = guarantee.getBigDecimal("premium");
+		BigDecimal premium = null;
+		if(groupInsuranceOrder.getInt("insurance_type")==0) {
+			premium = groupInsuranceOrder.getBigDecimal("annual_premium");
+		}
+		else{
+			premium = guarantee.getBigDecimal("premium");
+		}
 		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		//更新
@@ -1216,7 +1223,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
         InputStream in =null;  
         List<List<Object>> listob = null;  
-
+        List<GroupInsurancePersonLog> logs = new ArrayList<>();
         if(filePath.isEmpty()){  
            data.put("msg", "文件导入错误！");  
         } else {
@@ -1311,13 +1318,26 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		.set("change",person.get("premium"))
             		.set("policy_effective_date", person.getDate("policy_effective_date"))
             		.set("create_time", new Date()).save();
+            		
+            		logs.add(groupInsurancePersonLog);
                 }
                 else {
                 	data.put("msg", "未找到变更方案"+String.valueOf(lo.get(7))+"");
                  	renderJson(data);
                  	return;
                 }
-        }  
+        
+        }
+        
+        new Thread(new Runnable(){
+			public void run() {
+		        try {
+					emailService.sendChangePersonEmail(hiddenOrderIdForImport,logs);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			}).start();
         data.put("msg", "导入成功");
         data.put("orderId", hiddenOrderIdForImport);
         data.put("code", Constant.RESPONSE_CODE_SUCCESS);

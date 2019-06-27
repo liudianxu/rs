@@ -1,5 +1,6 @@
 package com.crm.controller.admin.group;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
     			   &&(groupInsuranceOrder.get("annual_premium")!="")
     			   &&(groupInsuranceOrder.get("person_num")!=null)
     			   &&(groupInsuranceOrder.get("person_num")!="")){
-    		   groupInsuranceOrder.put("totalPremium", Integer.parseInt(groupInsuranceOrder.get("annual_premium").toString())*Integer.parseInt(groupInsuranceOrder.get("person_num").toString()));
+    		   groupInsuranceOrder.put("totalPremium",groupInsuranceOrder.getBigDecimal("annual_premium").multiply(new BigDecimal(groupInsuranceOrder.getStr("person_num"))));
     	   }
        }
        dataGrid.setData(groupInsuranceOrders);

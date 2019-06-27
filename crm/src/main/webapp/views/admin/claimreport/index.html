@@ -27,12 +27,7 @@
 					<div class='layui-block'>
 						<div class='layui-form-label fl'>前进到阶段:</div>
 						<div class='layui-input-block '>
-							<select name='' lay-verify='required' id="" lay-search
-							 lay-verify lay-filter="customerId">
-						<option value='0'>报案</option>
-						<option value='1'>待审核</option>
-						<option value='2'>结案</option>
-						<option value='3'>注销</option>
+							<select name='' id="pushSelect">
 							</select>
 						</div>
 					</div>
@@ -41,7 +36,7 @@
 						<div class='layui-block'>
 							<div class='layui-form-label fl'>下次联系:</div>
 							<div class='layui-input-block'>
-								<input name='claimReport.cert_no' class='layui-input'  placeholder="时间" autocomplete='off' />
+								<input name='claimReport.cert_no' id="next_contact" class='layui-input'  placeholder="时间" autocomplete='off' />
 							</div>
 								<div class='layui-input-block'>
 								<input name='claimReport.cert_no' class='layui-input' placeholder="内容" autocomplete='off'/>
@@ -72,14 +67,21 @@
 <script type="text/html" id="actionBar">
 	<a class="layui-btn  layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
+#[[
+{{#if(d.status!=3){ }}
  <a class="layui-btn  layui-btn-xs" lay-event="push">推进</a>
+ {{#  } }}
+]]#
 		</script>
 <script>
+var form;
+var laydate;
+
 	layui.use(['table','layedit','laydate','form'], function(){
-	  var table = layui.table
-	  ,form = layui.form
-	  ,layedit = layui.layedit
-	  ,laydate = layui.laydate;
+	  var table = layui.table;
+	  form = layui.form
+	  var layedit = layui.layedit;
+	  laydate = layui.laydate;
 	  
 	 var branchTable =  table.render({
 	    elem: '#branchTable'
@@ -169,25 +171,31 @@
               location.href="/admin/claimreport/view?id="+data.id;
         }
 	    else if(obj.event === 'push'){
-	    	html ="<div class='layui-form-item'>"+
-					"<div class='layui-block'>"+
-						"<div class='layui-form-label fl'>前进到阶段:</div>"+
-						"<div class='layui-input-block '>"+
-							"<select>"+
-							"	<option value=''>请选择</option>"+
-							"</select>"+
-						"</div>"+
-						"<div class='layui-form-label'>下次联系时间:</div>"+
-							"<input name='claimReport.cert_no' class='layui-input' autocomplete='off' />"+
-						"</div>"+
-					"</div>"+
-				"</div>"
 	    	layer.open({
 	    		  title: '推进信息'
 	    		  ,content: $("#tplDemo").html()
 	    		  ,area: ['500px', '500px']
 	    		});     
-	    		  
+	    	var status = data.status;
+	    	var option1="<option value='1'>待审核</option>";
+	    	var option2="<option value='2'>结案</option>";
+	    	var option3="<option value='3'>注销</option>";
+	    	
+	    	if(status==0){
+	    		$("#pushSelect").append(option1).append(option2).append(option3);
+	    	}
+	    	if(status==1){
+	    		$("#pushSelect").append(option2).append(option3);
+	    	}
+            if(status==2){
+            	$("#pushSelect").append(option3);
+	    	}
+        	form.render();
+			laydate.render({
+				elem: '#next_contact',
+				format: 'yyyy-MM-dd',
+				trigger: 'click'
+			});
 	    }
 	  });
 	  form.render();

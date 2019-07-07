@@ -14,6 +14,11 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
 	private GroupInsurancePersonService personService;
 	
 	
+	public void index() {
+		setAttr("type", getPara("type"));
+		render("index.html");
+	}
+	
 	/**
 	 * 列表分页查询
 	 */
@@ -21,6 +26,7 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
        Map<String,String> params = new HashMap<>();
 		
        //查询参数
+       params.put("type", getPara("type"));
        params.put("name", getPara("name"));
        params.put("id_num", getPara("id_num"));
        params.put("customer_name", getPara("customer_name"));
@@ -33,6 +39,7 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
 	}
 	
 	public void add() {
+		setAttr("type", getPara("type"));
 		render("add.html");
 	}
 
@@ -52,6 +59,7 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
 	public void preserve() {
 		Long id = getParaToLong("id");
 		setAttr("orderId", id);
+		setAttr("type", getPara("type"));
 		render("preserve.html");
 	}
 }

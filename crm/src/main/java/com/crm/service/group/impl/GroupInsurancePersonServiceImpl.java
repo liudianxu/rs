@@ -94,6 +94,9 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 		if(StringUtils.isNotBlank(map.get("orderId"))){
 			sql.append(" and o.id= "+map.get("orderId"));
 		}
+		if(StringUtils.isNotBlank(map.get("type"))){
+			sql.append(" and o.insurance_type= "+map.get("type"));
+		}
 		sql.append(" order by o.create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsurancePerson.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);

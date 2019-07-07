@@ -222,6 +222,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void preserve() {
 		Long id = getParaToLong("id");
+		setAttr("type", getPara("type"));
 		//获取品牌集合
 		setAttr("brands", brandService.selectList());
 		setAttr("groups", groupInfoService.selectList());
@@ -1571,6 +1572,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * 人员增删记录页面
 	 */
 	public void personLog() {
+		setAttr("type", getPara("type"));
 		render("personLog.html");
 	}
 	

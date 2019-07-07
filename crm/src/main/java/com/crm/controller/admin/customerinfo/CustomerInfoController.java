@@ -128,7 +128,6 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   			if(admin==null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");
-  				renderJson(response);
   			}
   			customerInfo.set("creator", admin.get("name"));
   			if(customerInfoService.add(customerInfo) == null) {
@@ -138,6 +137,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
   				response.setMessage("添加成功！");
   			}
+  			renderJson(response);
   		}
   		//编辑操作
   		else {

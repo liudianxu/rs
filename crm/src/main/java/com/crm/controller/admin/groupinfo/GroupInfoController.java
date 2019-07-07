@@ -110,13 +110,11 @@ public class GroupInfoController extends BaseController<GroupInfo> {
   			if(admin==null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");
-  				renderJson(response);
   			}
   			groupInfo.set("creator", admin.get("name"));
   			if(groupInfoService.add(groupInfo) == null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");
-  				renderJson(response);
   			} else {
   				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
   				response.setMessage("添加成功！");

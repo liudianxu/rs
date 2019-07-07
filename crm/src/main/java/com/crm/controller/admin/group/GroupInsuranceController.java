@@ -906,11 +906,11 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			renderJson(data);
 			return;
 		}
-		if(person.get("job_type")==null) {
+	/*	if(person.get("job_type")==null) {
 			data.put("msg", "工种");
 			renderJson(data);
 			return;
-		}
+		}*/
 		if(person.getDate("policy_effective_date").getTime()<groupInsuranceOrder.getDate("policy_effective_date").getTime()
 				&&person.getDate("policy_expiration_date").getTime()>groupInsuranceOrder.getDate("policy_expiration_date").getTime()
 				) 
@@ -964,7 +964,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		
 		person.set("create_time", new Date());
 		person.set("order_id",hiddenOrderId);
-		
+        GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderId, "方案1");
+        person.set("guarantee_id", groupInsuranceGuarantee.getLong("id"));
 		//计算保费
 		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"), person.getDate("policy_effective_date")); 
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
@@ -1335,12 +1336,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             }
             else if(String.valueOf(lo.get(1)).equals("加保")){
             	 GroupInsurancePerson person = new GroupInsurancePerson();
+            	 int m=0;
             	 GroupInsurancePerson exPerson = personService.findByIdNumAndOrderId(idNum, hiddenOrderIdForImport);
             	 if(exPerson==null) {
+            		 m=1;
+            		 exPerson=person;
+            	 }
+            	/* if(exPerson==null) {
             		 data.put("msg", "未找到"+String.valueOf(lo.get(2))+"的承保信息");
                  	renderJson(data);
                  	return; 
-            	 }
+            	 }*/
             	 exPerson.set("name",String.valueOf(lo.get(2)));
             	 exPerson.set("id_type",0);
             	 exPerson.set("birth",DateUtil.parseDate(String.valueOf(lo.get(3)).substring(6, 14), new String[]{"yyyyMMdd"}));
@@ -1383,7 +1389,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
               
          		
                  exPerson.set("order_id",hiddenOrderIdForImport);
-                 exPerson.update();
+                 if(m==0) {
+                	 exPerson.update();	 
+                 }
+                 else {
+                	 exPerson.set("create_time", new Date());
+                	 exPerson.save();
+                 }
                  
                  GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
           		groupInsurancePersonLog

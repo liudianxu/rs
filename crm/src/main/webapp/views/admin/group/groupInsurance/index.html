@@ -80,15 +80,15 @@
 		</div>
 #end#end
 	</script>
-
+<!-- {{#  } else if(d.status==2||d.status==3){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="preserve">保全</a>
+  {{#  } }} -->
 <script type="text/html" id="actionBar">
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/edit"))
 #[[
 {{#if(d.status==0){ }}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
-{{#  } else if(d.status==2||d.status==3){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="preserve">保全</a>
-  {{#  } }}
+{{#  }  }}
 ]]#
 #end#end
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/view"))

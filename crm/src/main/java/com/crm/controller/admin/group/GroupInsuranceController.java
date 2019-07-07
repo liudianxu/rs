@@ -96,6 +96,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
        DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage());
        List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
        for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
+    	   if(groupInsuranceOrder.getInt("insurance_type")==0) {
     	   groupInsuranceOrder.put("person", groupInsuranceOrder.get("person_num")+"/"+groupInsuranceOrder.get("total_person_sum"));
     	   if((groupInsuranceOrder.get("annual_premium")!=null)
     			   &&(groupInsuranceOrder.get("annual_premium")!="")
@@ -110,9 +111,25 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     				   }
 			}
     		   }
-    		   groupInsuranceOrder.put("totalPremium",fre);    	   }
+    		   groupInsuranceOrder.put("totalPremium",fre);    
+    		   }
        }
-       dataGrid.setData(groupInsuranceOrders);
+    	   if(groupInsuranceOrder.getInt("insurance_type")==3) {
+    		   List<GroupInsurancePerson> persons = personService.findByOrderId(groupInsuranceOrder.getLong("id"));
+        	   groupInsuranceOrder.put("person", groupInsuranceOrder.get("person_num")+"/"+persons.size());
+        	   BigDecimal fre=BigDecimal.ZERO;
+    		   for (GroupInsurancePerson person : persons) {
+    			   if(person.get("premium")!=null) {
+    				   if(person.getInt("status")==0||person.getInt("status")==1) {
+    				   fre = fre.add(person.getBigDecimal("premium"));
+    				   }
+			}
+    		   }
+    		   groupInsuranceOrder.put("totalPremium",fre);    
+    	   }
+       }
+	   
+	   dataGrid.setData(groupInsuranceOrders);
 		renderJson(dataGrid);
 	}
 	

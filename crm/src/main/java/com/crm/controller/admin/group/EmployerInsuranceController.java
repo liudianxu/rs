@@ -8,9 +8,11 @@ import java.util.Map;
 import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.group.GroupInsuranceOrder;
+import com.crm.model.group.GroupInsurancePerson;
 import com.crm.service.brand.BrandService;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.group.GroupInsuranceOrderService;
+import com.crm.service.group.GroupInsurancePersonService;
 import com.jfinal.aop.Inject;
 
 public class EmployerInsuranceController extends BaseController<GroupInsuranceOrder>{
@@ -21,6 +23,8 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
 	private CustomerInfoService customerInfoService;
 	@Inject
 	private GroupInsuranceOrderService groupInsuranceOrderService;
+	@Inject
+	private GroupInsurancePersonService personService;
 	
 	/**
 	 * 列表分页查询
@@ -50,7 +54,17 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
     			   &&(groupInsuranceOrder.get("annual_premium")!="")
     			   &&(groupInsuranceOrder.get("person_num")!=null)
     			   &&(groupInsuranceOrder.get("person_num")!="")){
-    		   groupInsuranceOrder.put("totalPremium",groupInsuranceOrder.getBigDecimal("annual_premium").multiply(new BigDecimal(groupInsuranceOrder.getStr("person_num"))));
+    		   
+    		   BigDecimal fre=BigDecimal.ZERO;
+    		   List<GroupInsurancePerson> persons = personService.findByOrderId(groupInsuranceOrder.getLong("id"));
+    		   for (GroupInsurancePerson person : persons) {
+    			   if(person.get("premium")!=null) {
+    				   if(person.getInt("status")==0||person.getInt("status")==1) {
+    				   fre = fre.add(person.getBigDecimal("premium"));
+    				   }
+			}
+    		   }
+    		   groupInsuranceOrder.put("totalPremium",fre);
     	   }
        }
        dataGrid.setData(groupInsuranceOrders);

@@ -19,7 +19,7 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 
 
 	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,String customerName,
-			String policyNum,String name,String createTime,String policyEffectiveDate) {
+			String policyNum,String name,String createTime,String policyEffectiveDate,String insurance_type) {
 		Page<GroupInsurancePersonLog> page = new Page<>();
 		DataGrid<GroupInsurancePersonLog> dataGrid = new DataGrid<>();
 		String createBeginTime = null;
@@ -39,7 +39,7 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select  g.*,c.customer_name as customerName from crm_group_insurance_person_log g ");
-		sql.append("left join crm_customer_info c on c.id =g.customer_id where 1=1");
+		sql.append("left join crm_customer_info c on c.id =g.customer_id left join crm_group_insurance_orders o on o.id=g.order_id where 1=1");
 		if(StringUtils.isNotBlank(customerName)){
 			sql.append(" and c.customer_name like '%").append(customerName + "%' ");
 		}
@@ -49,6 +49,10 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 		if(StringUtils.isNotBlank(name)){
 			sql.append(" and g.name like '%").append(name + "%' ");
 		}
+		if(StringUtils.isNotBlank(insurance_type)){
+			sql.append(" and o.insurance_type = "+insurance_type);
+		}
+		
 		if(StringUtils.isNotBlank(createBeginTime)&&StringUtils.isNotBlank(createEndTime)){
 			sql.append(" and g.create_time > '"+createBeginTime+"' and g.create_time <'"+createEndTime+"'");
 		}

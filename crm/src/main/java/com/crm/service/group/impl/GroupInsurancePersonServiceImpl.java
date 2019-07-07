@@ -68,7 +68,7 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 		DataGrid<GroupInsurancePerson> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select p.*,c.customer_name as customerName from crm_group_insurance_person p ");
+		sql.append("select p.*,c.customer_name as customerName,o.insurance_type as insuranceType from crm_group_insurance_person p ");
 		sql.append("left join crm_group_insurance_orders o on o.id=p.order_id ");
 		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
 		sql.append("where 1=1 ");
@@ -81,6 +81,10 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 		if(StringUtils.isNotBlank(map.get("status"))){
 			sql.append(" and p.status = "+map.get("status"));
 		}
+		if(StringUtils.isNotBlank(map.get("insurance_type"))){
+			sql.append(" and o.insurance_type = "+map.get("insurance_type"));
+		}
+		
 		if(StringUtils.isNotBlank(map.get("customer_name"))){
 			sql.append(" and c.customer_name like '%").append(map.get("customer_name")).append("%' ");
 		}

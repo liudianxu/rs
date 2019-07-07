@@ -54,6 +54,9 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		if(StringUtils.isNotBlank(map.get("type"))){
 			sql.append(" and o.type = "+map.get("type"));
 		}
+		if(StringUtils.isNotBlank(map.get("company_name"))){
+			sql.append(" and c.customer_name like  '%"+map.get("company_name")+"%'");
+		}
 		if(StringUtils.isNotBlank(map.get("insurance_type"))){
 			sql.append(" and o.insurance_type = "+map.get("insurance_type"));
 		}

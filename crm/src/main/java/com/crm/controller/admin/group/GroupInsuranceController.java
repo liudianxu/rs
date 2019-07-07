@@ -62,6 +62,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	private UserService userService;
 	@Inject
 	private EmailService emailService;
+	@Inject
+	private GroupInsurancePersonService personService;
 	
 	//团险理赔类型
 	public static final int GROUP_CLAIM_TYPE =1;
@@ -99,8 +101,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     			   &&(groupInsuranceOrder.get("annual_premium")!="")
     			   &&(groupInsuranceOrder.get("person_num")!=null)
     			   &&(groupInsuranceOrder.get("person_num")!="")){
-    		   groupInsuranceOrder.put("totalPremium",groupInsuranceOrder.getBigDecimal("annual_premium").multiply(new BigDecimal(groupInsuranceOrder.getStr("person_num"))));
-    	   }
+    		   BigDecimal fre=BigDecimal.ZERO;
+    		   List<GroupInsurancePerson> persons = personService.findByOrderId(groupInsuranceOrder.getLong("id"));
+    		   for (GroupInsurancePerson person : persons) {
+    			   if(person.get("premium")!=null) {
+    				   if(person.getInt("status")==0||person.getInt("status")==1) {
+    				   fre = fre.add(person.getBigDecimal("premium"));
+    				   }
+			}
+    		   }
+    		   groupInsuranceOrder.put("totalPremium",fre);    	   }
        }
        dataGrid.setData(groupInsuranceOrders);
 		renderJson(dataGrid);
@@ -1185,7 +1195,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
           		groupInsurancePersonLog.put("id_num",person.get("id_num"));
           		groupInsurancePersonLog.put("job_type",person.get("job_type"));
           		groupInsurancePersonLog.put("gender",person.get("gender"));
-          		groupInsurancePersonLog.put("premium",person.get("premium"));
+        		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
           		logs.add(groupInsurancePersonLog);
             }
             
@@ -1318,7 +1328,11 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		.set("change",person.get("premium"))
             		.set("policy_effective_date", person.getDate("policy_effective_date"))
             		.set("create_time", new Date()).save();
-            		
+            		groupInsurancePersonLog.put("id_num",person.get("id_num"));
+              		groupInsurancePersonLog.put("job_type",person.get("job_type"));
+              		groupInsurancePersonLog.put("gender",person.get("gender"));
+            		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
+
             		logs.add(groupInsurancePersonLog);
                 }
                 else {
@@ -1443,11 +1457,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		person.set("status", 2);
 		long[] getDate = DateUtil.getDatePoor(new Date(), person.getDate("policy_effective_date")); 
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+		if(guarantee!=null) {
 		BigDecimal premium = guarantee.getBigDecimal("premium");
 		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		person.update();
-		
+		}
+		   List<GroupInsurancePersonLog> logs = new ArrayList<>();
+
 		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
 		groupInsurancePersonLog
 		.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
@@ -1458,6 +1475,24 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		.set("change",person.get("premium"))
 		.set("policy_effective_date", person.getDate("policy_effective_date"))
 		.set("create_time", new Date()).save();
+		groupInsurancePersonLog.put("id_num",person.get("id_num"));
+  		groupInsurancePersonLog.put("job_type",person.get("job_type"));
+  		groupInsurancePersonLog.put("gender",person.get("gender"));
+		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
+		
+		logs.add(groupInsurancePersonLog);
+		
+		
+		  new Thread(new Runnable(){
+				public void run() {
+			        try {
+						emailService.sendChangePersonEmail(person.getLong("order_id"),logs);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				}).start();
+		  
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 		renderJson(data);
@@ -1474,12 +1509,15 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		person.set("status", 0);
 		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"), person.getDate("policy_effective_date")); 
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+		if(guarantee!=null) {
 		BigDecimal premium = guarantee.getBigDecimal("premium");
 		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		person.update();
-		
-		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+		}
+		   List<GroupInsurancePersonLog> logs = new ArrayList<>();
+
+		  GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
 		groupInsurancePersonLog
 		.set("customer_id", groupInsuranceOrder.getLong("insure_customer_id"))
 		.set("policy_num", person.get("policy_num"))
@@ -1489,6 +1527,23 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		.set("change",person.get("premium"))
 		.set("policy_effective_date", person.getDate("policy_effective_date"))
 		.set("create_time", new Date()).save();
+		groupInsurancePersonLog.put("id_num",person.get("id_num"));
+  		groupInsurancePersonLog.put("job_type",person.get("job_type"));
+  		groupInsurancePersonLog.put("gender",person.get("gender"));
+		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
+
+    		logs.add(groupInsurancePersonLog);
+		
+		
+		  new Thread(new Runnable(){
+				public void run() {
+			        try {
+						emailService.sendChangePersonEmail(person.getLong("order_id"),logs);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				}).start();
 		
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
@@ -1508,9 +1563,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		String name = getPara("name");
 		String createTime = getPara("create_time");
 		String policyEffectiveDate = getPara("policy_effective_date");
+		String insurance_type = getPara("insurance_type");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
-		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate));
+		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type));
 	}
 	
 }

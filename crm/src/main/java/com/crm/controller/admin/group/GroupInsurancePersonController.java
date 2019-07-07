@@ -27,6 +27,7 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
        params.put("policy_num", getPara("policy_num"));
        params.put("status", getPara("status"));
        params.put("orderId", getPara("orderId"));
+       params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
 		renderJson(personService.selectPage(params, getPage()));
 	}

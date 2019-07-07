@@ -157,9 +157,12 @@ public class EmailServiceImpl implements EmailService{
 				  MailUtil mailUtil=new MailUtil(smtpHost,smtpUsername,smtpPassword);
 				  
 				  CustomerInfo customerInfo = CustomerInfo.dao.findById(order.getLong("insure_customer_id"));
+				  if(customerInfo.get("email")!=null) {
 				  mailUtil.sendMail("保全申请书", customerInfo.get("email"), content ,"保全申请书.xlsx", is,null);
+				  }
+				  if(order.get("brand_service_emial")!=null) {
 				  mailUtil.sendMail("保全申请书", order.get("brand_service_emial"), content ,"保全申请书.xlsx", is,null);
-				  
+				  }
 				//}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

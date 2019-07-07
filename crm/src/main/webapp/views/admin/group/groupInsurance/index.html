@@ -42,7 +42,7 @@
 						<option value='1'>线下</option>
 					</select>
 				</div>
-					<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+				<!-- 	<div class="layui-input-inline layui-col-sm4 layui-col-md2">
 					<select name='insurance_type' lay-search>
 						<option value=''>险种类型</option>
 						<option value='0'>雇主责任险</option>
@@ -51,7 +51,7 @@
 						<option value='3'>团体意外险</option>
 						<option value='4'>其他</option>
 					</select>
-				</div>
+				</div> -->
 			<!--  	<div class="layui-input-inline layui-col-sm4 layui-col-md2">
 					 <input type="date" class="form-control layui-input" name="startTime" id="startTime">
 					 </div>
@@ -104,7 +104,7 @@
 	  
 	 var branchTable =  table.render({
 	    elem: '#branchTable'
-	    ,url:'/admin/groupInsurance/selectByPage'
+	    ,url:'/admin/groupInsurance/selectByPage?insurance_type=3'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,defaultToolbar: ['filter','print','exports']

@@ -9,18 +9,26 @@
 						placeholder='客户名' />
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-						<input name='create_time' autocomplete='off' class="layui-input" id="createTime"
+						<input name='policy_effective_date' autocomplete='off' class="layui-input" id="policy_effective_date"
 							placeholder="合同起期">
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-						<input name='policy_effective_date' autocomplete='off' class="layui-input" id="policyEffectiveDate"
+						<input name='policy_expiration_date' autocomplete='off' class="layui-input" id="policy_expiration_date"
 							placeholder="合同止期">
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
-					<select name='type' lay-search>
-						<option value=''>合同状态</option>
-						<option value='0'>线上</option>
-						<option value='1'>线下</option>
+					<select name='status' lay-search>
+						<option value=''>状态</option>
+						<option value='3'>承保</option>
+						<option value='5'>退保</option>
+						<option value='4'>失效</option>
+					</select>
+				</div>
+					<div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<select name='insurance_type' lay-search>
+						<option value=''>险种类型</option>
+						<option value='0'>雇主责任险</option>
+						<option value='3'>团体意外险</option>
 					</select>
 				</div>
 				<div class='layui-input-inline layui-col-sm4 layui-col-md2'>
@@ -45,7 +53,15 @@
 	  ,form = layui.form
 	  ,layedit = layui.layedit
 	  ,laydate = layui.laydate;
-	  
+	  laydate.render({
+			elem: '#policy_effective_date' //指定元素
+				,trigger: 'click'
+		});
+
+		laydate.render({
+			elem: '#policy_expiration_date' //指定元素
+				,trigger: 'click'
+		});
 	 var branchTable =  table.render({
 	    elem: '#branchTable'
 	    ,url:'/admin/groupInsurance/selectByPage'
@@ -61,7 +77,7 @@
 		      ,{field:'policy_expiration_date', title:'合同止期'}
 		      ,{field:'totalPremium', title:'总保费'}
 		      ,{field:'status', title:'状态'}
-	    
+		      ,{field:'insurance_type', title:'险种类型'}
 	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
 	    ]]
 	 ,done: function(res, page, count){
@@ -109,6 +125,13 @@
 					   $(this).html("<span>线上<span>");
 					}else if($(this).text()=='1'){
 						   $(this).html("<span>线下<span>");
+					}
+			}),
+			$("[data-field='insurance_type']").children().each(function(){
+				if($(this).text()=='0'){
+					   $(this).html("<span>雇主责任险<span>");
+					}else if($(this).text()=='3'){
+						   $(this).html("<span>团体意外险<span>");
 					}
 			})
 	 }

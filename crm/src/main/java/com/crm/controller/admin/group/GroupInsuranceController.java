@@ -740,7 +740,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(person.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
 		person.set("policy_expiration_date", policyExpirationDate);
 		
-		if(groupInsuranceOrder.get("max_review_time")!=null) {
+		if(groupInsuranceOrder.get("max_review_time")!=null&&groupInsuranceOrder.getInt("max_review_time")!=0) {
 			Integer maxTime = groupInsuranceOrder.get("max_review_time");
 			Date date = groupInsuranceOrder.getDate("policy_effective_date");
 			Date reviewTime = DateUtil.addDays(date, maxTime);

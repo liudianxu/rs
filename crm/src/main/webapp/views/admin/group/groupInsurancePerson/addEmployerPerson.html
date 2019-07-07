@@ -121,20 +121,24 @@ text-decoration: none;
 min-width: 48px;
 text-align: center;
 }
+
 </style>
 <script type="text/html" id="headBar">
 <div class='layui-btn-container'>
-                             <a class="layui-btn layui-btn-sm" id='exportBatchPersonBtn'>
+							<a class="layui-btn layui-btn-sm" lay-event='addPersonBtn'>
+								<i class="layui-icon layui-icon-add-1"></i>新增人员
+							</a>
+							<a class="layui-btn layui-btn-sm" id="exportEmployPersonBtn" lay-event='exportEmployPersonBtn'>
+								<i class="layui-icon layui-icon-add-1"></i>新增人员导入
+							</a>
+ <a class="layui-btn layui-btn-sm" id='exportBatchPersonBtn'>
 								<i class="layui-icon layui-icon-add-1"></i>保全人员导入
 							</a>
-	                        <a class="layui-btn layui-btn-sm" id='exportChangePersonBtn'>
-								<i class="layui-icon layui-icon-add-1"></i>批量变更层级
+							<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增雇主人员模板.xls">
+								<i class="layui-icon"></i>新增人员Excel模板
 							</a>
-		                 <a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/保全增减员模板.xlsx">
+ <a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/保全增减员模板.xlsx">
 								<i class="layui-icon"></i>保全增减员模板
-							</a>
-								<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/层级方案变更模板.xlsx">
-								<i class="layui-icon"></i>层级方案变更模板
 							</a>
 					</div>
 </script>
@@ -161,7 +165,7 @@ text-align: center;
 			upload = layui.upload;
 			//指定允许上传的文件类型
 			upload.render({
-				elem: '#exportPersonBtn',
+				elem: '#exportEmployPersonBtn',
 				url: '/common/file/upload',
 				accept: 'file' //普通文件
 					,
@@ -170,7 +174,7 @@ text-align: center;
 					var hiddenOrderIdForImport = #(orderId);
 					$.ajax({
 						type: 'POST',
-						url: '/admin/groupInsurance/importPerson',
+						url: '/admin/groupInsurance/exportEmployerPersonBtn',
 						data: {
 							hiddenOrderIdForImport: hiddenOrderIdForImport,
 							filePath: res.data.filePath.trim()
@@ -179,7 +183,7 @@ text-align: center;
 						success: function(data) {
 							layer.msg(data.msg);
 							if (data.code == 1) {
-								  location.href="/admin/groupInsurancePerson/addPreserve?id=#(orderId)";
+								  location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
 							}
 
 						}
@@ -212,7 +216,7 @@ text-align: center;
 							success: function(data) {
 								layer.msg(data.msg);
 								if (data.code == 1) {
-									location.href="/admin/groupInsurancePerson/addPreserve?id=#(orderId)";
+									location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
 								}
 
 							}
@@ -248,7 +252,7 @@ text-align: center;
 							success: function(data) {
 								layer.msg(data.msg);
 								if (data.code == 1) {
-									location.href="/admin/groupInsurancePerson/addPreserve?id=#(orderId)";
+									location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
 								}
 
 							}
@@ -295,7 +299,7 @@ text-align: center;
 	  table.on('toolbar(test)', function(obj){
 	    var data = obj.data; 
 	    var hiddenOrderId = #(orderId);
-	    if(obj.event === 'addPreserveBtn'){
+	    if(obj.event === 'addPersonBtn'){
 	    	//查询保障方案
 			$.ajax({
 				type: 'GET',
@@ -312,7 +316,7 @@ text-align: center;
 					});
 					selectHtml += '</select>';
 					var html =
-						'<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPreserve">' +
+						'<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addEmployPerson">' +
 						'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> ' +
 						'<div class="layui-form-item"><table class="input"> ' +
 						'<tr>' +
@@ -361,33 +365,13 @@ text-align: center;
 						'<input type="text" name="groupInsurancePerson.phone" class="layui-input" maxlength="20" />' +
 						'</td>' +
 						'<th>' +
-						'职业类别' +
-						'</th>' +
-						'<td>' +
-						'<select name="groupInsurancePerson.occupation_category" class="layui-input">' +
-						'<option value="">请选择</option>' +
-						'<option value="1">1</option>' +
-						'<option value="2">2</option>' +
-						'<option value="3">3</option>' +
-						'<option value="4">4</option>' +
-						'<option value="5">5</option>' +
-						'<option value="6">6</option>' +
-						'</select>' +
-						'</td>' +
-						'</tr>' +
-						'<tr>' +
-						'<th>' +
-						'<span style="color:red">*</span>保障方案' +
-						'</th>' +
-						'<td>' + selectHtml + '' +
-						'</td>' +
-						'<th>' +
 						'备注' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.remark" class="layui-input" maxlength="200" />' +
 						'</th>' +
 						'</tr>' +
+						'<tr>' +
 						'<tr>' +
 						'<th>' +
 						'<span style="color:red">*</span>生效日期' +
@@ -409,7 +393,7 @@ text-align: center;
 						'<input type="text" name="groupInsurancePerson.policy_num" class="layui-input" maxlength="200" />' +
 						'</th>' +
 						'<th>' +
-						'工种' +
+						'<span style="color:red">*</span>工种' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.job_type" id="job_type" class="layui-input" maxlength="200" />' +
@@ -459,7 +443,7 @@ text-align: center;
 					layer.msg(res.msg);
 					if (res.code == 1) {
 							cover.hide()
-						  location.href="/admin/groupInsurancePerson/addPreserve?id=#(orderId)";
+						  location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
   
 					}
 				}, "json");
@@ -488,7 +472,7 @@ text-align: center;
 				function(res) {
 					layer.msg(res.msg);
 					if (res.code == 1) {
-						 location.href="/admin/groupInsurancePerson/addPreserve?id=#(orderId)";
+						 location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
 					}
 				}, "json");
 			
@@ -502,7 +486,7 @@ text-align: center;
 				function(res) {
 					layer.msg(res.msg);
 					if (res.code == 1) {
-						 location.href="/admin/groupInsurancePerson/addPreserve?id=#(orderId)";
+						 location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
 					}
 				}, "json");
 	    }
@@ -519,6 +503,7 @@ text-align: center;
 			var policy_effective_date = data.policy_effective_date
 			var policy_expiration_date = data.policy_expiration_date;
 			var policy_num = data.policy_num;
+			var job_type=data.job_type;
 			var hiddenOrderId = #(orderId);
 			$.ajax({
 				type: 'GET',
@@ -538,7 +523,7 @@ text-align: center;
 						}
 					});
 					selectHtml += '</select>';
-					var html = '<form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPreserve">' +
+					var html = '<form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addEmployPerson">' +
 						'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> <table class="input"> ' +
 						'<tr>' +
 						'<th>' +
@@ -604,57 +589,20 @@ text-align: center;
 						'" class="layui-input" maxlength="20" />' +
 						'</td>' +
 						'<th>' +
-						'职业类别' +
-						'</th>' +
-						'<td>' +
-						'<select name="groupInsurancePerson.occupation_category" class="layui-input">' +
-						'<option value="">请选择</option><option value="1"';
-					if (occupationCategory == 1) {
-						html += 'selected';
-					}
-					html += '>1</option><option value="2"';
-					if (occupationCategory == 2) {
-						html += 'selected';
-					}
-					html += '>2</option><option value="3"';
-					if (occupationCategory == 3) {
-						html += 'selected';
-					}
-					html += '>3</option><option value="4"';
-					if (occupationCategory == 4) {
-						html += 'selected';
-					}
-					html += '>4</option><option value="5"';
-					if (occupationCategory == 5) {
-						html += 'selected';
-					}
-					html += '>5</option><option value="6"';
-					if (occupationCategory == 6) {
-						html += 'selected';
-					}
-					html += '>6</option>';
-					html += '</select>' +
-						'</td>' +
-						'</tr>' +
-						'<tr>' +
-						'<th>' +
-						'<span style="color:red">*</span>保障方案' +
-						'</th>' +
-						'<td>' + selectHtml + '' +
-						'</td>' +
-						'<th>' +
 						'备注' +
 						'</th>';
-					if (remark == null || remark == "null") {
-						html += '<th>' +
-							'<input type="text" name="groupInsurancePerson.remark" value="" class="layui-input" maxlength="200" />' +
-							'</th>';
-					} else {
-						html += '<th>' +
-							'<input type="text" name="groupInsurancePerson.remark" value="' + remark +
-							'" class="layui-input" maxlength="200" />' +
-							'</th>';
-					}
+						if (remark == null || remark == "null") {
+							html += '<th>' +
+								'<input type="text" name="groupInsurancePerson.remark" value="" class="layui-input" maxlength="200" />' +
+								'</th>';
+						} else {
+							html += '<th>' +
+								'<input type="text" name="groupInsurancePerson.remark" value="' + remark +
+								'" class="layui-input" maxlength="200" />' +
+								'</th>';
+						}
+						'</tr>';
+					
 					html += '</tr>' +
 						'<tr>' +
 						'<th>' +
@@ -679,6 +627,12 @@ text-align: center;
 						'<input type="text" name="groupInsurancePerson.policy_num" class="layui-input" value="' + policy_num +
 						'" maxlength="200" />' +
 						'</th>' +
+						'<th>' +
+						'<span style="color:red">*</span>工种' +
+						'</th>' +
+						'<th>' +
+						'<input type="text" name="groupInsurancePerson.job_type" id="job_type" value="'+job_type+'" class="layui-input" maxlength="200" />' +
+						'</th>' +
 						'</tr>' +
 						'</table>' +
 						'</form>';
@@ -692,10 +646,7 @@ text-align: center;
 								function(res) {
 									layer.msg(res.msg);
 									if (res.code == 1) {
-										reloadPersonTable(hiddenOrderId).then(function() {
-											form.render()
-											cover.hide()
-										})
+											 location.href="/admin/groupInsurancePerson/addPerson?id=#(orderId)";
 									}
 								}, "json");
 
@@ -704,16 +655,19 @@ text-align: center;
 							layer.close(index);
 						}
 					});
-					form.render();
 
 					laydate.render({
 						elem: '.person_policy_effective_date',
-						trigger: 'click'
+						trigger: 'click',
+						type: 'datetime',
+						
 					});
 					laydate.render({
 						elem: '.person_policy_expiration_date',
-						trigger: 'click'
+						trigger: 'click',
+						type: 'datetime',
 					});
+					form.render();
 				}
 			});
 	    }

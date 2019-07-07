@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.crm.controller.admin.BaseController;
+import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
@@ -47,7 +48,15 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
 	public void addPerson() {
 		Long id = getParaToLong("id");
 		setAttr("orderId", id);
-		render("addPerson.html");
+		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
+		setAttr("type", order.getInt("insurance_type"));
+		int type=order.getInt("insurance_type");
+		if(type==3) {
+			render("addPerson.html");
+		}
+		if(type==0) {
+			render("addEmployerPerson.html");
+		}
 	}
 	
 	public void addPreserve() {

@@ -363,7 +363,7 @@
 		</div>
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form2" action="/admin/groupInsurance/saveGrantee">
-				<input type="hidden" name="hiddenOrderIdForGuarantee" value="#(order.id)" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee" value="#if(order.step_one==1)#(order.id)#end" />
 				<div class="bar">
 					<div class="buttonGroup">
 						<a class="layui-btn layui-btn-sm" id='addGuaranteeBtn'>
@@ -491,7 +491,7 @@
 		</div> -->
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form3" action="/admin/groupInsurance/saveGuaranteeDesc">
-				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="#(order.id)" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="#if(order.step_two==1)#(order.id)#end" />
 				<div class="layui-form-item layui-form-text">
 					<label class="layui-form-label">产品保障说明</label>
 					<div class="layui-input-block" style="margin-left: 114px;">
@@ -549,7 +549,7 @@
 					</div>
 				</div>
 				<div id="personDiv">
-					<input type="hidden" name="hiddenOrderIdForGuarantee3" value="#(order.id)" />
+					<input type="hidden" name="hiddenOrderIdForGuarantee3" value="#if(order.step_three==1)#(order.id)#end" />
 					<div class="bar">
 						<div class="buttonGroup">
 							<a class="layui-btn layui-btn-sm" id='addPersonBtn'>
@@ -622,7 +622,7 @@
 		</div>
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form5" action="/admin/groupInsurance/saveServiceInfo">
-				<input type="hidden" name="hiddenOrderIdForGuarantee5" value="#(order.id)" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee5" value="#if(order.step_one==1)#(order.id)#end" />
 				<div class='layui-form-item'>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>服务人员</div>
@@ -1072,6 +1072,11 @@ text-align: center;
 						layer.msg("产品保障说明超出字数限制！");
 						return false;
 					}
+					var maxOccpation = $("input[name='groupInsuranceOrder.max_occupation_category']").val();
+					if(!(/^(\+|-)?\d+$/.test(maxOccpation)) || maxOccpation < 0){
+						layer.msg("最高职业类别必须是正整数！");   
+					    return false;  
+					}
 					if ($('input[name=hiddenOrderIdForGuarantee2]').val() == null || $('input[name=hiddenOrderIdForGuarantee2]').val() ==
 						"") {
 						layer.msg("请先保存保障方案！");
@@ -1240,7 +1245,7 @@ text-align: center;
 		//查询保障方案
 		$.ajax({
 			type: 'GET',
-			url: "/admin/findGuaranteeSchemes",
+			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
 				orderId: hiddenOrderId
 			},
@@ -1421,7 +1426,7 @@ text-align: center;
 		var hiddenOrderId = $("input[name='hiddenOrderIdForGuarantee3']").val();
 		$.ajax({
 			type: 'GET',
-			url: "findGuaranteeSchemes",
+			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
 				orderId: hiddenOrderId
 			},

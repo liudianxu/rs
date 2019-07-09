@@ -1029,6 +1029,11 @@ text-align: center;
 						layer.msg("请先保存保障方案！");
 						return false;
 					}
+					var maxOccpation = $("input[name='groupInsuranceOrder.max_occupation_category']").val();
+					if(!(/^(\+|-)?\d+$/.test(maxOccpation)) || maxOccpation < 0){
+						layer.msg("最高职业类别必须是正整数！");   
+					    return false;  
+					}
 					$.post($(".layui-form3").attr('action'), $(".layui-form3").serialize(),
 						function(res) {
 							layer.msg(res.msg);

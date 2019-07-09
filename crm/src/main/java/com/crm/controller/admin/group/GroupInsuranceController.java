@@ -912,7 +912,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			return;
 		}*/
 		if(person.getDate("policy_effective_date").getTime()<groupInsuranceOrder.getDate("policy_effective_date").getTime()
-				&&person.getDate("policy_expiration_date").getTime()>groupInsuranceOrder.getDate("policy_expiration_date").getTime()
+				||person.getDate("policy_expiration_date").getTime()>groupInsuranceOrder.getDate("policy_expiration_date").getTime()
 				) 
 		{
 			data.put("msg", "需要与保单起止日期一致！");
@@ -1127,7 +1127,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				person.set("id_type",0);
 				GroupInsurancePerson exPerson = personService.findByIdNumAndOrderId(String.valueOf(lo.get(3)), hiddenOrderIdForImport);
 				if(exPerson!=null) {
-					data.put("msg", "该人员已存在");
+					data.put("msg", "该人员"+lo.get(3)+"已存在");
 					renderJson(data);
 					return;
 				}
@@ -1169,6 +1169,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             person.set("policy_expiration_date",lo.get(9).toString() + " 23:59:59");
             person.set("order_id",hiddenOrderIdForImport);
             
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	person.set("policy_expiration_date", sdf.parse(person.get("policy_expiration_date")));
+        	person.set("policy_effective_date", sdf.parse(person.get("policy_effective_date")));
+        	
             if(order.get("max_insurance_age")!=null){
 				int maxAge = order.get("max_insurance_age");
 				int age = DateUtil.calcAge(person.getDate("birth"), new Date());
@@ -1179,11 +1183,34 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				}
 			}
             
+        	if(person.getDate("policy_effective_date").getTime()<order.getDate("policy_effective_date").getTime()
+    				||person.getDate("policy_expiration_date").getTime()>order.getDate("policy_expiration_date").getTime()
+    				) 
+    		{
+    			data.put("msg", "需要与保单起止日期一致！");
+    			renderJson(data);
+    			return;
+    		}
+        	
+
+    		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(person.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
+    		person.set("policy_expiration_date", policyExpirationDate);
+    		if(order.get("max_review_time")!=null&&order.getInt("max_review_time")!=0) {
+    			Integer maxTime = order.get("max_review_time");
+    			Date date = order.getDate("policy_effective_date");
+    			Date reviewTime = DateUtil.addDays(date, maxTime);
+    			 long diff = person.getDate("policy_effective_date").getTime() - reviewTime.getTime();
+    			 if(diff>0) {
+    				 data.put("msg", "已超过追溯日期!");
+    					renderJson(data);
+    					return;
+    			 }
+    		}
+            
             GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
             if(groupInsuranceGuarantee!=null) {
                 person.set("guarantee_id",groupInsuranceGuarantee.get("id"));
-                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-                long[] getDate = DateUtil.getDatePoor(format.parse(person.get("policy_expiration_date")),format.parse(person.get("policy_effective_date"))); 
+                long[] getDate = DateUtil.getDatePoor(person.get("policy_expiration_date"),person.get("policy_effective_date")); 
         		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
         		BigDecimal premium = guarantee.getBigDecimal("premium");
         		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
@@ -1198,7 +1225,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         		.set("name", person.get("name"))
         		.set("order_id", person.getLong("order_id"))
         		.set("change",person.get("premium"))
-        		.set("policy_effective_date", format.parse(person.get("policy_expiration_date")))
+        		.set("policy_effective_date", person.get("policy_expiration_date"))
         		.set("create_time", new Date()).save();
             }
             

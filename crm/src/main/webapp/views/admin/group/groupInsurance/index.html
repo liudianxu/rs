@@ -86,7 +86,7 @@
 <script type="text/html" id="actionBar">
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/edit"))
 #[[
-{{#if(d.status==0){ }}
+{{#if(d.step_one==0||d.step_two==0||d.step_three==0||d.step_four==0||d.step_fifth==0){ }}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 {{#  }  }}
 ]]#

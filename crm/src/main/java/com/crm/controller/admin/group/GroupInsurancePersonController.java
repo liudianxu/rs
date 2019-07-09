@@ -6,7 +6,6 @@ import java.util.Map;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
-import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.jfinal.aop.Inject;
 
@@ -70,5 +69,17 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
 		setAttr("orderId", id);
 		setAttr("type", getPara("type"));
 		render("preserve.html");
+	}
+	
+	/**
+	 * 查看页面
+	 * @param id
+	 */
+	public void view() {
+		Long id = getParaToLong("id");
+		int type = getParaToInt("type");
+		GroupInsurancePerson groupInsurancePerson = personService.findById(id,type);
+		setAttr("groupInsurancePerson", groupInsurancePerson);
+		render("view.html");
 	}
 }

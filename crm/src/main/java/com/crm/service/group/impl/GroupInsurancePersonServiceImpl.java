@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.crm.component.DataGrid;
-import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.jfinal.plugin.activerecord.Db;
@@ -103,6 +102,11 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 		dataGrid.setCount(page.getTotalRow());
 		dataGrid.setData(page.getList());
 	return dataGrid;
+	}
+
+	@Override
+	public GroupInsurancePerson findById(Long id,int type) {
+		return GroupInsurancePerson.dao.find("select p.*,c.customer_name as customerName,o.insurance_type as insuranceType from crm_group_insurance_person p left join crm_group_insurance_orders o on o.id=p.order_id left join crm_customer_info c on c.id=o.insure_customer_id where p.id=? and o.insurance_type=? ",id,type).get(0);
 	}
 
 }

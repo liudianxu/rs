@@ -793,7 +793,7 @@ a cite {
 }
 
 .layui-header {
-	z-index: 1000;
+	z-index: 1;
 	height: 60px
 }
 
@@ -847,8 +847,7 @@ a cite {
 }
 
 .layui-layout-admin .layui-body {
-	top: 60px;
-	bottom: 44px
+	padding-top: 60px;
 }
 
 .layui-layout-admin .layui-main {

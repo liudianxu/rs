@@ -59,3 +59,10 @@
 .layui-table .tbttl:hover {
 	background-color: #009688 !important;
 }
+
+.headerttl{
+	font-size: 14px;
+	padding: 8px 9px;
+	border-bottom: 1px solid #009a00;
+	box-shadow: 0 0 3px #009688;
+}

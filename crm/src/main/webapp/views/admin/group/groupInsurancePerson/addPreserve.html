@@ -85,14 +85,14 @@
 		background-color: #fff;
 		text-align: center;
 		}
-		.cover .btns{
+		.btns{
 			text-align: right;
 			padding: 0 15px 12px;
 			user-select: none;
 			-webkit-user-select: none;
 			background: #fff;
 		}
-		.cover .btns .a{
+		.btns .a{
 		display: inline-block;
 		height: 28px;
 		line-height: 28px;
@@ -107,7 +107,7 @@
 		min-width: 48px;
 		text-align: center;
 		}
-		.cover .btns .c{
+		.btns .c{
 		display: inline-block;
 		height: 28px;
 		line-height: 28px;
@@ -125,11 +125,11 @@
 		.zdy-class-wrap{
 			padding: 15px 20px 15px 15px;
 		}
-		.zdy-class-wrap .layui-form6{
+		.zdy-class-wrap .layui-formEditPerson{
 			padding: 0;
 			font-size: 0;
 		}
-		.zdy-class-wrap .layui-form6 .input .zdy-class-label{
+		.zdy-class-wrap .layui-formEditPerson .input .zdy-class-label{
 			min-width: 80px;
 			line-height: 38px;
 			font-weight: 400;
@@ -138,21 +138,21 @@
 			vertical-align: middle;
 			
 		}
-		.zdy-class-wrap .layui-form6 .input th, .zdy-class-wrap .layui-form6 .input td{
+		.zdy-class-wrap .layui-formEditPerson .input th, .zdy-class-wrap .layui-formEditPerson .input td{
 			padding-bottom: 5px;
 		}
-		.zdy-class-wrap .layui-form6 .layui-form-item, .zdy-class-wrap .layui-form6 .layui-inline {
+		.zdy-class-wrap .layui-formEditPerson .layui-form-item, .zdy-class-wrap .layui-formEditPerson .layui-inline {
 			margin: 0;
 		}
-		.zdy-class-wrap .layui-form6 table.input{
+		.zdy-class-wrap .layui-formEditPerson table.input{
 			width: 100%;
 		}
-		.zdy-class-wrap .layui-form6 select{
+		.zdy-class-wrap .layui-formEditPerson select{
 			font-size: 14px;
 			color: #121212;
 			font-weight: 400;
 		}
-		.zdy-class-wrap .layui-form6 .theme-required:before{
+		.zdy-class-wrap .layui-formEditPerson .theme-required:before{
 			display: inline-block;
 			content: '';
 			width: 5px;
@@ -161,6 +161,23 @@
 			background: red;
 			vertical-align: 8px;
 			margin-right: 3px;
+		}
+		.layui-layer-dialog{
+			border: 2px solid #009688;
+		}
+		.layui-layer-dialog .layui-layer-title{
+			font-size: 14px;
+			color: #fff;
+			overflow: hidden;
+			background-color: #009688;
+		}
+		.layui-layer-dialog .layui-layer-btn0{
+			border: 1px solid #1E9FFF;
+			background-color: #009688;
+			color: #fff;
+		}
+		.layui-layer-dialog .layui-layer-close1{
+			color: #fff;
 		}
 </style>
 <script type="text/html" id="headBar">
@@ -579,19 +596,19 @@
 						}
 					});
 					selectHtml += '</select>';
-					var html = '<form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPreserve">' +
+					var html = '<div class="layui-tab-item layui-show zdy-class-wrap"><form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPreserve">' +
 						'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> <table class="input"> ' +
 						'<tr>' +
-						'<th>' +
-						'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>姓名</div></div>' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'<div class="layui-inline">姓名</div>' +
 						'</th>' +
 						'<td>' +
 						'<input type="text" name="groupInsurancePerson.id" value="' + personId +
 						'" class="layui-input" style="display:none;" maxlength="50" /><input type="text" name="groupInsurancePerson.name" value="' +
 						name + '" class="layui-input" maxlength="50" />' +
 						'</td>' +
-						'<th>' +
-						'<div class="layui-form-item"><div class="layui-inline theme-required">性别</div></div>' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'<div class="layui-inline">性别</div>' +
 						'</th>' +
 						'<td>' +
 						'<select name="groupInsurancePerson.gender" class="layui-input">' +
@@ -608,8 +625,8 @@
 						'</td>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
-						'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>证件类型</div></div>' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'<div class="layui-inline">证件类型</div>' +
 						'</th>' +
 						'<td>' +
 						'<select name="groupInsurancePerson.id_type" class="layui-input">' +
@@ -628,8 +645,8 @@
 					html += '>护照</option>';
 					html += '</select>' +
 						'</td>' +
-						'<th>' +
-						'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>证件号码</div></div>' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'<div class="layui-inline">证件号码</div>' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.id_num" value="' + idNum +
@@ -637,14 +654,14 @@
 						'</th>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'联系电话' +
 						'</th>' +
 						'<td>' +
 						'<input type="text" name="groupInsurancePerson.phone" value="' + phone +
 						'" class="layui-input" maxlength="20" />' +
 						'</td>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'职业类别' +
 						'</th>' +
 						'<td>' +
@@ -678,12 +695,12 @@
 						'</td>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
-						'<span style="color:red">*</span>保障方案' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'保障方案' +
 						'</th>' +
 						'<td>' + selectHtml + '' +
 						'</td>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'备注' +
 						'</th>';
 					if (remark == null || remark == "null") {
@@ -698,14 +715,14 @@
 					}
 					html += '</tr>' +
 						'<tr>' +
-						'<th>' +
-						'<span style="color:red">*</span>生效日期' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'生效日期' +
 						'</th>' +
 						'<td><input type="text" name="groupInsurancePerson.policy_effective_date" value="' + policy_effective_date +
 						'"   class="layui-input person_policy_effective_date" maxlength="200" />' +
 						'</td>' +
-						'<th>' +
-						'<span style="color:red">*</span>终止日期' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'终止日期' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.policy_expiration_date" value="' + policy_expiration_date +
@@ -713,7 +730,7 @@
 						'</th>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'保单号' +
 						'</th>' +
 						'<th>' +
@@ -722,7 +739,8 @@
 						'</th>' +
 						'</tr>' +
 						'</table>' +
-						'</form>';
+						'</form>' +
+						'</div>';
 					layer.open({
 						title: '修改人员',
 						area: ['660px', '400px'],

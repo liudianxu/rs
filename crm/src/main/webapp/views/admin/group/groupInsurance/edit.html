@@ -248,7 +248,7 @@
 									<!-- <option value='0' #if(order.insurance_type==0)selected #end>雇主责任险</option>
 									<option value='1' #if(order.insurance_type==1)selected #end>年金保险</option>
 									<option value='2' #if(order.insurance_type==2)selected #end>补充医疗</option> -->
-									<option value='3' #if(order.insurance_type==3)selected #end>团体意外险</option>
+									<option value='3' #if(order.insurance_type==3)selected #end>团体保险</option>
 									<!-- <option value='4' #if(order.insurance_type==4)selected #end>其他</option> -->
 								</select>
 							</div>
@@ -394,6 +394,10 @@
 							</th>
 							<th>方案五保额
 							</th>
+							<th>方案六保额
+							</th>
+							<th>方案七保额
+							</th>
 							<th>操作
 							</th>
 						</tr>
@@ -427,6 +431,10 @@
 								 placeholder="方案四保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[3] )" /></td>
 							<td><input type="text" name="guaranteeList[#(for.index)].plan[4]" param-guarantee-plan4 class="layui-input plans"
 								 placeholder="方案五保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[4] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[5]" param-guarantee-plan5 class="layui-input plans"
+								 placeholder="方案六保额" maxlength="200" style="width: 100px;" #if(guarantee.plan.size()>5) value="#(guarantee.plan[5] )#end" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[6]" param-guarantee-plan6 class="layui-input plans"
+								 placeholder="方案七保额" maxlength="200" style="width: 100px;" #if(guarantee.plan.size()>6) value="#(guarantee.plan[6] )#end" /></td>
 							<td><a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]</a></td>
 						</tr>
 						#end
@@ -434,7 +442,7 @@
 				</div>
 				<table class="planPremiumTable layui-table" style="width: 600px;margin: 10px auto;">
 					<tr class="tbttl">
-						<th colspan="5" style="text-align: center;">方案保费</th>
+						<th colspan="7" style="text-align: center;">方案保费</th>
 					</tr>
 					<tr class="tbttl">
 						<th>方案1</th>
@@ -442,6 +450,8 @@
 						<th>方案3</th>
 						<th>方案4</th>
 						<th>方案5</th>
+						<th>方案6</th>
+						<th>方案7</th>
 					</tr>
 					<tr class="planPremium">
 						<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 #if(premiums.size()>0)value="#(premiums[0]??)"#end
@@ -453,6 +463,10 @@
 						<td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3 #if(premiums.size()>3)value="#(premiums[3]??)"#end
 							class="layui-input" style="width: 100%;"></td>
 						<td style="padding: 9px 15px;"><input type="text" name="premium[4]" premium4 #if(premiums.size()>4)value="#(premiums[4]??)"#end
+							class="layui-input" style="width: 100%;"></td>
+							<td style="padding: 9px 15px;"><input type="text" name="premium[5]" premium5 #if(premiums.size()>5)value="#(premiums[5]??)"#end
+							class="layui-input" style="width: 100%;"></td>
+							<td style="padding: 9px 15px;"><input type="text" name="premium[6]" premium6 #if(premiums.size()>6)value="#(premiums[6]??)"#end
 							class="layui-input" style="width: 100%;"></td>
 					</tr>
 				</table>
@@ -1167,6 +1181,8 @@ text-align: center;
 				premiumList.push(formWrap.find('[premium2]').val());
 				premiumList.push(formWrap.find('[premium3]').val());
 				premiumList.push(formWrap.find('[premium4]').val());
+				premiumList.push(formWrap.find('[premium5]').val());
+				premiumList.push(formWrap.find('[premium6]').val());
 				return premiumList
 			}
 
@@ -1222,6 +1238,14 @@ text-align: center;
 			'<td class="planTD">' +
 			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
 			'].plan[4]" param-guarantee-plan4 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[5]" param-guarantee-plan5 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[6]" param-guarantee-plan6 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
 			'<\/td>' +
 			'<td class="actionTD">' +
 			'	<a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]<\/a>' +

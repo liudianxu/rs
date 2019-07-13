@@ -310,17 +310,17 @@ text-align: center;
 					});
 					selectHtml += '</select>';
 					var html =
-						'<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addEmployPerson">' +
+						'<div class="layui-tab-item layui-show zdy-class-wrap"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPerson">' +
 						'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> ' +
 						'<div class="layui-form-item"><table class="input"> ' +
 						'<tr>' +
-						'<th>' +
-						'<div class="layui-inline theme-required"><span style="color:red">*</span>姓名</div></div>' +
+						'<th class="zdy-class-label">' +
+						'<div class="layui-inline theme-required">姓名</div></div>' +
 						'</th>' +
 						'<td>' +
 						'<input type="text" name="groupInsurancePerson.name" class="layui-input" maxlength="50" />' +
 						'</td>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'<div class="layui-form-item"><div class="layui-inline theme-required">性别</div></div>' +
 						'</th>' +
 						'<td>' +
@@ -332,8 +332,8 @@ text-align: center;
 						'</td>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
-						'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>证件类型</div></div>' +
+						'<th class="zdy-class-label">' +
+						'<div class="layui-form-item"><div class="layui-inline theme-required">证件类型</div></div>' +
 						'</th>' +
 						'<td>' +
 						'<select name="groupInsurancePerson.id_type" class="layui-input">' +
@@ -341,52 +341,72 @@ text-align: center;
 						'<option value="0">身份证</option>' +
 						'<option value="1">出生证</option>' +
 						'<option value="2">护照</option>' +
-
+						
 						'</select>' +
 						'</td>' +
-						'<th>' +
-						'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>证件号码</div></div>' +
+						'<th class="zdy-class-label">' +
+						'<div class="layui-form-item"><div class="layui-inline theme-required">证件号码</div></div>' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.id_num" class="layui-input" maxlength="30" />' +
 						'</th>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'联系电话' +
 						'</th>' +
 						'<td>' +
 						'<input type="text" name="groupInsurancePerson.phone" class="layui-input" maxlength="20" />' +
 						'</td>' +
+						'<th class="zdy-class-label">' +
+						'职业类别' +
+						'</th>' +
+						'<td>' +
+						'<select name="groupInsurancePerson.occupation_category" class="layui-input">' +
+						'<option value="">请选择</option>' +
+						'<option value="1">1</option>' +
+						'<option value="2">2</option>' +
+						'<option value="3">3</option>' +
+						'<option value="4">4</option>' +
+						'<option value="5">5</option>' +
+						'<option value="6">6</option>' +
+						'</select>' +
+						'</td>' +
+						'</tr>' +
+						'<tr>' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'保障方案' +
+						'</th>' +
+						'<td>' + selectHtml + '' +
+						'</td>' +
 						'<th>' +
 						'备注' +
 						'</th>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'<input type="text" name="groupInsurancePerson.remark" class="layui-input" maxlength="200" />' +
 						'</th>' +
 						'</tr>' +
 						'<tr>' +
-						'<tr>' +
-						'<th>' +
-						'<span style="color:red">*</span>生效日期' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'生效日期' +
 						'</th>' +
 						'<td><input type="text" name="groupInsurancePerson.policy_effective_date" id="person_policy_effective_date" class="layui-input" maxlength="200" />' +
 						'</td>' +
-						'<th>' +
-						'<span style="color:red">*</span>终止日期' +
+						'<th class="layui-inline theme-required zdy-class-label">' +
+						'终止日期' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.policy_expiration_date" id="person_policy_expiration_date" class="layui-input" maxlength="200" />' +
 						'</th>' +
 						'</tr>' +
 						'<tr>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'保单号' +
 						'</th>' +
 						'<th>' +
 						'<input type="text" name="groupInsurancePerson.policy_num" class="layui-input" maxlength="200" />' +
 						'</th>' +
-						'<th>' +
+						'<th class="zdy-class-label">' +
 						'工种' +
 						'</th>' +
 						'<th>' +

@@ -149,7 +149,7 @@ public class GroupInsuranceOrder extends Model<GroupInsuranceOrder>{
 					insuranceTypeStr ="补充医疗";
 					break;	
 				case 3:
-					insuranceTypeStr ="团体意外险";
+					insuranceTypeStr ="团体保险";
 					break;	
 				case 4:
 					insuranceTypeStr ="其他";

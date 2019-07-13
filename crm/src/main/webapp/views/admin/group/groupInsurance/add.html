@@ -39,7 +39,7 @@
 								</select>
 							</div>
 						</div>
-					</div >
+					</div>
 					<div class='layui-form-item' style="display: inline-block;">
 						<div class='layui-inline '>
 							<div class='layui-form-label'>证件类型</div>
@@ -91,8 +91,8 @@
 							<div class='layui-inline '>
 								<div class='layui-form-label'>集团名称</div>
 								<div class='layui-input-inline'>
-									<select name='groupInsuranceOrder.relation_group_id' lay-filter="relationGroup" id="relationGroupId" lay-search
-									 lay-verify>
+									<select name='groupInsuranceOrder.relation_group_id' lay-filter="relationGroup" id="relationGroupId"
+									 lay-search lay-verify>
 										<option value=''>请选择</option>
 										#for(group:groups)
 										<option value='#(group.id)'>#(group.group_name)</option>
@@ -151,7 +151,7 @@
 								<!-- <div class='layui-form-label'></div> -->
 								<input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="0" title="法定" checked="checked">
 								<input type="radio" name="groupInsuranceOrder.profit_type" lay-filter="profit" value="1" title="指定">
-	
+
 							</div>
 						</div>
 					</div>
@@ -225,7 +225,7 @@
 									<!-- <option value='0'>雇主责任险</option>
 									<option value='1'>年金保险</option>
 									<option value='2'>补充医疗</option> -->
-									<option value='3'>团体意外险</option>
+									<option value='3'>团体保险</option>
 									<!-- <option value='4'>其他</option> -->
 								</select>
 							</div>
@@ -321,13 +321,13 @@
 						</div>
 					</div>
 					<div class='layui-form-item' style="display: inline-block;">
-                        <div class='layui-inline '>
-                            <div class='layui-form-label'>经纪费比例</div>
-                            <div class='layui-input-inline'>
-                                <input name='groupInsuranceOrder.brokerage_charges' class='layui-input' autocomplete='off' placeholder='请输入' />
-                            </div>
-                        </div>
-                    </div>
+						<div class='layui-inline '>
+							<div class='layui-form-label'>经纪费比例</div>
+							<div class='layui-input-inline'>
+								<input name='groupInsuranceOrder.brokerage_charges' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="layui-form-item" style="margin-top: 15px;text-align: center;">
 					<button class="layui-btn" lay-submit lay-filter="submit1">保存</button>
@@ -368,10 +368,14 @@
 							</th>
 							<th>方案五保额
 							</th>
+							<th>方案六保额
+							</th>
+							<th>方案七保额
+							</th>
 							<th>操作
 							</th>
 						</tr>
-	
+
 						#for(guarantee:guarantees)
 						<tr class="guaranteeClass">
 							<td><input type="text" name="guaranteeList[#(for.index)].item" param-guarantee-item class="layui-input"
@@ -390,13 +394,17 @@
 								 placeholder="方案四保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[3] )" /></td>
 							<td><input type="text" name="guaranteeList[#(for.index)].plan[4]" param-guarantee-plan4 class="layui-input plans"
 								 placeholder="方案五保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[4] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[5]" param-guarantee-plan5 class="layui-input plans"
+								 placeholder="方案六保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[5] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[6]" param-guarantee-plan6 class="layui-input plans"
+								 placeholder="方案七保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[6] )" /></td>
 						</tr>
 						#end
 					</table>
 				</div>
 				<table class="planPremiumTable layui-table" style="width: 600px;margin: 10px auto;">
 					<tr class="tbttl">
-						<th colspan="5" style="text-align: center;">方案保费</th>
+						<th colspan="7" style="text-align: center;">方案保费</th>
 					</tr>
 					<tr class="tbttl">
 						<th>方案1</th>
@@ -404,15 +412,20 @@
 						<th>方案3</th>
 						<th>方案4</th>
 						<th>方案5</th>
-					</tr>	
+						<th>方案6</th>
+						<th>方案7</th>
+					</tr>
 					<tr class="planPremium">
 						<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 class="layui-input" style="width: 100px;"></td>
 						<td style="padding: 9px 15px;"><input type="text" name="premium[1]" premium1 class="layui-input" style="width: 100px;"></td>
 						<td style="padding: 9px 15px;"><input type="text" name="premium[2]" premium2 class="layui-input" style="width: 100px;"></td>
 						<td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3 class="layui-input" style="width: 100px;"></td>
 						<td style="padding: 9px 15px;"><input type="text" name="premium[4]" premium4 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[5]" premium5 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[6]" premium6 class="layui-input" style="width: 100px;"></td>
+					
 					</tr>
-				</table>
+				</table>	
 				<div class="layui-form-item" style="margin-top: 15px;text-align: center;">
 					<button class="layui-btn" lay-submit lay-filter="submit2">保存</button>
 					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurance'>返回</a>
@@ -516,7 +529,7 @@
 							<a class="layui-btn layui-btn-sm layui-btn-danger" id='delBtn'>
 								<i class="layui-icon"></i>删除
 							</a>
-							<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增人员模板.xls">
+							<a class="layui-btn layui-btn-sm layui-btn-info" href="../../excel/新增人员模板.xls">
 								<i class="layui-icon"></i>Excel模板
 							</a>
 							<input type="text" style="display:none;" id="logo" name="groupInsuranceOrder.excel_tem" autocomplete="off" class="layui-input"
@@ -528,7 +541,7 @@
 						<div class='line-inline'>
 							<div class="layui-form">
 								<div style="overflow-x: auto">
-									<table class="layui-table" id="personTable"	>
+									<table class="layui-table" id="personTable">
 										<!-- <colgroup>
 											<col width="10%">
 											<col width="10%">
@@ -646,75 +659,115 @@
 </div>
 <style>
 	.cover{
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 999;
-	background-color: rgba(0,0,0,0.3)
-}
-.yzr_dialog{
-	width: 660px;
-	position: fixed;
-	z-index: 99999;
-	top: 50%;
-	left: 50%;
-	transform: translate3d(-50%,-50%,0)
-}
-.cover .title{
-padding: 0 80px 0 20px;
-height: 42px;
-line-height: 42px;
-border-bottom: 1px solid #eee;
-font-size: 14px;
-color: #333;
-overflow: hidden;
-background-color: #F8F8F8;
-border-radius: 2px 2px 0 0;
-}
-.cover .content{
-background-color: #fff;
-text-align: center
-}
-.cover .btns{
-	text-align: right;
-	padding: 0 15px 12px;
-	user-select: none;
-	-webkit-user-select: none;
-	background: #fff;
-}
-.cover .btns .a{
-display: inline-block;
-height: 28px;
-line-height: 28px;
-margin: 5px 5px 0;
-border: 1px solid #1E9FFF;
-background-color: #1e9fff;
-color: #fff;
-border-radius: 2px;
-font-weight: 400;
-cursor: pointer;
-text-decoration: none;
-min-width: 48px;
-text-align: center;
-}
-.cover .btns .c{
-display: inline-block;
-height: 28px;
-line-height: 28px;
-margin: 5px 5px 0;
-border: 1px solid #dedede;
-background-color: #fff;
-color: #333;
-border-radius: 2px;
-font-weight: 400;
-cursor: pointer;
-text-decoration: none;
-min-width: 48px;
-text-align: center;
-}
-
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 999;
+			background-color: rgba(0,0,0,0.3)
+		}
+		.yzr_dialog{
+			width: 660px;
+			position: fixed;
+			z-index: 99999;
+			top: 50%;
+			left: 50%;
+			transform: translate3d(-50%,-50%,0);
+			border: 2px solid #009688;
+		}
+		.cover .title{
+		padding: 0 80px 0 20px;
+		height: 42px;
+		line-height: 42px;
+		border-bottom: 1px solid #eee;
+		font-size: 14px;
+		color: #fff;
+		overflow: hidden;
+		background-color: #009688;
+		border-radius: 2px 2px 0 0;
+		}
+		.cover .content{
+		background-color: #fff;
+		text-align: center;
+		}
+		.cover .btns{
+			text-align: right;
+			padding: 0 15px 12px;
+			user-select: none;
+			-webkit-user-select: none;
+			background: #fff;
+		}
+		.cover .btns .a{
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #1E9FFF;
+		background-color: #009688;
+		color: #fff;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+		}
+		.cover .btns .c{
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #dedede;
+		background-color: #fff;
+		color: #333;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+		}
+		.zdy-class-wrap{
+			padding: 15px 20px 15px 15px;
+		}
+		.zdy-class-wrap .layui-form6{
+			padding: 0;
+			font-size: 0;
+		}
+		.zdy-class-wrap .layui-form6 .input .zdy-class-label{
+			min-width: 80px;
+			line-height: 38px;
+			font-weight: 400;
+			font-size: 14px;
+			color: #333;
+			vertical-align: middle;
+			
+		}
+		.zdy-class-wrap .layui-form6 .input th, .zdy-class-wrap .layui-form6 .input td{
+			padding-bottom: 5px;
+		}
+		.zdy-class-wrap .layui-form6 .layui-form-item, .zdy-class-wrap .layui-form6 .layui-inline {
+			margin: 0;
+		}
+		.zdy-class-wrap .layui-form6 table.input{
+			width: 100%;
+		}
+		.zdy-class-wrap .layui-form6 select{
+			font-size: 14px;
+			color: #121212;
+			font-weight: 400;
+		}
+		.zdy-class-wrap .layui-form6 .theme-required:before{
+			display: inline-block;
+			content: '';
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: red;
+			vertical-align: 8px;
+			margin-right: 3px;
+		}
 </style>
 <script type="text/javascript">
 	function wangedit(id) {
@@ -1030,9 +1083,9 @@ text-align: center;
 						return false;
 					}
 					var maxOccpation = $("input[name='groupInsuranceOrder.max_occupation_category']").val();
-					if(!(/^(\+|-)?\d+$/.test(maxOccpation)) || maxOccpation < 0){
-						layer.msg("最高职业类别必须是正整数！");   
-					    return false;  
+					if (!(/^(\+|-)?\d+$/.test(maxOccpation)) || maxOccpation < 0) {
+						layer.msg("最高职业类别必须是正整数！");
+						return false;
 					}
 					$.post($(".layui-form3").attr('action'), $(".layui-form3").serialize(),
 						function(res) {
@@ -1120,6 +1173,8 @@ text-align: center;
 				premiumList.push(formWrap.find('[premium2]').val());
 				premiumList.push(formWrap.find('[premium3]').val());
 				premiumList.push(formWrap.find('[premium4]').val());
+				premiumList.push(formWrap.find('[premium5]').val());
+				premiumList.push(formWrap.find('[premium6]').val());
 				return premiumList
 			}
 
@@ -1176,6 +1231,14 @@ text-align: center;
 			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
 			'].plan[4]" param-guarantee-plan4 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
 			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[5]" param-guarantee-plan5 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[6]" param-guarantee-plan6 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
 			'<td class="actionTD">' +
 			'	<a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]<\/a>' +
 			'<\/td>' + '<\/tr>').appendTo(
@@ -1211,17 +1274,17 @@ text-align: center;
 				});
 				selectHtml += '</select>';
 				var html =
-					'<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPerson">' +
+					'<div class="layui-tab-item layui-show zdy-class-wrap"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPerson">' +
 					'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> ' +
 					'<div class="layui-form-item"><table class="input"> ' +
 					'<tr>' +
-					'<th>' +
-					'<div class="layui-inline theme-required"><span style="color:red">*</span>姓名</div></div>' +
+					'<th class="zdy-class-label">' +
+					'<div class="layui-inline theme-required">姓名</div></div>' +
 					'</th>' +
 					'<td>' +
 					'<input type="text" name="groupInsurancePerson.name" class="layui-input" maxlength="50" />' +
 					'</td>' +
-					'<th>' +
+					'<th class="zdy-class-label">' +
 					'<div class="layui-form-item"><div class="layui-inline theme-required">性别</div></div>' +
 					'</th>' +
 					'<td>' +
@@ -1233,8 +1296,8 @@ text-align: center;
 					'</td>' +
 					'</tr>' +
 					'<tr>' +
-					'<th>' +
-					'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>证件类型</div></div>' +
+					'<th class="zdy-class-label">' +
+					'<div class="layui-form-item"><div class="layui-inline theme-required">证件类型</div></div>' +
 					'</th>' +
 					'<td>' +
 					'<select name="groupInsurancePerson.id_type" class="layui-input">' +
@@ -1242,24 +1305,24 @@ text-align: center;
 					'<option value="0">身份证</option>' +
 					'<option value="1">出生证</option>' +
 					'<option value="2">护照</option>' +
-
+					
 					'</select>' +
 					'</td>' +
-					'<th>' +
-					'<div class="layui-form-item"><div class="layui-inline theme-required"><span style="color:red">*</span>证件号码</div></div>' +
+					'<th class="zdy-class-label">' +
+					'<div class="layui-form-item"><div class="layui-inline theme-required">证件号码</div></div>' +
 					'</th>' +
 					'<th>' +
 					'<input type="text" name="groupInsurancePerson.id_num" class="layui-input" maxlength="30" />' +
 					'</th>' +
 					'</tr>' +
 					'<tr>' +
-					'<th>' +
+					'<th class="zdy-class-label">' +
 					'联系电话' +
 					'</th>' +
 					'<td>' +
 					'<input type="text" name="groupInsurancePerson.phone" class="layui-input" maxlength="20" />' +
 					'</td>' +
-					'<th>' +
+					'<th class="zdy-class-label">' +
 					'职业类别' +
 					'</th>' +
 					'<td>' +
@@ -1275,12 +1338,12 @@ text-align: center;
 					'</td>' +
 					'</tr>' +
 					'<tr>' +
-					'<th>' +
-					'<span style="color:red">*</span>保障方案' +
+					'<th class="layui-inline theme-required zdy-class-label">' +
+					'保障方案' +
 					'</th>' +
 					'<td>' + selectHtml + '' +
 					'</td>' +
-					'<th>' +
+					'<th class="zdy-class-label">' +
 					'备注' +
 					'</th>' +
 					'<th>' +
@@ -1288,20 +1351,20 @@ text-align: center;
 					'</th>' +
 					'</tr>' +
 					'<tr>' +
-					'<th>' +
-					'<span style="color:red">*</span>生效日期' +
+					'<th class="layui-inline theme-required zdy-class-label">' +
+					'生效日期' +
 					'</th>' +
 					'<td><input type="text" name="groupInsurancePerson.policy_effective_date" id="person_policy_effective_date" class="layui-input" maxlength="200" />' +
 					'</td>' +
-					'<th>' +
-					'<span style="color:red">*</span>终止日期' +
+					'<th class="layui-inline theme-required zdy-class-label">' +
+					'终止日期' +
 					'</th>' +
 					'<th>' +
 					'<input type="text" name="groupInsurancePerson.policy_expiration_date" id="person_policy_expiration_date" class="layui-input" maxlength="200" />' +
 					'</th>' +
 					'</tr>' +
 					'<tr>' +
-					'<th>' +
+					'<th class="zdy-class-label">' +
 					'保单号' +
 					'</th>' +
 					'<th>' +
@@ -1773,11 +1836,12 @@ text-align: center;
 	.layui-elem-quote .layui-form-item:last-of-type {
 		margin-bottom: 0
 	}
-	
-	.w-e-toolbar{
+
+	.w-e-toolbar {
 		background-color: #009688 !important;
 	}
-	.w-e-toolbar .w-e-menu i{
+
+	.w-e-toolbar .w-e-menu i {
 		color: #fff;
 	}
 </style>

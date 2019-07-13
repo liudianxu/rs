@@ -327,8 +327,12 @@
 	      ,{field:'id_num', title:'身份证'}
 	      ,{field:'policy_num', title:'保单号'}
 	      ,{field:'customerName', title:'客户名称'}
-	      ,{field:'premium', title:'保费'}
-	      ,{field:'job_type', title:'工种'}
+	      ,{field:'premium', title:'保费',templet:function (item) {
+	    	  var premium=item.premium.toFixed(2);
+	    	  return premium;
+	    	  }
+	      }
+    	  ,{field:'occupation_category', title:'职业类别'}
 	      ,{field:'status', title:'状态'}
 	    
 	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
@@ -596,7 +600,7 @@
 						}
 					});
 					selectHtml += '</select>';
-					var html = '<div class="layui-tab-item layui-show zdy-class-wrap"><form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPreserve">' +
+					var html = '<div class="layui-tab-item layui-show zdy-class-wrap"><form class="layui-tab-content layui-formEditPerson" action="/admin/groupInsurance/addPerson">' +
 						'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> <table class="input"> ' +
 						'<tr>' +
 						'<th class="layui-inline theme-required zdy-class-label">' +

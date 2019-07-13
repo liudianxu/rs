@@ -435,21 +435,18 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			data.put("orderId", createdOrder.get("id"));
 		}
 		else {
-			groupInsuranceGuaranteeService.deleteByOrderId(order.get("id"));
 			JSONArray newAray = new JSONArray();
 			if(order.getInt("insurance_type")==0) {
+			//groupInsuranceGuaranteeService.deleteByOrderId(order.get("id"));
+			GroupInsuranceGuarantee guarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("id"), "方案1");
 			newAray.add(new GuaranteeDetail("身故赔偿限额",order.get("death_compensation")));
 			newAray.add(new GuaranteeDetail("残疾赔偿限额",order.get("disability_compensation")));
 			newAray.add(new GuaranteeDetail("医疗补偿限额",order.get("medical_compensation")));
 			newAray.add(new GuaranteeDetail("住院津贴赔偿限额",order.get("hospitalization_compensation")));
 			newAray.add(new GuaranteeDetail("误工赔偿限额",order.get("tardy_job_compensation")));
 			newAray.add(new GuaranteeDetail("法律费用赔偿限额",order.get("law_compensation")));
-			GroupInsuranceGuarantee guarant = new GroupInsuranceGuarantee();
-			guarant.set("name",Constant.GUARANTEE_PLAN_NAME_PREFIX + 1);
-			guarant.set("order_id",order.get("id"));
-			guarant.set("create_time", new Date());
-			guarant.set("premium", order.get("annual_premium"));
-			guarant.set("details", newAray.toString()).save();
+			guarantee.set("name",Constant.GUARANTEE_PLAN_NAME_PREFIX + 1);
+			guarantee.set("details", newAray.toString()).update();
 			}
 			
 			data.put("orderId", order.get("id"));
@@ -1304,7 +1301,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             }
             String idNum = String.valueOf(lo.get(3));
 
-            if(String.valueOf(lo.get(1)).equals("减保")) {
+            if(String.valueOf(lo.get(1)).equals("减保")||String.valueOf(lo.get(1)).equals("退保")) {
                 GroupInsurancePerson person = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
                 if(person==null) {
                 	{
@@ -1360,7 +1357,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
               
                 
             }
-            else if(String.valueOf(lo.get(1)).equals("加保")){
+            else if(String.valueOf(lo.get(1)).equals("加保")||String.valueOf(lo.get(1)).equals("承保")){
             	 GroupInsurancePerson person = new GroupInsurancePerson();
             	 int m=0;
             	 GroupInsurancePerson exPerson = personService.findByIdNumAndOrderId(idNum, hiddenOrderIdForImport);
@@ -1373,6 +1370,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                  	renderJson(data);
                  	return; 
             	 }*/
+            	 exPerson.set("status",0);
             	 exPerson.set("name",String.valueOf(lo.get(2)));
             	 exPerson.set("id_type",0);
             	 exPerson.set("birth",DateUtil.parseDate(String.valueOf(lo.get(3)).substring(6, 14), new String[]{"yyyyMMdd"}));
@@ -1442,7 +1440,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             }
             
         }  
-        new Thread(new Runnable(){
+       /* new Thread(new Runnable(){
 			public void run() {
 		        try {
 					emailService.sendChangePersonEmail(hiddenOrderIdForImport,logs);
@@ -1450,7 +1448,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 					e.printStackTrace();
 				}
 			}
-			}).start();
+			}).start();*/
         
         //发送邮件
         data.put("msg", "导入成功");

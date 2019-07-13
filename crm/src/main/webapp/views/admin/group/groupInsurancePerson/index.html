@@ -78,8 +78,16 @@
 	      ,{field:'id_num', title:'身份证'}
 	      ,{field:'policy_num', title:'保单号'}
 	      ,{field:'customerName', title:'客户名称'}
-	      ,{field:'premium', title:'保费'}
-	      ,{field:'job_type', title:'工种'}
+	      ,{field:'premium', title:'保费',templet:function (item) {
+	    	  var premium=item.premium.toFixed(2);
+	    	  return premium;
+	    	  }}
+	      #if(type=='0')
+	    	  ,{field:'job_type', title:'工种'}
+	    	#end
+	       #if(type=='3')
+	    	  ,{field:'occupation_category', title:'职业类别'}
+	        #end
 	      ,{field:'status', title:'状态'}
 	      ,{field:'insuranceType', title:'险种类型'}
 	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}

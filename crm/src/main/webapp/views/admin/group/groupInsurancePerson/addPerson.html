@@ -307,7 +307,11 @@
 	      ,{field:'id_num', title:'身份证'}
 	      ,{field:'policy_num', title:'保单号'}
 	      ,{field:'customerName', title:'客户名称'}
-	      ,{field:'premium', title:'保费'}
+	      ,{field:'premium', title:'保费',templet:function (item) {
+	    	  var premium=item.premium.toFixed(2);
+	    	  return premium;
+	    	  }
+	      }
 	      ,{field:'job_type', title:'工种'}
 	      ,{field:'status', title:'状态'}
 	    

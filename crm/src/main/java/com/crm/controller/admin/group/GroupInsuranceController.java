@@ -1115,8 +1115,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		|| StringUtils.isBlank(String.valueOf(lo.get(3))) || StringUtils.isBlank(String.valueOf(lo.get(6))) 
             		|| StringUtils.isBlank(String.valueOf(lo.get(7)))||
             		StringUtils.isBlank(String.valueOf(lo.get(8)))||
-            				StringUtils.isBlank(String.valueOf(lo.get(9)))||
-            				StringUtils.isBlank(String.valueOf(lo.get(10)))) {
+            				StringUtils.isBlank(String.valueOf(lo.get(9)))) {
             	continue;
             }
         	
@@ -1159,7 +1158,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             
             person.set("phone",String.valueOf(lo.get(10))==null?"":String.valueOf(lo.get(10)));
             person.set("remark",String.valueOf(lo.get(11)));
-            if(lo.get(12)==null) {
+            if(lo.get(12)==null||"".equals(lo.get(12))) {
             	  person.set("policy_num",order.get("policy_num"));
             }
             else {

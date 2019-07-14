@@ -709,75 +709,170 @@
 </div>
 <style>
 	.cover{
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 999;
-	background-color: rgba(0,0,0,0.3)
-}
-.yzr_dialog{
-	width: 660px;
-	position: fixed;
-	z-index: 99999;
-	top: 50%;
-	left: 50%;
-	transform: translate3d(-50%,-50%,0)
-}
-.cover .title{
-padding: 0 80px 0 20px;
-height: 42px;
-line-height: 42px;
-border-bottom: 1px solid #eee;
-font-size: 14px;
-color: #333;
-overflow: hidden;
-background-color: #F8F8F8;
-border-radius: 2px 2px 0 0;
-}
-.cover .content{
-background-color: #fff;
-text-align: center
-}
-.cover .btns{
-	text-align: right;
-	padding: 0 15px 12px;
-	user-select: none;
-	-webkit-user-select: none;
-	background: #fff;
-}
-.cover .btns .a{
-display: inline-block;
-height: 28px;
-line-height: 28px;
-margin: 5px 5px 0;
-border: 1px solid #1E9FFF;
-background-color: #1e9fff;
-color: #fff;
-border-radius: 2px;
-font-weight: 400;
-cursor: pointer;
-text-decoration: none;
-min-width: 48px;
-text-align: center;
-}
-.cover .btns .c{
-display: inline-block;
-height: 28px;
-line-height: 28px;
-margin: 5px 5px 0;
-border: 1px solid #dedede;
-background-color: #fff;
-color: #333;
-border-radius: 2px;
-font-weight: 400;
-cursor: pointer;
-text-decoration: none;
-min-width: 48px;
-text-align: center;
-}
-
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 999;
+			background-color: rgba(0,0,0,0.3)
+		}
+		.yzr_dialog{
+			width: 660px;
+			position: fixed;
+			z-index: 99999;
+			top: 50%;
+			left: 50%;
+			transform: translate3d(-50%,-50%,0);
+			border: 2px solid #009688;
+		}
+		.cover .title{
+		padding: 0 80px 0 20px;
+		height: 42px;
+		line-height: 42px;
+		border-bottom: 1px solid #eee;
+		font-size: 14px;
+		color: #fff;
+		overflow: hidden;
+		background-color: #009688;
+		border-radius: 2px 2px 0 0;
+		}
+		.cover .content{
+		background-color: #fff;
+		text-align: center;
+		}
+		.cover .btns{
+			text-align: right;
+			padding: 0 15px 12px;
+			user-select: none;
+			-webkit-user-select: none;
+			background: #fff;
+		}
+		.cover .btns .a{
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #1E9FFF;
+		background-color: #009688;
+		color: #fff;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+		}
+		.cover .btns .c{
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #dedede;
+		background-color: #fff;
+		color: #333;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+		}
+		.zdy-class-wrap{
+			padding: 15px 20px 15px 15px;
+		}
+		.zdy-class-wrap .layui-form6{
+			padding: 0;
+			font-size: 0;
+		}
+		.zdy-class-wrap .layui-form6 .input .zdy-class-label{
+			min-width: 80px;
+			line-height: 38px;
+			font-weight: 400;
+			font-size: 14px;
+			color: #333;
+			vertical-align: middle;
+			
+		}
+		.zdy-class-wrap .layui-form6 .input th, .zdy-class-wrap .layui-form6 .input td{
+			padding-bottom: 5px;
+		}
+		.zdy-class-wrap .layui-form6 .layui-form-item, .zdy-class-wrap .layui-form6 .layui-inline {
+			margin: 0;
+		}
+		.zdy-class-wrap .layui-form6 table.input{
+			width: 100%;
+		}
+		.zdy-class-wrap .layui-form6 select{
+			font-size: 14px;
+			color: #121212;
+			font-weight: 400;
+		}
+		.zdy-class-wrap .layui-form6 .theme-required:before{
+			display: inline-block;
+			content: '';
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: red;
+			vertical-align: 8px;
+			margin-right: 3px;
+		}
+		
+		.zdy-class-wrap .layui-formEditPerson{
+			padding: 0;
+			font-size: 0;
+		}
+		.zdy-class-wrap .layui-formEditPerson .input .zdy-class-label{
+			min-width: 80px;
+			line-height: 38px;
+			font-weight: 400;
+			font-size: 14px;
+			color: #333;
+			vertical-align: middle;
+			
+		}
+		.zdy-class-wrap .layui-formEditPerson .input th, .zdy-class-wrap .layui-formEditPerson .input td{
+			padding-bottom: 5px;
+		}
+		.zdy-class-wrap .layui-formEditPerson .layui-form-item, .zdy-class-wrap .layui-formEditPerson .layui-inline {
+			margin: 0;
+		}
+		.zdy-class-wrap .layui-formEditPerson table.input{
+			width: 100%;
+		}
+		.zdy-class-wrap .layui-formEditPerson select{
+			font-size: 14px;
+			color: #121212;
+			font-weight: 400;
+		}
+		.zdy-class-wrap .layui-formEditPerson .theme-required:before{
+			display: inline-block;
+			content: '';
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: red;
+			vertical-align: 8px;
+			margin-right: 3px;
+		}
+		.layui-layer-dialog{
+			border: 2px solid #009688;
+		}
+		.layui-layer-dialog .layui-layer-title{
+			font-size: 14px;
+			color: #fff;
+			overflow: hidden;
+			background-color: #009688;
+		}
+		.layui-layer-dialog .layui-layer-btn0{
+			border: 1px solid #1E9FFF;
+			background-color: #009688;
+			color: #fff;
+		}
+		.layui-layer-dialog .layui-layer-close1{
+			color: #fff;
+		}
 </style>
 <script type="text/javascript">
 	function wangedit(id) {
@@ -1282,7 +1377,7 @@ text-align: center;
 				});
 				selectHtml += '</select>';
 				var html =
-					'<div class="layui-tab-item layui-show"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPerson">' +
+					'<div class="layui-tab-item layui-show  layui-show zdy-class-wrap"><form class="layui-tab-content layui-form6" action="/admin/groupInsurance/addPerson">' +
 					'<input type="hidden" name="hiddenOrderId" value="' + hiddenOrderId + '" /> ' +
 					'<div class="layui-form-item"><table class="input"> ' +
 					'<tr>' +

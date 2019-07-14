@@ -446,6 +446,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			newAray.add(new GuaranteeDetail("误工赔偿限额",order.get("tardy_job_compensation")));
 			newAray.add(new GuaranteeDetail("法律费用赔偿限额",order.get("law_compensation")));
 			guarantee.set("name",Constant.GUARANTEE_PLAN_NAME_PREFIX + 1);
+			guarantee.set("premium", order.getBigDecimal("annual_premium"));
 			guarantee.set("details", newAray.toString()).update();
 			}
 			
@@ -903,11 +904,11 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			renderJson(data);
 			return;
 		}
-	/*	if(person.get("job_type")==null) {
-			data.put("msg", "工种");
+		if(person.get("job_type")==null) {
+			data.put("msg", "工种不能为空");
 			renderJson(data);
 			return;
-		}*/
+		}
 		if(person.getDate("policy_effective_date").getTime()<groupInsuranceOrder.getDate("policy_effective_date").getTime()
 				||person.getDate("policy_expiration_date").getTime()>groupInsuranceOrder.getDate("policy_expiration_date").getTime()
 				) 
@@ -1398,6 +1399,19 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
      					return;
      				}
      			}
+                 
+         		
+         		if(order.get("max_review_time")!=null&&order.getInt("max_review_time")!=0) {
+         			Integer maxTime = order.get("max_review_time");
+         			Date date = order.getDate("policy_effective_date");
+         			Date reviewTime = DateUtil.addDays(date, maxTime);
+         			 long diff = exPerson.getDate("policy_effective_date").getTime() - reviewTime.getTime();
+         			 if(diff>0) {
+         				 data.put("msg", "已超过追溯日期!");
+         					renderJson(data);
+         					return;
+         			 }
+         		}
                  
                  GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
                  if(groupInsuranceGuarantee!=null) {
@@ -1977,7 +1991,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		logs.add(groupInsurancePersonLog);
 		
 		
-		  new Thread(new Runnable(){
+		 /* new Thread(new Runnable(){
 				public void run() {
 			        try {
 						emailService.sendChangePersonEmail(person.getLong("order_id"),logs);
@@ -1985,7 +1999,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 						e.printStackTrace();
 					}
 				}
-				}).start();
+				}).start();*/
 		  
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
@@ -2029,7 +2043,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     		logs.add(groupInsurancePersonLog);
 		
 		
-		  new Thread(new Runnable(){
+		  /*new Thread(new Runnable(){
 				public void run() {
 			        try {
 						emailService.sendChangePersonEmail(person.getLong("order_id"),logs);
@@ -2037,7 +2051,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 						e.printStackTrace();
 					}
 				}
-				}).start();
+				}).start();*/
 		
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);

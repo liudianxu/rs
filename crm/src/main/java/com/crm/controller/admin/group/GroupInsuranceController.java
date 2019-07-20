@@ -1206,7 +1206,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         		BigDecimal premium = guarantee.getBigDecimal("premium");
         		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
         		person.set("premium", totelPre);
-        		person.set("guarantee_name", groupInsuranceGuarantee.get("name"));
+        		person.put("guarantee_name", groupInsuranceGuarantee.get("name"));
         		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
         		groupInsurancePersonLog
         		.set("customer_id", order.getLong("insure_customer_id"))
@@ -1275,7 +1275,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         }
         
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
-        
+        List<GroupInsurancePerson> persons = new ArrayList<>();
+        String mes="";
         List<GroupInsurancePersonLog> logs = new ArrayList<>();
         //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
         for (int i = 0; i < listob.size(); i++) {  
@@ -1303,17 +1304,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                 GroupInsurancePerson person = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
                 if(person==null) {
                 	{
-                    	data.put("msg", "未找到"+String.valueOf(lo.get(2))+"的承保信息");
-                    	renderJson(data);
-                    	return;
+                    	mes="未找到"+String.valueOf(lo.get(2))+"的承保信息";
                     }
                 }
                 else {
                 	if(!person.getStr("name").equals(String.valueOf(lo.get(2)))) 
                      {
-                     	data.put("msg", "身份证为"+idNum+"的人员信息不匹配");
-                     	renderJson(data);
-                     	return;
+                     	mes="身份证为"+idNum+"的人员信息不匹配";
                      }
                 }
                 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
@@ -1333,7 +1330,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		person.set("premium", totelPre);
             		person.update();
             		
-            		   GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+            		  /* GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
                  		groupInsurancePersonLog
                  		.set("customer_id", order.getLong("insure_customer_id"))
                  		.set("policy_num", person.get("policy_num"))
@@ -1350,7 +1347,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                   		groupInsurancePersonLog.put("gender",person.get("gender"));
                   		groupInsurancePersonLog.put("premium",person.get("premium"));
 
-                 		logs.add(groupInsurancePersonLog);
+                 		logs.add(groupInsurancePersonLog);*/
                 }
               
                 
@@ -1391,9 +1388,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
      				int maxAge = order.get("max_insurance_age");
      				int age = DateUtil.calcAge(DateUtil.parseDate(String.valueOf(lo.get(3)).substring(6, 14), new String[]{"yyyyMMdd"}), new Date());
      				if(age>maxAge) {
-     					data.put("msg", ""+person.getStr("name")+"已超过最大年龄!");
-     					renderJson(data);
-     					return;
+     					mes="第"+i+"行"+person.getStr("name")+"已超过最大年龄!";
      				}
      			}
                  
@@ -1405,8 +1400,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          			 long diff = exPerson.getDate("policy_effective_date").getTime() - reviewTime.getTime();
          			 if(diff>0) {
          				 data.put("msg", "已超过追溯日期!");
-         					renderJson(data);
-         					return;
+         				mes="第"+i+"行已超过追溯日期!";
          			 }
          		}
                  
@@ -1425,14 +1419,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          		
                  exPerson.set("order_id",hiddenOrderIdForImport);
                  if(m==0) {
-                	 exPerson.update();	 
+                	 //exPerson.update();	
+                	 persons.add(exPerson);
                  }
                  else {
                 	 exPerson.set("create_time", new Date());
-                	 exPerson.save();
+                	 //exPerson.save();
+                	 persons.add(exPerson);
                  }
                  
-                 GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+                /* GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
           		groupInsurancePersonLog
           		.set("customer_id", order.getLong("insure_customer_id"))
           		.set("policy_num", person.get("policy_num"))
@@ -1447,7 +1443,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
           		groupInsurancePersonLog.put("job_type",person.get("job_type"));
           		groupInsurancePersonLog.put("gender",person.get("gender"));
         		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
-          		logs.add(groupInsurancePersonLog);
+          		logs.add(groupInsurancePersonLog);*/
             }
             
         }  
@@ -1462,9 +1458,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			}).start();*/
         
         //发送邮件
-        data.put("msg", "导入成功");
+        if(StringUtils.isNotBlank(mes)) {
+            data.put("code", Constant.RESPONSE_CODE_FAIL);
+            data.put("message", mes);
+        }
+        else {
+            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+        }
         data.put("orderId", hiddenOrderIdForImport);
-        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+        data.put("persons", persons);
     	renderJson(data);
     	return;
 	}
@@ -1509,6 +1512,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         }
         
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
+        List<GroupInsurancePerson> persons = new ArrayList<>();
+        String mes="";
+
         //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
         for (int i = 0; i < listob.size(); i++) {  
             List<Object> lo = listob.get(i);  
@@ -1534,25 +1540,19 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                 GroupInsurancePerson person = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
                 if(person==null) {
                 	{
-                    	data.put("msg", "未找到"+String.valueOf(lo.get(2))+"的承保信息");
-                    	renderJson(data);
-                    	return;
+                    	mes="未找到"+String.valueOf(lo.get(2))+"的承保信息";
                     }
                 }
                 else {
                 	if(!person.getStr("name").equals(String.valueOf(lo.get(2)))) 
                      {
-                     	data.put("msg", "身份证为"+idNum+"的人员信息不匹配");
-                     	renderJson(data);
-                     	return;
+                     	mes="身份证为"+idNum+"的人员信息不匹配";
                      }
                 }
                 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
                 GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(8)));
                 if(groupInsuranceGuarantee==null) {
-                	data.put("msg", "未找到方案"+String.valueOf(lo.get(7))+"");
-                 	renderJson(data);
-                 	return;
+                	mes="未找到方案"+String.valueOf(lo.get(7))+"";
                 }
                 if(newGroupInsuranceGuarantee!=null) {
                 	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
@@ -1566,10 +1566,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
              		BigDecimal premium = guarantee.getBigDecimal("premium");
              		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
              		person.set("premium", totelPre);
-             		person.update();
+             		persons.add(person);
              		
              		
-             		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+             		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
             		groupInsurancePersonLog
             		.set("customer_id", order.getLong("insure_customer_id"))
             		.set("policy_num", person.get("policy_num"))
@@ -1584,17 +1584,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
               		groupInsurancePersonLog.put("gender",person.get("gender"));
             		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
 
-            		logs.add(groupInsurancePersonLog);
+            		logs.add(groupInsurancePersonLog);*/
                 }
                 else {
-                	data.put("msg", "未找到变更方案"+String.valueOf(lo.get(7))+"");
-                 	renderJson(data);
-                 	return;
+                	mes="未找到变更方案"+String.valueOf(lo.get(7))+"";
+
                 }
         
         }
         
-        new Thread(new Runnable(){
+      /*  new Thread(new Runnable(){
 			public void run() {
 		        try {
 					emailService.sendChangePersonEmail(hiddenOrderIdForImport,logs);
@@ -1602,10 +1601,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 					e.printStackTrace();
 				}
 			}
-			}).start();
-        data.put("msg", "导入成功");
+			}).start();*/
+        if(StringUtils.isNotBlank(mes)) {
+            data.put("code", Constant.RESPONSE_CODE_FAIL);
+            data.put("message", mes);
+        }
+        else {
+            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+        }
         data.put("orderId", hiddenOrderIdForImport);
-        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+        data.put("persons", persons);
     	renderJson(data);
     	return;
 	}
@@ -1651,7 +1657,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
         List<GroupInsurancePersonLog> logs = new ArrayList<>();
-
+        List<GroupInsurancePerson> persons = new ArrayList<>();
+        String mes="";
         //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
         for (int i = 0; i < listob.size(); i++) {  
             List<Object> lo = listob.get(i);  
@@ -1680,17 +1687,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                 GroupInsurancePerson person = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
                 if(person==null) {
                 	{
-                    	data.put("msg", "未找到"+String.valueOf(lo.get(2))+"的承保信息");
-                    	renderJson(data);
-                    	return;
+                    	mes="未找到"+String.valueOf(lo.get(2))+"的承保信息";
                     }
                 }
                 else {
                 	if(!person.getStr("name").equals(String.valueOf(lo.get(2)))) 
                      {
-                     	data.put("msg", "身份证为"+idNum+"的人员信息不匹配");
-                     	renderJson(data);
-                     	return;
+                     	mes= "身份证为"+idNum+"的人员信息不匹配";
                      }
                 }
                 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport,"方案1");
@@ -1712,9 +1715,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		BigDecimal premium = guarantee.getBigDecimal("premium");
             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
             		person.set("premium", totelPre);
-            		person.update();
-            		
-            		   GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+            		//person.update();
+            		persons.add(person);
+            		  /* GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
                  		groupInsurancePersonLog
                  		.set("customer_id", order.getLong("insure_customer_id"))
                  		.set("policy_num", person.get("policy_num"))
@@ -1731,7 +1734,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                   		groupInsurancePersonLog.put("gender",person.get("gender"));
                   		groupInsurancePersonLog.put("premium",person.get("premium"));
 
-                 		logs.add(groupInsurancePersonLog);
+                 		logs.add(groupInsurancePersonLog);*/
                 }
               
                 
@@ -1772,9 +1775,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
      				int maxAge = order.get("max_insurance_age");
      				int age = DateUtil.calcAge(DateUtil.parseDate(String.valueOf(lo.get(4)).substring(6, 14), new String[]{"yyyyMMdd"}), new Date());
      				if(age>maxAge) {
-     					data.put("msg", ""+person.getStr("name")+"已超过最大年龄!");
-     					renderJson(data);
-     					return;
+     					mes= ""+person.getStr("name")+"已超过最大年龄!";
      				}
      			}
                  
@@ -1786,9 +1787,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          				&&exPerson.getDate("policy_expiration_date").getTime()>order.getDate("policy_expiration_date").getTime()
          				) 
          		{
-         			data.put("msg", "需要与保单起止日期一致！");
-         			renderJson(data);
-         			return;
+         			mes= "第"+i+"行需要与保单起止日期一致！";
          		}
          		
          		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(exPerson.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
@@ -1800,9 +1799,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          			Date reviewTime = DateUtil.addDays(date, maxTime);
          			 long diff = person.getDate("policy_effective_date").getTime() - reviewTime.getTime();
          			 if(diff>0) {
-         				 data.put("msg", "已超过追溯日期!");
-         					renderJson(data);
-         					return;
+         				mes= "第"+i+"行已超过追溯日期!";
          			 }
          		}
                  
@@ -1820,14 +1817,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          		
                  exPerson.set("order_id",hiddenOrderIdForImport);
                  if(m==0) {
-                	 exPerson.update();	 
+                	 //exPerson.update();	 
+                	 persons.add(exPerson);
                  }
                  else {
                 	 exPerson.set("create_time", new Date());
                 	 exPerson.save();
+                	 persons.add(exPerson);
                  }
                  
-                 GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+            /*     GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
           		groupInsurancePersonLog
           		.set("customer_id", order.getLong("insure_customer_id"))
           		.set("policy_num", person.get("policy_num"))
@@ -1842,11 +1841,11 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
           		groupInsurancePersonLog.put("job_type",person.get("job_type"));
           		groupInsurancePersonLog.put("gender",person.get("gender"));
         		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
-          		logs.add(groupInsurancePersonLog);
+          		logs.add(groupInsurancePersonLog);*/
             }
         }
             
-        new Thread(new Runnable(){
+       /* new Thread(new Runnable(){
 			public void run() {
 		        try {
 					emailService.sendChangePersonEmail(hiddenOrderIdForImport,logs);
@@ -1854,11 +1853,18 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 					e.printStackTrace();
 				}
 			}
-			}).start();
+			}).start();*/
         
-        data.put("msg", "导入成功");
+        if(StringUtils.isNotBlank(mes)) {
+            data.put("code", Constant.RESPONSE_CODE_FAIL);
+            data.put("message", mes);
+        }
+        else {
+            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+        }
         data.put("orderId", hiddenOrderIdForImport);
-        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+        data.put("persons", persons);
     	renderJson(data);
     	return;
 	}

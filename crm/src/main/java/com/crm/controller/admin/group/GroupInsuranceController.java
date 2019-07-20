@@ -2039,13 +2039,27 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void saveChangePersonBtnn(Long hiddenOrderIdForImport) throws Exception {
 		Map<String, Object> resp = new HashMap<>();
+
 		String data = HttpKit.readData(getRequest());
-		List<GroupInsurancePerson> persons = JsonUtil.jsonToList(data,GroupInsurancePerson.class);
+		JSONArray jsonArray = JSONArray.parseArray(data);
+		//List<GroupInsurancePerson> persons = JsonUtil.jsonToList(JsonKit.toJson(data),GroupInsurancePerson.class);
 		String mes="";
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
-        List<GroupInsurancePersonLog> logs = new ArrayList<>();
-		 for (GroupInsurancePerson person:persons) { 
-			 String idNum = String.valueOf(person.get("id_num"));
+         int i=1;
+         List<GroupInsurancePerson> persons = new ArrayList<>();
+         List<GroupInsurancePersonLog> insurancePersonLogs = new ArrayList<>();
+		 for (int m=0;m<jsonArray.size();m++) {  
+				JSONObject job = jsonArray.getJSONObject(m); // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+				Long oldPlanId=job.getLong("oldPlanId");
+				Long newPlanId=job.getLong("newPlanId");
+				String newPlan=job.getString("newPlan");
+				String oldPlan=job.getString("newPlan");
+				job.remove("oldPlan");
+				job.remove("newPlan");
+				job.remove("newPlanId");
+				job.remove("oldPlanId");
+				 GroupInsurancePerson person = (GroupInsurancePerson) ModelUtil.json2Model(GroupInsurancePerson.class,job.toString());
+			 String idNum = person.getStr("id_num");
 
              GroupInsurancePerson oldPerson = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
              if(person==null) {
@@ -2054,29 +2068,30 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                  }
              }
              else {
-             	if(!person.getStr("name").equals(String.valueOf(oldPerson.get("name")))) 
+             	if(!person.getStr("name").equals(oldPerson.get("name"))) 
                   {
              		mes+="身份证为"+idNum+"的人员信息不匹配</br>";
                   }
              }
              person.set("id", oldPerson.getLong("id"));
-             GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(person.get("guarantee_id")));
-             GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(groupInsuranceGuarantee.get("name")));
+             GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, oldPlan);
+             GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, newPlan);
              if(newGroupInsuranceGuarantee==null) {
             	 mes+="未找到方案"+String.valueOf(groupInsuranceGuarantee.get("name"))+"";
              }
              if(newGroupInsuranceGuarantee!=null) {
              	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
                   person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
-                  Date policy_expiration_date = format.parse(String.valueOf(person.get("policy_expiration_date")));
+                  person.set("policy_expiration_date", oldPerson.getDate("policy_expiration_date"));
+                  Date policy_expiration_date = person.getDate("policy_expiration_date");
                   Date newDate = DateUtil.addDays(policy_expiration_date, 1);
                   person.set("policy_expiration_date", newDate);
-          		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
+          		long[] getDate = DateUtil.getDatePoor(newDate,format.parse(person.get("policy_effective_date"))); 
           		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
           		BigDecimal premium = guarantee.getBigDecimal("premium");
           		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
           		person.set("premium", totelPre);
-          		person.update();
+                persons.add(person);
           		
           		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
          		groupInsurancePersonLog
@@ -2086,14 +2101,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          		.set("name", person.get("name"))
          		.set("order_id", person.getLong("order_id"))
          		.set("change",person.get("premium"))
-         		.set("policy_effective_date", person.getDate("policy_effective_date"))
-         		.set("create_time", new Date()).save();
+         		.set("policy_effective_date", person.get("policy_effective_date"))
+         		.set("create_time", new Date());
          		groupInsurancePersonLog.put("id_num",person.get("id_num"));
            		groupInsurancePersonLog.put("job_type",person.get("job_type"));
            		groupInsurancePersonLog.put("gender",person.get("gender"));
          		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
 
-         		logs.add(groupInsurancePersonLog);
+         		insurancePersonLogs.add(groupInsurancePersonLog);
              }
              else {
             	 mes+="未找到变更方案</br>";
@@ -2101,15 +2116,15 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
      
      }
      
-   /*  new Thread(new Runnable(){
+     new Thread(new Runnable(){
 			public void run() {
 		        try {
-					emailService.sendChangePersonEmail(hiddenOrderIdForImport,logs);
+					emailService.sendChangePersonEmail(hiddenOrderIdForImport,insurancePersonLogs);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			}).start();*/
+			}).start();
      if(StringUtils.isNotBlank(mes)) {
     	 resp.put("code", Constant.RESPONSE_CODE_FAIL);
     	 resp.put("message", mes);
@@ -2117,6 +2132,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
      else {
     	 resp.put("code", Constant.RESPONSE_CODE_SUCCESS);
     	 resp.put("message", "导入成功");
+    	 for (GroupInsurancePersonLog groupInsurancePersonLog : insurancePersonLogs) {
+     		groupInsurancePersonLog.remove("id_num");
+       		groupInsurancePersonLog.remove("job_type");
+       		groupInsurancePersonLog.remove("gender");
+       		groupInsurancePersonLog.remove("premium");
+			}
+     	Db.batchSave(insurancePersonLogs, 1000);
+     	Db.batchUpdate(persons, 1000);
      }
      resp.put("orderId", hiddenOrderIdForImport);
      resp.put("persons", persons);

@@ -608,6 +608,20 @@ public class DateUtil extends DateUtils {
 		return "";
 	}
 
+	/**
+     * 
+     * 描述:获取下一个月的第一天.
+     * 
+     * @return
+     */
+    public static Date getPerFirstDayOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
+	
 	  /**
      * 计算两个日期的时间差
      * 

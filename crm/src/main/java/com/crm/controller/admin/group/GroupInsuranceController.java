@@ -1094,7 +1094,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         	renderJson(data);
         	return;
         }
-        
+        List<GroupInsurancePerson> persons = new ArrayList<>();
+        String mes="";
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
         //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
         for (int i = 0; i < listob.size(); i++) {  
@@ -1108,25 +1109,24 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                 	continue;
                 }
             }
+            GroupInsurancePerson person = new GroupInsurancePerson();
             //姓名、证件类型、证件号码、保障方案、职位类别中有一项为空就不保存
             if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2))) 
             		|| StringUtils.isBlank(String.valueOf(lo.get(3))) || StringUtils.isBlank(String.valueOf(lo.get(6))) 
             		|| StringUtils.isBlank(String.valueOf(lo.get(7)))||
             		StringUtils.isBlank(String.valueOf(lo.get(8)))||
             				StringUtils.isBlank(String.valueOf(lo.get(9)))) {
+            	mes+="表格第"+i+"行存在未填写信息，请确认！";
             	continue;
             }
         	
-            GroupInsurancePerson person = new GroupInsurancePerson();
             person.set("name",String.valueOf(lo.get(1)));
             switch (String.valueOf(lo.get(2))) {
 			case "身份证":
 				person.set("id_type",0);
 				GroupInsurancePerson exPerson = personService.findByIdNumAndOrderId(String.valueOf(lo.get(3)), hiddenOrderIdForImport);
 				if(exPerson!=null) {
-					data.put("msg", "该人员"+lo.get(3)+"已存在");
-					renderJson(data);
-					return;
+	            	mes+="表格第"+i+"行人员"+lo.get(3)+"已存在";
 				}
 				try {
 					person.set("birth",DateUtil.parseDate(String.valueOf(lo.get(3)).substring(6, 14), new String[]{"yyyyMMdd"}));
@@ -1148,9 +1148,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             
             if(order.get("max_occupation_category")!=null&&Integer.parseInt(person.get("occupation_category"))>order.getInt("max_occupation_category"))
     		{
-    			data.put("msg", "职业类别不能高于"+order.getInt("max_occupation_category")+"类");
-    			renderJson(data);
-    			return;
+    			mes+="表格第"+i+"行职业类别不能高于"+order.getInt("max_occupation_category")+"类";
     		}
             
             
@@ -1174,9 +1172,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				int maxAge = order.get("max_insurance_age");
 				int age = DateUtil.calcAge(person.getDate("birth"), new Date());
 				if(age>maxAge) {
-					data.put("msg", ""+person.getStr("name")+"已超过最大年龄!");
-					renderJson(data);
-					return;
+	    			mes+="表格第"+i+"行"+person.getStr("name")+"已超过最大年龄!";
 				}
 			}
             
@@ -1184,12 +1180,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     				||person.getDate("policy_expiration_date").getTime()>order.getDate("policy_expiration_date").getTime()
     				) 
     		{
-    			data.put("msg", "需要与保单起止日期一致！");
-    			renderJson(data);
-    			return;
+    			mes+="表格第"+i+"行需要与保单起止日期一致！";
     		}
-        	
-
     		Date policyExpirationDate = DateUtil.parseDate(DateUtil.formatDate(person.get("policy_expiration_date"),"yyyy-MM-dd") + " 23:59:59");
     		person.set("policy_expiration_date", policyExpirationDate);
     		if(order.get("max_review_time")!=null&&order.getInt("max_review_time")!=0) {
@@ -1198,9 +1190,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     			Date reviewTime = DateUtil.addDays(date, maxTime);
     			 long diff = person.getDate("policy_effective_date").getTime() - reviewTime.getTime();
     			 if(diff>0) {
-    				 data.put("msg", "已超过追溯日期!");
-    					renderJson(data);
-    					return;
+    					mes+="表格第"+i+"行已超过追溯日期!";
     			 }
     		}
             
@@ -1225,16 +1215,20 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         		.set("policy_effective_date", person.get("policy_expiration_date"))
         		.set("create_time", new Date()).save();
             }
-            
-         
-    		
             person.set("order_id",hiddenOrderIdForImport);
             person.set("create_time", new Date());
-            person.save();
+            persons.add(person);
         }  
-        data.put("msg", "导入成功");
+        if(StringUtils.isNotBlank(mes)) {
+            data.put("code", Constant.RESPONSE_CODE_FAIL);
+            data.put("message", mes);
+        }
+        else {
+            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+        }
         data.put("orderId", hiddenOrderIdForImport);
-        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+        data.put("persons", persons);
     	renderJson(data);
     	return;
 	}

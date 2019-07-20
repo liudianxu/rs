@@ -1116,7 +1116,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		|| StringUtils.isBlank(String.valueOf(lo.get(7)))||
             		StringUtils.isBlank(String.valueOf(lo.get(8)))||
             				StringUtils.isBlank(String.valueOf(lo.get(9)))) {
-            	mes+="表格第"+i+"行存在未填写信息，请确认！";
+            	//mes+="表格第"+i+"行存在未填写信息，请确认！";
             	continue;
             }
         	
@@ -1124,6 +1124,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             switch (String.valueOf(lo.get(2))) {
 			case "身份证":
 				person.set("id_type",0);
+				person.put("idTypeStr","身份证");
 				GroupInsurancePerson exPerson = personService.findByIdNumAndOrderId(String.valueOf(lo.get(3)), hiddenOrderIdForImport);
 				if(exPerson!=null) {
 	            	mes+="表格第"+i+"行人员"+lo.get(3)+"已存在";
@@ -1135,12 +1136,15 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				}
 				if(CommonUtils.isOdd(String.valueOf(lo.get(3)).charAt(String.valueOf(lo.get(3)).length() - 2))) {
 					person.set("gender",Constant.FEMALE);
+					person.put("genderStr","女");
 				} else {
 					person.set("gender",Constant.MALE);
+					person.put("genderStr","男");
 				}
 				break;
 			case "护照":
 				person.set("id_type",1);
+				person.put("idTypeStr","护照");
 				break;
 			}
             person.set("id_num",String.valueOf(lo.get(3)));
@@ -1202,9 +1206,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         		BigDecimal premium = guarantee.getBigDecimal("premium");
         		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
         		person.set("premium", totelPre);
-        		
-        		
-        		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+        		person.set("guarantee_name", groupInsuranceGuarantee.get("name"));
+        		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
         		groupInsurancePersonLog
         		.set("customer_id", order.getLong("insure_customer_id"))
         		.set("policy_num", person.get("policy_num"))
@@ -1213,7 +1216,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         		.set("order_id", person.getLong("order_id"))
         		.set("change",person.get("premium"))
         		.set("policy_effective_date", person.get("policy_expiration_date"))
-        		.set("create_time", new Date()).save();
+        		.set("create_time", new Date()).save();*/
             }
             person.set("order_id",hiddenOrderIdForImport);
             person.set("create_time", new Date());

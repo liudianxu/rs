@@ -91,7 +91,7 @@
 		<div class="tip"></div>
 		<div class="btns">
 			<div class="btn submit" onclick="submitExcel2()">提交</div>
-			<div class="btn cancel" onclick="hideExcel()">取消</div>
+			<div class="btn cancel" onclick="hideExcel2()">取消</div>
 		</div>
 	</div>
 </div>
@@ -684,9 +684,9 @@
 										"</td><td>"+
 											"<input type='text' name='id_num' groupInsurancePersonId_num id='' value='" + trim(person.id_num )+ "' />"+
 										"</td><td>"+
-											"<input type='text' name='oldPlan' groupInsurancePersonOldPlan='' value='" + trim(person.oldPlan) + "' /><input type='text' name='oldPlanId'  id='' value='" + trim(person.oldPlanId) + "' />"+
+											"<input type='text' name='oldPlan' groupInsurancePersonOldPlan='' value='" + trim(person.oldPlan) + "' /><input type='text' name='oldPlanId' style='display:none;' id='' value='" + trim(person.oldPlanId) + "' />"+
 										"</td><td>"+
-											"<input type='text' name='newPlan' groupInsurancePersonNew_plan id='' value='" + trim(person.newPlan) + "' /><input type='text' name='newPlanId'  id='' value='" + trim(person.newPlanId) + "' />"+
+											"<input type='text' name='newPlan' groupInsurancePersonNew_plan id='' value='" + trim(person.newPlan) + "' /><input type='text' name='newPlanId' style='display:none;' id='' value='" + trim(person.newPlanId) + "' />"+
 										"</td><td>"+
 											"<input type='text' name='policy_effective_date' groupInsurancePersonPolicy_effective_date id='' value='" + trim(person.policy_effective_date) + "' />"+
 										"</td><td>"+
@@ -1668,11 +1668,13 @@
 									//return;
 									continue;
 								}
-								if(key == 'groupInsurancePersonGuarantee_id'){
+								if(key == 'groupInsurancePersonNew_plan'){
 									$.each(guarantee.guarantees, function(key, val) {
 										guarantee=data;
 										if (key == result[_key]) {
-											$td.val(val);									} 
+											$td.val(val);		
+											return;
+											} 
 									});
 									continue;
 								}

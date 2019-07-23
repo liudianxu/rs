@@ -1967,6 +1967,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                     
                      if(newGroupInsuranceGuarantee!=null) {
                      	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+                     	person.set("policy_effective_date", format.parse(String.valueOf(lo.get(9))));
                           person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
                           person.set("remark",String.valueOf(lo.get(11)));
                           Date policy_expiration_date = format.parse(String.valueOf(lo.get(9)));
@@ -2073,7 +2074,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                   {
              		mes+="身份证为"+idNum+"的人员信息不匹配</br>";
                   }
+             	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+             	 
+             	oldPerson.set("guarantee_id", person.getLong("guarantee_id"));
+             	oldPerson.set("policy_effective_date",format.parse(person.get("policy_effective_date")));
              	person=oldPerson;
+             	
              }
              person.set("id", oldPerson.getLong("id"));
              GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, oldPlan);
@@ -2088,10 +2094,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
              	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
                   person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
                   person.set("policy_expiration_date", oldPerson.getDate("policy_expiration_date"));
-                  Date policy_expiration_date = person.getDate("policy_expiration_date");
-                  Date newDate = DateUtil.addDays(policy_expiration_date, 1);
-                  person.set("policy_expiration_date", newDate);
-          		long[] getDate = DateUtil.getDatePoor(newDate,person.get("policy_effective_date")); 
+                 // Date policy_expiration_date = person.getDate("policy_expiration_date");
+                  //Date newDate = DateUtil.addDays(policy_expiration_date, 1);
+                  //person.set("policy_expiration_date", newDate);
+          		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"),person.getDate("policy_effective_date")); 
           		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
           		BigDecimal premium = guarantee.getBigDecimal("premium");
           		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);

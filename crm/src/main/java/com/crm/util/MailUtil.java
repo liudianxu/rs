@@ -41,6 +41,8 @@ public class MailUtil {
             Properties props = new Properties();
             props.put("mail.smtp.host", host);   // 指定SMTP服务器
             props.put("mail.smtp.auth", "true"); // 指定是否需要SMTP验证
+            props.setProperty("mail.smtp.port", "80");
+            props.setProperty("mail.smtp.socketFactory.port", "80");
             Session session = Session.getDefaultInstance(props);
             session.setDebug(false);
  

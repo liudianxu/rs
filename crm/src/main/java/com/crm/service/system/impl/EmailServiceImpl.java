@@ -64,7 +64,7 @@ public class EmailServiceImpl implements EmailService{
 			BigDecimal amout=BigDecimal.ZERO;
 			BigDecimal origin = BigDecimal.ZERO;
 			for (GroupInsurancePersonLog groupInsurancePersonLog : logs) {
-				
+				if(groupInsurancePersonLog.get("change")!=null) {
 				amout = amout.add(groupInsurancePersonLog.getBigDecimal("change"));
 				if(groupInsurancePersonLog.getInt("status")==0) {
 					add++;
@@ -73,7 +73,7 @@ public class EmailServiceImpl implements EmailService{
 					subtract++;
 				}
 			}
-
+			}
 			
 			
 			//List<GroupInsurancePersonLog> persons = GroupInsurancePersonLog.findByOrderId(id);

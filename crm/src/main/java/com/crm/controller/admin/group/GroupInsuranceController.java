@@ -1955,56 +1955,57 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                      {
                 		mes+="身份证为"+idNum+"的人员信息不匹配</br>";
                      }
+                	 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
+                     GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(8)));
+                     if(groupInsuranceGuarantee==null) {
+                     	mes="未找到方案"+String.valueOf(lo.get(7))+"";
+                     }
+                     else {
+                     	 person.put("oldPlanId",groupInsuranceGuarantee.get("id"));
+                     }
+                     person.put("oldPlan",String.valueOf(lo.get(7)));
+                    
+                     if(newGroupInsuranceGuarantee!=null) {
+                     	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+                          person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
+                          person.set("remark",String.valueOf(lo.get(11)));
+                          Date policy_expiration_date = format.parse(String.valueOf(lo.get(9)));
+                          Date newDate = DateUtil.addDays(policy_expiration_date, 1);
+                          person.set("policy_expiration_date", newDate);
+                  		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
+                  		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
+                  		BigDecimal premium = guarantee.getBigDecimal("premium");
+                  		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+                  		person.set("premium", totelPre);
+                         person.put("newPlan",guarantee.get("name"));
+                         person.put("newPlanId",guarantee.get("id"));
+
+                  		persons.add(person);
+                  		
+                  		
+                  		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
+                 		groupInsurancePersonLog
+                 		.set("customer_id", order.getLong("insure_customer_id"))
+                 		.set("policy_num", person.get("policy_num"))
+                 		.set("status", 4)
+                 		.set("name", person.get("name"))
+                 		.set("order_id", person.getLong("order_id"))
+                 		.set("change",person.get("premium"))
+                 		.set("policy_effective_date", person.getDate("policy_effective_date"))
+                 		.set("create_time", new Date()).save();
+                 		groupInsurancePersonLog.put("id_num",person.get("id_num"));
+                   		groupInsurancePersonLog.put("job_type",person.get("job_type"));
+                   		groupInsurancePersonLog.put("gender",person.get("gender"));
+                 		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
+
+                 		logs.add(groupInsurancePersonLog);*/
+                     }
+                     else {
+                     	mes+="未找到变更方案"+String.valueOf(lo.get(7))+"</br>";
+
+                     }
                 }
-                GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(7)));
-                GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, String.valueOf(lo.get(8)));
-                if(groupInsuranceGuarantee==null) {
-                	mes="未找到方案"+String.valueOf(lo.get(7))+"";
-                }
-                else {
-                	 person.put("oldPlanId",groupInsuranceGuarantee.get("id"));
-                }
-                person.put("oldPlan",String.valueOf(lo.get(7)));
                
-                if(newGroupInsuranceGuarantee!=null) {
-                	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
-                     person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
-                     person.set("remark",String.valueOf(lo.get(11)));
-                     Date policy_expiration_date = format.parse(String.valueOf(lo.get(9)));
-                     Date newDate = DateUtil.addDays(policy_expiration_date, 1);
-                     person.set("policy_expiration_date", newDate);
-             		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
-             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
-             		BigDecimal premium = guarantee.getBigDecimal("premium");
-             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
-             		person.set("premium", totelPre);
-                    person.put("newPlan",guarantee.get("name"));
-                    person.put("newPlanId",guarantee.get("id"));
-
-             		persons.add(person);
-             		
-             		
-             		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
-            		groupInsurancePersonLog
-            		.set("customer_id", order.getLong("insure_customer_id"))
-            		.set("policy_num", person.get("policy_num"))
-            		.set("status", 4)
-            		.set("name", person.get("name"))
-            		.set("order_id", person.getLong("order_id"))
-            		.set("change",person.get("premium"))
-            		.set("policy_effective_date", person.getDate("policy_effective_date"))
-            		.set("create_time", new Date()).save();
-            		groupInsurancePersonLog.put("id_num",person.get("id_num"));
-              		groupInsurancePersonLog.put("job_type",person.get("job_type"));
-              		groupInsurancePersonLog.put("gender",person.get("gender"));
-            		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
-
-            		logs.add(groupInsurancePersonLog);*/
-                }
-                else {
-                	mes+="未找到变更方案"+String.valueOf(lo.get(7))+"</br>";
-
-                }
         
         }
         
@@ -2650,19 +2651,19 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
 	          		groupInsurancePersonLog
 	          		.set("customer_id", order.getLong("insure_customer_id"))
-	          		.set("policy_num", person.get("policy_num"))
+	          		.set("policy_num", exPerson.get("policy_num"))
 	          		.set("status", 0)
-	          		.set("name", person.get("name"))
-	          		.set("order_id", person.getLong("order_id"))
-	          		.set("person_id", person.getLong("id"))
-	          		.set("change",person.get("premium"))
-	          		.set("policy_effective_date", person.get("policy_expiration_date"))
+	          		.set("name", exPerson.get("name"))
+	          		.set("order_id", exPerson.getLong("order_id"))
+	          		.set("person_id", exPerson.getLong("id"))
+	          		.set("change",exPerson.get("premium"))
+	          		.set("policy_effective_date", exPerson.get("policy_expiration_date"))
 	          		.set("create_time", new Date());
 	          		logs.add(groupInsurancePersonLog);
-	          		groupInsurancePersonLog.put("id_num",person.get("id_num"));
-	          		groupInsurancePersonLog.put("job_type",person.get("job_type"));
-	          		groupInsurancePersonLog.put("gender",person.get("gender"));
-	        		groupInsurancePersonLog.put("premium",person.get("premium")==null?BigDecimal.ZERO:person.get("premium"));
+	          		groupInsurancePersonLog.put("id_num",exPerson.get("id_num"));
+	          		groupInsurancePersonLog.put("job_type",exPerson.get("job_type"));
+	          		groupInsurancePersonLog.put("gender",exPerson.get("gender"));
+	        		groupInsurancePersonLog.put("premium",exPerson.get("premium")==null?BigDecimal.ZERO:exPerson.get("premium"));
 	        		insurancePersonLogs.add(groupInsurancePersonLog);
 	            }
 	             

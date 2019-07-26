@@ -1697,6 +1697,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				 job.put("status", 2);
 			 }
 			 GroupInsurancePerson person = (GroupInsurancePerson) ModelUtil.json2Model(GroupInsurancePerson.class,job.toString());
+				if(!IDCardUtils.isValidatedAllIdcard(person.getStr("id_num"))) {
+					mes+="证件号码不合法!</br>";
+			}
 			 if(person.getInt("status")==2) {
 	                GroupInsurancePerson oldPerson = groupInsurancePersonService.findByIdNumAndOrderId(person.getStr("id_num"),hiddenOrderIdForImport);
 	                if(oldPerson==null) {
@@ -1715,9 +1718,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            	 }
 		                person.set("id", oldPerson.getLong("id"));
 	                }
-	            	if(!IDCardUtils.isValidatedAllIdcard(person.getStr("id_num"))) {
-						mes+="证件号码不合法!</br>";
-				}
+	            
 	                GroupInsuranceGuarantee guaranteess=GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 	                if(groupInsuranceGuarantee!=null) {
 	                    person.set("guarantee_id",groupInsuranceGuarantee.get("id"));

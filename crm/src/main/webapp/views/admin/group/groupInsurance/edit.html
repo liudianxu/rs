@@ -723,7 +723,7 @@
 					<td>生效日期</td>
 					<td>终止日期</td>
 					<td>保单号</td>
-					<td>操作</td>
+				<!-- 	<td>操作</td> -->
 				</tr>
 			</thead>
 			<tbody></tbody>
@@ -752,6 +752,10 @@
 	border-radius: 10px;
 	border: 1px solid #efefef;
 	z-index: 10000000000000000;
+}
+
+.show-excel-data .isFail td{
+border-bottom: solid 1px red;
 }
 .show-excel-data .ttl{
 	color: #323232;
@@ -1002,6 +1006,9 @@
 		$tr.each(function(key, val){
 			var _data = {}
 			$(val).find('input[type=text]').each(function(key,val){
+				_data[$(val).attr('name')] = $(val).val();
+			})
+			$(val).find('select').each(function(key,val){
 				_data[$(val).attr('name')] = $(val).val();
 			})
 			data.push(_data)
@@ -1295,40 +1302,116 @@
 									return val == null ? '' : val
 								}
 								var html = '';
+								var lengths=data.persons.length;
 								data.persons.forEach(function(person, index) {
-									html += '<tr><td>'+
+									var selectHtml="";
+									$.ajax({
+										type: 'GET',
+										url: "/admin/groupInsurance/findGuaranteeSchemes",
+										data: {
+											orderId: hiddenOrderIdForImport
+										},
+										async: false,
+										dataType: "json",
+										success: function(data2) {
+											 selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
+											$.each(data2.guarantees, function(key, val) {
+												if (val == trim(person.guarantee_name)) {
+													selectHtml += '<option value="' + val + '" selected="selected">' + val + '</option>';
+												} else {
+													selectHtml += '<option value="' + val + '">' + val + '</option>';
+												}
+											});
+											selectHtml += '</select>';
+										}
+									})
+									
+									html += '<tr ';
+									if(person.isFail==1){
+										html += 'class="isFail" ';
+									}
+										html += '><td>'+
 										"<input type='text' name='name' groupInsurancePersonName id='' value='" + trim(person.name) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='gender' groupInsurancePersonGender id='' value='" + trim(person.genderStr) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='id_type' groupInsurancePersonId_type id='' value='" + trim(person.idTypeStr) + "' />"+
+										"</td><td>";
+										html +='<select name="gender" groupInsurancePersonGender class="layui-input">' +
+										'<option value="1"';
+									if (trim(person.genderStr) == "男") {
+										html += ' selected';
+									}
+									html += '>男</option><option value="0" ';
+									if (trim(person.genderStr) == "女") {
+										html += ' selected';
+									}
+									html += '>女</option>';
+									html += '</select>';
+									html +=	"</td><td>"+
+											"<input type='text' name='id_type' groupInsurancePersonId_type id='' disabled  value='" + trim(person.idTypeStr) + "' />"+
 										"</td><td>"+
 											"<input type='text' name='id_num' groupInsurancePersonId_num id='' value='" + trim(person.id_num )+ "' />"+
 										"</td><td>"+
 											"<input type='text' name='phone' groupInsurancePersonPhone id='' value='" + trim(person.phone) + "' />"+
+										"</td><td>";
+										html +='<select  name="occupation_category" groupInsurancePersonOccupation_category class="layui-input">' +
+										'<option value="1"';
+									if (trim(person.occupation_category) == 1) {
+										html += 'selected';
+									}
+									html += '>1</option><option value="2"';
+									if (trim(person.occupation_category) == 2) {
+										html += 'selected';
+									}
+									html += '>2</option><option value="3"';
+									if (trim(person.occupation_category) == 3) {
+										html += 'selected';
+									}
+									html += '>3</option><option value="4"';
+									if (trim(person.occupation_category) == 4) {
+										html += 'selected';
+									}
+									html += '>4</option><option value="5"';
+									if (trim(person.occupation_category) == 5) {
+										html += 'selected';
+									}
+									html += '>5</option><option value="6"';
+									if (trim(person.occupation_category) == 6) {
+										html += 'selected';
+									}
+									html += '>6</option>';
+									html += '</select>' +
+										"</td><td>";
+									 html+=selectHtml;
+										html+="</td><td>"+
+											"<input type='text' name='policy_effective_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_effective_date id='' class='layui-input person_policy_effective_date"+index+"'  value='" + trim(person.policy_effective_date) + "' />"+
 										"</td><td>"+
-											"<input type='text' name='occupation_category' groupInsurancePersonOccupation_category id='' value='" + trim(person.occupation_category) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='guarantee_id' groupInsurancePersonGuarantee_id id='' value='" + trim(person.guarantee_name) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='policy_effective_date' groupInsurancePersonPolicy_effective_date id='' value='" + trim(person.policy_effective_date) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='policy_expiration_date' groupInsurancePersonPolicy_expiration_date id='' value='" + trim(person.policy_expiration_date) + "' />"+
+											"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(person.policy_expiration_date) + "' />"+
 										"</td><td>"+
 											"<input type='text' name='policy_num' policy_num id='' value='" + trim(person.policy_num) + "' />"+
-										"</td><td>"+
-										"<div class='btn ok'"  +
+										"</td></tr>";
+										/* "<div class='btn ok'"  +
 											
 											" data-name='"+ trim(person.name) + "' data-gender='"+ trim(person.gender) + "' data-id_type='" + trim(person.id_type) + "' data-id_num='" + trim(person.id_num) + "' data-phone='" + trim(person.phone) + "' data-occupation_category='" + trim(person.occupation_category) + "' data-guarantee_id='" + trim(person.guarantee_id) + "' data-remark='" + trim(person.remark) + "' data-policy_effective_date='" + trim(person.policy_effective_date) + "' data-policy_expiration_date='" + trim(person.policy_expiration_date) + "' data-policy_num='" + trim(person.policy_num) + "' data-id='" + trim(person.id) + "'" +
 											
 											" >修改</div>" +
 										
-										"</td></tr>"
+										"</td> </tr>"*/
 								})
 								$('.show-excel-data').show();
 								$('.excel-cover').show();
 								$('.show-excel-data').find('tbody').append(html)
 								$('.show-excel-data').find('.tip').html(data.message)
+								form.render();
+								for(var i=0;i<lengths;i++){
+								laydate.render({
+									elem: '.person_policy_effective_date'+i,
+									format: 'yyyy-MM-dd HH:mm:ss',
+									trigger: 'click'
+								});
+								laydate.render({
+									elem: '.person_policy_expiration_date'+i,
+									format: 'yyyy-MM-dd HH:mm:ss',
+									trigger: 'click'
+								});
+								}
 								$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
 							}
 						});

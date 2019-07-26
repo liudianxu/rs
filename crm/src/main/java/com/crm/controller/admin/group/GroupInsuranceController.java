@@ -1134,7 +1134,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				}
 				if((int)person.get("id_type")==0) {
 					if(!IDCardUtils.isValidatedAllIdcard(String.valueOf(lo.get(3)))) {
-						mes+="证件号码不合法!</br>";
+						mes+="表格第"+i+"行人员"+lo.get(3)+"证件号码不合法!</br>";
 					}
 				}
 					
@@ -1232,6 +1232,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             }
             person.set("order_id",hiddenOrderIdForImport);
             person.set("create_time", new Date());
+            if(StringUtils.isNotBlank(mes)) {
+            	person.put("isFail",1);
+            }
+            else {
+            	person.put("isFail",0);
+            }
             persons.add(person);
         }  
         if(StringUtils.isNotBlank(mes)) {
@@ -1281,6 +1287,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	        	 job.remove("guarantee_id");
 	         }
 	         job.put("id_type", 0);
+					
 			 GroupInsurancePerson person = (GroupInsurancePerson) ModelUtil.json2Model(GroupInsurancePerson.class,job.toString());
 					GroupInsurancePerson exPerson = personService.findByIdNumAndOrderId(person.get("id_num"), hiddenOrderIdForImport);
 					if(exPerson!=null) {
@@ -1309,7 +1316,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	        	
 				if((int)person.get("id_type")==0) {
 					if(!IDCardUtils.isValidatedAllIdcard(person.getStr("id_num"))) {
-						mes+="证件号码不合法!</br>";
+						mes+="表格第"+h+"行人员"+person.get("id_num")+"证件号码不合法!</br>";
 					}
 				}
 	            if(order.get("max_insurance_age")!=null){
@@ -1364,6 +1371,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            person.set("order_id",hiddenOrderIdForImport);
 	            person.set("create_time", new Date());
 	            persons.add(person);
+	         /*   if(StringUtils.isNotBlank(mes)) {
+	            	person.put("isFail",1);
+	            }
+	            else {
+	            	person.put("isFail",0);
+	            }*/
 	        }  
 		 
 	      if(StringUtils.isNotBlank(mes)) {
@@ -1497,6 +1510,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                    		person.set("premium", totelPre);
                    		//person.update();
                    		person.put("guarantee_name", groupInsuranceGuarantee.get("name"));
+                   	 if(StringUtils.isNotBlank(mes)) {
+                   		person.put("isFail",1);
+                     }
+                     else {
+                    	 person.put("isFail",0);
+                     }
                    		persons.add(person);	
                    		  /* GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
                         		groupInsurancePersonLog
@@ -1596,11 +1615,23 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                  exPerson.set("order_id",hiddenOrderIdForImport);
                  if(m==0) {
                 	 //exPerson.update();	
+                	 if(StringUtils.isNotBlank(mes)) {
+                		 exPerson.put("isFail",1);
+                     }
+                     else {
+                    	 exPerson.put("isFail",0);
+                     }
                 	 persons.add(exPerson);
                  }
                  else {
                 	 exPerson.set("create_time", new Date());
                 	 //exPerson.save();
+                	 if(StringUtils.isNotBlank(mes)) {
+                		 exPerson.put("isFail",1);
+                     }
+                     else {
+                    	 exPerson.put("isFail",0);
+                     }
                 	 persons.add(exPerson);
                  }
                  
@@ -1982,6 +2013,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                          person.put("newPlan",guarantee.get("name"));
                          person.put("newPlanId",guarantee.get("id"));
 
+                         if(StringUtils.isNotBlank(mes)) {
+                        	 person.put("isFail",1);
+                         }
+                         else {
+                        	 person.put("isFail",0);
+                         }
                   		persons.add(person);
                   		
                   		
@@ -2047,7 +2084,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//List<GroupInsurancePerson> persons = JsonUtil.jsonToList(JsonKit.toJson(data),GroupInsurancePerson.class);
 		String mes="";
         GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForImport);
-         int i=1;
+         int i=0;
          List<GroupInsurancePerson> persons = new ArrayList<>();
          List<GroupInsurancePersonLog> insurancePersonLogs = new ArrayList<>();
          List<GroupInsurancePersonLog> logs = new ArrayList<>();
@@ -2061,23 +2098,24 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				job.remove("newPlan");
 				job.remove("newPlanId");
 				job.remove("oldPlanId");
+				 i=i+1;
 				 GroupInsurancePerson person = (GroupInsurancePerson) ModelUtil.json2Model(GroupInsurancePerson.class,job.toString());
 			 String idNum = person.getStr("id_num");
 
              GroupInsurancePerson oldPerson = groupInsurancePersonService.findByIdNumAndOrderId(idNum,hiddenOrderIdForImport);
              if(oldPerson==null) {
              	{
-             		mes+="未找到"+String.valueOf(person.get("id_num"))+"的承保信息</br>";
+             		mes+="第"+i+"未找到"+String.valueOf(person.get("id_num"))+"的承保信息</br>";
                  }
              }
              else {
              	if(!person.getStr("name").equals(oldPerson.get("name"))) 
                   {
-             		mes+="身份证为"+idNum+"的人员信息不匹配</br>";
+             		mes+="第"+i+"身份证为"+idNum+"的人员信息不匹配</br>";
                   }
              	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
              	 
-             	oldPerson.set("guarantee_id", person.getLong("guarantee_id"));
+             	//oldPerson.set("guarantee_id", person.getLong("guarantee_id"));
              	oldPerson.set("policy_effective_date",format.parse(person.get("policy_effective_date")));
              	person=oldPerson;
              	
@@ -2086,10 +2124,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
              GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, oldPlan);
              GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, newPlan);
              if(groupInsuranceGuarantee==null) {
-             	mes="未找到方案"+oldPlan+"";
+             	mes="第"+i+"未找到方案"+oldPlan+"</br>";
              }
              if(newGroupInsuranceGuarantee==null) {
-            	 mes+="未找到方案"+String.valueOf(groupInsuranceGuarantee.get("name"))+"";
+            	 mes+="第"+i+"未找到方案"+String.valueOf(groupInsuranceGuarantee.get("name"))+"</br>";
+             }
+             if(!person.getLong("guarantee_id").equals(groupInsuranceGuarantee.getLong("id"))) {
+            	 mes+="第"+i+"行原投保方案不匹配</br>";
              }
              if(newGroupInsuranceGuarantee!=null) {
              	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
@@ -2124,7 +2165,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          		insurancePersonLogs.add(groupInsurancePersonLog);
              }
              else {
-            	 mes+="未找到变更方案</br>";
+            	 mes+="第"+i+"未找到变更方案</br>";
              }
      
      }
@@ -2300,6 +2341,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
             		person.set("premium", totelPre);
             		//person.update();
+            		 if(StringUtils.isNotBlank(mes)) {
+                    	 person.put("isFail",1);
+                     }
+                     else {
+                    	 person.put("isFail",0);
+                     }
             		persons.add(person);
             		  /* GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
                  		groupInsurancePersonLog
@@ -2412,12 +2459,24 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          		
                  exPerson.set("order_id",hiddenOrderIdForImport);
                  if(m==0) {
-                	 //exPerson.update();	 
+                	 //exPerson.update();	
+                	 if(StringUtils.isNotBlank(mes)) {
+                		 exPerson.put("isFail",1);
+                     }
+                     else {
+                    	 exPerson.put("isFail",0);
+                     }
                 	 persons.add(exPerson);
                  }
                  else {
                 	 exPerson.set("create_time", new Date());
                 	 //exPerson.save();
+                	 if(StringUtils.isNotBlank(mes)) {
+                		 exPerson.put("isFail",1);
+                     }
+                     else {
+                    	 exPerson.put("isFail",0);
+                     }
                 	 persons.add(exPerson);
                  }
                  
@@ -2836,7 +2895,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		logs.add(groupInsurancePersonLog);
 		
 		
-		 /* new Thread(new Runnable(){
+		 new Thread(new Runnable(){
 				public void run() {
 			        try {
 						emailService.sendChangePersonEmail(person.getLong("order_id"),logs);
@@ -2844,13 +2903,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 						e.printStackTrace();
 					}
 				}
-				}).start();*/
+				}).start();
 		  
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 		renderJson(data);
 	}
-	
+		
 	/**
 	 * 进保
 	 */
@@ -2888,7 +2947,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
     		logs.add(groupInsurancePersonLog);
 		
 		
-		  /*new Thread(new Runnable(){
+		  new Thread(new Runnable(){
 				public void run() {
 			        try {
 						emailService.sendChangePersonEmail(person.getLong("order_id"),logs);
@@ -2896,7 +2955,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 						e.printStackTrace();
 					}
 				}
-				}).start();*/
+				}).start();
 		
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);

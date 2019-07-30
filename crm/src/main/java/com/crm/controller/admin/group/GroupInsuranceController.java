@@ -144,6 +144,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		setAttr("brands", brandService.selectList());
 		setAttr("groups", groupInfoService.selectList());
 		setAttr("admins", userService.selectList());
+		setAttr("customers", customerInfoService.selectList());
 		render("add.html");
 	}
 	
@@ -162,9 +163,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//GroupInsuranceCompany company = GroupInsuranceCompany.dao.findById((Long)order.get("company_id"));
 		//setAttr("brands", brandService.selectList());
 		setAttr("order", order);
+		if(order.get("insure_group_id")!=null) {
 		List<CustomerInfo> customers = customerInfoService.findByGroupId(order.getLong("insure_group_id"));
 		setAttr("customers", customers);
-		
+		}
+		else {
+			setAttr("customers", customerInfoService.selectList());
+		}
 		//setAttr("company", company);
 		int size = 0;
 		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
@@ -2859,13 +2864,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	
 	/**
 	 * 退保
+	 * @throws ParseException 
 	 */
-	public void cancelPerson() {
+	public void cancelPerson() throws ParseException {
 		Map<String, Object> data = new HashMap<>();
 		Long id = getParaToLong("personId");
 		GroupInsurancePerson person = GroupInsurancePerson.dao.findById(id);
 		GroupInsuranceOrder groupInsuranceOrder = GroupInsuranceOrder.dao.findById(person.getLong("order_id"));
-
+		String nextDay = DateUtil.formatDate(DateUtil.addDays(new Date(), 1), "yyyy-MM-dd")+" 23:59:59";
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		person.set("policy_expiration_date",  format.parse(nextDay));
 		person.set("status", 2);
 		long[] getDate = DateUtil.getDatePoor(new Date(), person.getDate("policy_effective_date")); 
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
@@ -2912,13 +2920,18 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		
 	/**
 	 * 进保
+	 * @throws ParseException 
 	 */
-	public void comePerson() {
+	public void comePerson() throws ParseException {
 		Map<String, Object> data = new HashMap<>();
 		Long id = getParaToLong("personId");
 		GroupInsurancePerson person = GroupInsurancePerson.dao.findById(id);
 		GroupInsuranceOrder groupInsuranceOrder = GroupInsuranceOrder.dao.findById(person.getLong("order_id"));
 		person.set("status", 0);
+		String nextDay = DateUtil.formatDate(DateUtil.addDays(new Date(), 1), "yyyy-MM-dd")+" 00:00:00";
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+
+		person.set("policy_effective_date", format.parse(nextDay));
 		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"), person.getDate("policy_effective_date")); 
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 		if(guarantee!=null) {

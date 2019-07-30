@@ -11,6 +11,7 @@ import com.crm.model.system.Setting;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.system.EmailService;
 import com.crm.util.Constant;
+import com.crm.util.MailUtil;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
@@ -67,7 +68,8 @@ public class SettingController extends Controller{
 			properties.put("smtpUsername", getPara("smtpUsername"));
 			properties.put("smtpSSLEnabled", getPara("smtpSSLEnabled"));
 			properties.put("smtpFromMail", getPara("smtpFromMail"));
-			//mailService.sendTestSmtpMail(smtpHost, smtpPort, smtpUsername, StringUtils.isNotEmpty(smtpPassword) ? smtpPassword : setting.getSmtpPassword(), smtpSSLEnabled, smtpFromMail, toMail);
+			MailUtil mailUtil=new MailUtil(getPara("smtpHost"),getPara("smtpUsername"),getPara("smtpPassword"));
+			mailUtil.sendMail("测试邮箱", toMail, "测试邮箱" ,null, null,null);
 		} catch (Exception e) {
 			response.setMessage("发送失败");
 			renderJson(response);	

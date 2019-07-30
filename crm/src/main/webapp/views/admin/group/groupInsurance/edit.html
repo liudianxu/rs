@@ -33,7 +33,7 @@
 						<div class='layui-inline theme-required'>
 							<div class='layui-form-label'>单位名称</div>
 							<div class='layui-input-inline'>
-								<select name='groupInsuranceOrder.insure_customer_id' lay-verify='required' id="insureCustomerId" lay-search
+								<select name='groupInsuranceOrder.insure_customer_id' lay-verify='required' lay-filter="relationCustomer" id="insureCustomerId" lay-search
 								 lay-verify>
 									<option value=''>请选择</option>
 									#for(customer:customers)
@@ -1243,6 +1243,23 @@
 				}
 			});
 
+			form.on('select(relationCustomer)', function(data) {
+				if (data.value != "") {
+					$.ajax({
+						type: "get",
+						url: '/admin/groupInsurance/selectCustomerById',
+						async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
+						data: {
+							id: data.value,
+						},
+						success: function(result) {
+							
+							$("input[name='groupInsuranceOrder.insure_id_num']").val(result.data.cert_no);
+						}
+					});
+				}
+			});
+			
 			form.on('select(relationGroup)', function(data) {
 				if (data.value != "") {
 					$.ajax({

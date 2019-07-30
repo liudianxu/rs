@@ -2862,6 +2862,16 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		renderJson(data);
 	}
 	
+	public void selectCustomerById() {
+		Long id = getParaToLong("id");
+	    Map<String, Object> data = new HashMap<>();
+	    CustomerInfo customerInfo = CustomerInfo.dao.findById(id);
+	    data.put("data", customerInfo);
+		renderJson(data);
+		return;
+	}
+	
+	
 	/**
 	 * 退保
 	 * @throws ParseException 

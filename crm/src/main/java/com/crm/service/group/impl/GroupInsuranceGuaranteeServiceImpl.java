@@ -21,17 +21,17 @@ public class GroupInsuranceGuaranteeServiceImpl implements GroupInsuranceGuarant
 
 	@Override
 	public List<GroupInsuranceGuarantee> findByOrderId(Long orderId) {
-		return GroupInsuranceGuarantee.dao.find("select * from crm_group_insurance_guarantee where order_id=? ",orderId);
+		return GroupInsuranceGuarantee.dao.find("select * from crm_group_insurance_guarantee where plan_id=? ",orderId);
 	}
 
 	@Override
-	public void deleteByOrderId(Long hiddenOrderIdForGuarantee) {
-      Db.delete("delete from crm_group_insurance_guarantee where order_id = ? ", hiddenOrderIdForGuarantee);		
+	public void deleteByPlanId(Long hiddenOrderIdForGuarantee) {
+      Db.delete("delete from crm_group_insurance_guarantee where plan_id = ? ", hiddenOrderIdForGuarantee);		
 	}
 
 	@Override
 	public GroupInsuranceGuarantee findByOrderIdAndPlan(Long hiddenOrderIdForImport, String name) {
-		return GroupInsuranceGuarantee.dao.findFirst("select * from crm_group_insurance_guarantee where order_id=? and name =? ",hiddenOrderIdForImport,name);
+		return GroupInsuranceGuarantee.dao.findFirst("select * from crm_group_insurance_guarantee where plan_id=? and name =? ",hiddenOrderIdForImport,name);
 	}
 
 }

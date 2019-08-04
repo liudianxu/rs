@@ -473,7 +473,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param hiddenOrderIdForGuarantee
 	 * @param guaranteeListForm
 	 * @return
-	 */
+	 *//*
 	public void saveGrantee() {
 		Map<String, Object> data = new HashMap<>();
 		// 获取参数组
@@ -610,13 +610,13 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	}
 
 
-	/**
+	*//**
 	 * 保存产品保障说明
 	 * 
 	 * @param hiddenOrderIdForGuaranteeDesc
 	 * @param guaranteeDesc
 	 * @return
-	 */
+	 *//*
 	public void saveGuaranteeDesc() {
 		Long hiddenOrderIdForGuarantee2 = getParaToLong("hiddenOrderIdForGuarantee2");
 		GroupInsuranceOrder groupInsuranceOrder = getModel(GroupInsuranceOrder.class);
@@ -632,7 +632,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		data.put("msg", "保存成功");
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 		renderJson(data);
-	}
+	}*/
 
 	/**
 	 * 保存人员
@@ -643,9 +643,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long hiddenOrderIdForGuarantee3 = getParaToLong("hiddenOrderIdForGuarantee3");
 		if(getPara("person")!=null) {
 	        int person = getParaToInt("person");
-	        if(person==0) {
+	       /* if(person==0) {
 				groupInsurancePersonService.deleteByOrderId(hiddenOrderIdForGuarantee3);
-			}
+			}*/
 		}
 		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderIdForGuarantee3);
 		

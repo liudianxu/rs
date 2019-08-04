@@ -8,6 +8,7 @@ import com.crm.model.group.GroupInsuranceGuarantee;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.group.GroupInsurancePersonLog;
+import com.crm.model.group.GroupInsurancePlan;
 import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Area;
 import com.crm.model.system.Permission;
@@ -46,6 +47,8 @@ public class MappingKit {
 		arp.addMapping("crm_area", Area.class);
 		arp.addMapping("crm_claim_report", ClaimReport.class);
 		arp.addMapping("crm_claim_push", ClaimReportPush.class);
+		arp.addMapping("crm_group_insurance_plan", GroupInsurancePlan.class);
+
 		
 	}
 	

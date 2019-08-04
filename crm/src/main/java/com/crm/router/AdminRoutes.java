@@ -8,6 +8,7 @@ import com.crm.controller.admin.customerinfo.CustomerInfoController;
 import com.crm.controller.admin.group.EmployerInsuranceController;
 import com.crm.controller.admin.group.GroupInsuranceController;
 import com.crm.controller.admin.group.GroupInsurancePersonController;
+import com.crm.controller.admin.group.GroupInsurancePlanController;
 import com.crm.controller.admin.groupinfo.GroupInfoController;
 import com.crm.controller.admin.system.PermissionController;
 import com.crm.controller.admin.system.RoleController;
@@ -43,6 +44,8 @@ public class AdminRoutes extends Routes {
 		add("admin/customermanage/customerInfo", CustomerInfoController.class, "/customermanage/customerInfo");
 		add("admin/customermanage/groupInfo", GroupInfoController.class, "/customermanage/groupInfo");
 		add("admin/claimreport", ClaimReportController.class, "/claimreport");
+		add("admin/groupInsurancePlan", GroupInsurancePlanController.class, "/group/groupInsurancePlan");
+
 	}
 
 }

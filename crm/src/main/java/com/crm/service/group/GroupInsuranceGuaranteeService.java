@@ -19,7 +19,7 @@ public interface GroupInsuranceGuaranteeService {
 
 	List<GroupInsuranceGuarantee> findByOrderId(Long orderId);
 
-	void deleteByOrderId(Long hiddenOrderIdForGuarantee);
+	void deleteByPlanId(Long hiddenOrderIdForGuarantee);
 
 	GroupInsuranceGuarantee findByOrderIdAndPlan(Long hiddenOrderIdForImport, String valueOf);
 

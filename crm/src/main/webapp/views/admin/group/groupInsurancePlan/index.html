@@ -1,0 +1,100 @@
+#@layout() #define main()
+<div class="layui-card">
+	<div class="headerttl">保障计划列表</div>
+	<div class="layui-card-body">
+		<div class='layui-form' lay-filter='form_pro'>
+			<div class='layui-row layui-col-space5'>
+				<!-- <div class="layui-input-inline layui-col-sm4 layui-col-md2">
+					<input name='customer_name' autocomplete='off' class='layui-input'
+						placeholder='客户名' />
+				</div> -->
+				<!-- <div class='layui-input-inline layui-col-sm4 layui-col-md2'>
+					<div class="layui-btn-container">
+						<button class="layui-btn" lay-submit='' lay-filter='submit'>
+							<i class="layui-icon layui-icon-search"></i>查询
+						</button>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
+	</div>
+</div>
+
+<script type="text/html" id="headBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurancePlan/add"))
+  		<div class='layui-btn-container'>
+			 <button class="layui-btn layui-btn-sm" lay-event='add'><i class="layui-icon layui-icon-add-1"></i>添加</button>
+		</div>
+#end#end
+	</script>
+
+<script type="text/html" id="actionBar">
+#if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurancePlan/edit"))
+	<a class="layui-btn  layui-btn-xs" lay-event="edit">修改</a>
+#end#end
+		</script>
+<script>
+	layui.use(['table','layedit','laydate','form'], function(){
+	  var table = layui.table
+	  ,form = layui.form
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	  
+	 var branchTable =  table.render({
+	    elem: '#branchTable'
+	    ,url:'/admin/groupInsurancePlan/selectByPage'
+	    ,cellMinWidth: 80
+	    ,toolbar: '#headBar'
+	    ,defaultToolbar: ['filter','print','exports']
+	    ,title: ''
+	    ,cols: [[
+	       {field:'name', title:'计划名称'},
+	       {field:'sn', title:'计划编号'}
+	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
+	    ]]
+	    ,page: true
+	  });
+	  
+	  //头工具栏事件
+	  table.on('toolbar(test)', function(obj){
+	    switch(obj.event){
+	      case 'add': 
+			  location.href="/admin/groupInsurancePlan/add";
+	      break;
+	    };
+	  });
+
+	  //监听行工具事件
+	  table.on('tool(test)', function(obj){
+	    var data = obj.data;
+	    if(obj.event === 'del'){
+	      layer.confirm('真的要删除该条记录吗？', function(index){
+	    	  $.get('/admin/groupInsurancePlan/delete', {id: data.id},
+	  				function(res) {
+	  					layer.msg(res.msg);
+	  		    		if(res.code == 1) {
+	  		    			 setTimeout("location.href='/admin/groupInsurancePlan'",500);
+	  		    		}
+	  				}, "json");
+	      });
+	    } else if(obj.event === 'edit'){
+	    	console.log('edit')
+			  location.href="/admin/groupInsurancePlan/edit?id="+data.id;
+	    }
+	  });
+	  form.render();
+	  form.on('submit(submit)',function(data){
+		  
+		  branchTable.reload({
+			  page:{
+				  curr: 1
+			  },
+			  where: data.field
+		  })
+		  console.log(data.field)
+	  })
+	});
+	</script>
+#end

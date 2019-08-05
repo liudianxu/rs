@@ -256,11 +256,15 @@
 					</div>
 					<div class='layui-form-item' style="display: inline-block;">
 						<div class='layui-inline theme-required'>
-							<div class='layui-form-label'>方案名称</div>
-							<div class='layui-input-inline'>
-								<input name='groupInsuranceOrder.plan_name' lay-verify='required' class='layui-input' autocomplete='off' value='#(order.plan_name)'
-								 placeholder='请输入' />
-							</div>
+							<div class='layui-form-label'>保障方案</div>
+								<div class='layui-input-inline'>
+							<select name='groupInsuranceOrder.plan_id' id="planId"  lay-verify='required' lay-search lay-verify>
+										<option value=''>请选择</option>
+										#for(plan:plans)
+										<option value='#(plan.id)' #if(order.plan_id==plan.id)selected #end>#(plan.name)</option>
+										#end
+									</select>
+									</div>
 						</div>
 					</div>
 					<div class='layui-form-item' style="display: inline-block;">

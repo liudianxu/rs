@@ -35,8 +35,9 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		DataGrid<GroupInsuranceOrder> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select o.*,b.name as BrandName,c.customer_name as customerName,(select count(p.id) from crm_group_insurance_person p where p.order_id=o.id and p.status in (0,1))  as person_num from crm_group_insurance_orders o ");
+		sql.append("select o.*,p.name as planName,b.name as BrandName,c.customer_name as customerName,(select count(p.id) from crm_group_insurance_person p where p.order_id=o.id and p.status in (0,1))  as person_num from crm_group_insurance_orders o ");
 		sql.append("left join crm_brand b on b.id=o.brand_id ");
+		sql.append("left join crm_group_insurance_plan p on p.id=o.plan_id ");
 		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
 		sql.append("where 1=1 ");
 		if(StringUtils.isNotBlank(map.get("order_sn"))){

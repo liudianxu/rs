@@ -26,6 +26,7 @@ import com.crm.model.group.GroupInsuranceGuarantee;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.group.GroupInsurancePersonLog;
+import com.crm.model.group.GroupInsurancePlan;
 import com.crm.model.group.Guarantee;
 import com.crm.model.group.GuaranteeDetail;
 import com.crm.poi.ImportExcelUtil;
@@ -145,6 +146,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		setAttr("groups", groupInfoService.selectList());
 		setAttr("admins", userService.selectList());
 		setAttr("customers", customerInfoService.selectList());
+		setAttr("plans", GroupInsurancePlan.findList());
 		render("add.html");
 	}
 	
@@ -158,7 +160,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		setAttr("brands", brandService.selectList());
 		setAttr("groups", groupInfoService.selectList());
 		setAttr("admins", userService.selectList());
-		
+		setAttr("plans", GroupInsurancePlan.findList());
+
 		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
 		//GroupInsuranceCompany company = GroupInsuranceCompany.dao.findById((Long)order.get("company_id"));
 		//setAttr("brands", brandService.selectList());

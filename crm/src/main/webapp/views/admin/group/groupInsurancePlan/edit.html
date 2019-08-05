@@ -10,7 +10,8 @@
 		</ul>
 			<div class='layui-tab-item layui-show'>
 						<form class="layui-tab-content layui-form1" action="/admin/groupInsurancePlan/savePlan">
-						
+									<input type="hidden" name="hiddenOrderIdForGuarantee" value="#(plan.id)" />
+					<input name='groupInsurancePlan.id' class='layui-input' value="#(plan.id)" style="display:none" />
 						<div class='layui-inline theme-required'>
 						<div class='layui-inline '>
 							<div class='layui-form-label'>计划名称</div>
@@ -34,7 +35,7 @@
 				</form>
 			</div>
 		 <div class='layui-tab-item'>
-			<form class="layui-tab-content layui-form2" action="/admin/groupInsurance/saveGrantee">
+			<form class="layui-tab-content layui-form2" action="/admin/groupInsurancePlan/saveGrantee">
 				<div class="bar">
 					<div class="buttonGroup">
 						<a class="layui-btn layui-btn-sm" id='addGuaranteeBtn'>
@@ -47,13 +48,7 @@
 						<tr class="tbttl">
 							<th>保障项目
 							</th>
-							<th>保障额度
-							</th>
 							<th>保障说明
-							</th>
-							<th>理赔说明
-							</th>
-							<th>保障提示
 							</th>
 							<th>方案一保额
 							</th>
@@ -69,6 +64,10 @@
 							</th>
 							<th>方案七保额
 							</th>
+							<th>方案八保额
+							</th>
+							<th>方案九保额
+							</th>
 							<th>操作
 							</th>
 						</tr>
@@ -77,22 +76,11 @@
 						<tr class="guaranteeClass">
 							<td><input type="text" name="guaranteeList[#(for.index)].item" param-guarantee-item class="layui-input"
 								 placeholder="保障项目" maxlength="200" style="width: 100px;" value="#(guarantee.item )" /></td>
-							<td><input type="text" name="guaranteeList[#(for.index)].quota" param-guarantee-quota class="layui-input"
-								 placeholder="保障额度" maxlength="200" style="width: 100px;" value="#(guarantee.quota )" /></td>
 							<td><input type="text" name="guaranteeList[#(for.index)].description" class="layui-input" placeholder="保障说明"
 								 param-guarantee-description maxlength="200" style="width: 150px;" value="#(guarantee.description )" /></td>
 							<td>
-								<input type="text" name="guaranteeList[#(for.index)].claimInfo" class="layui-input" placeholder="理赔说明"
-								 param-guarantee-claimInfo maxlength="200" style="width: 150px;" value="#(guarantee.claimInfo )" />
-							</td>
-							<td>
-								<input type="text" name="guaranteeList[#(for.index)].tip" class="layui-input" placeholder="保障提示"
-								 param-guarantee-tip maxlength="200" style="width: 150px;" value="#(guarantee.tip )" />
-							</td>
-							<td>
 								<input type="text" name="guaranteeList[#(for.index)].plan[0]" param-guarantee-plan0 class="layui-input plans"
 								 placeholder="方案一保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[0] )" />
-	
 							</td>
 							<td><input type="text" name="guaranteeList[#(for.index)].plan[1]" param-guarantee-plan1 class="layui-input plans"
 								 placeholder="方案二保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[1] )" /></td>
@@ -106,6 +94,10 @@
 								 placeholder="方案六保额" maxlength="200" style="width: 100px;" #if(guarantee.plan.size()>5) value="#(guarantee.plan[5] )#end" /></td>
 								 <td><input type="text" name="guaranteeList[#(for.index)].plan[6]" param-guarantee-plan6 class="layui-input plans"
 								 placeholder="方案七保额" maxlength="200" style="width: 100px;" #if(guarantee.plan.size()>6) value="#(guarantee.plan[6] )#end" /></td>
+								  <td><input type="text" name="guaranteeList[#(for.index)].plan[7]" param-guarantee-plan6 class="layui-input plans"
+								 placeholder="方案八保额" maxlength="200" style="width: 100px;" #if(guarantee.plan.size()>7) value="#(guarantee.plan[7] )#end" /></td>
+								  <td><input type="text" name="guaranteeList[#(for.index)].plan[8]" param-guarantee-plan6 class="layui-input plans"
+								 placeholder="方案九保额" maxlength="200" style="width: 100px;" #if(guarantee.plan.size()>8) value="#(guarantee.plan[8] )#end" /></td>
 							<td><a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]</a></td>
 						</tr>
 						#end
@@ -113,7 +105,7 @@
 				</div>
 				<table class="planPremiumTable layui-table" style="width: 600px;margin: 10px auto;">
 					<tr class="tbttl">
-						<th colspan="7" style="text-align: center;">方案保费</th>
+						<th colspan="9" style="text-align: center;">方案保费</th>
 					</tr>
 					<tr class="tbttl">
 						<th>方案1</th>
@@ -123,6 +115,8 @@
 						<th>方案5</th>
 						<th>方案6</th>
 						<th>方案7</th>
+							<th>方案8</th>
+								<th>方案9</th>
 					</tr>
 					<tr class="planPremium">
 						<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 #if(premiums.size()>0)value="#(premiums[0]??)"#end
@@ -139,17 +133,21 @@
 							class="layui-input" style="width: 100%;"></td>
 							<td style="padding: 9px 15px;"><input type="text" name="premium[6]" premium6 #if(premiums.size()>6)value="#(premiums[6]??)"#end
 							class="layui-input" style="width: 100%;"></td>
+								<td style="padding: 9px 15px;"><input type="text" name="premium[7]" premium7 #if(premiums.size()>7)value="#(premiums[7]??)"#end
+							class="layui-input" style="width: 100%;"></td>
+								<td style="padding: 9px 15px;"><input type="text" name="premium[8]" premium8 #if(premiums.size()>8)value="#(premiums[8]??)"#end
+							class="layui-input" style="width: 100%;"></td>
 					</tr>
 				</table>
 				<div class="layui-form-item" style="margin-top: 15px;text-align: center;">
 					<button class="layui-btn" lay-submit lay-filter="submit2">保存</button>
-					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurance'>返回</a>
+					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurancePlan'>返回</a>
 				</div>
 			</form>
 		</div>
 		<div class='layui-tab-item'>
-			<form class="layui-tab-content layui-form3" action="/admin/groupInsurance/saveGuaranteeDesc">
-				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="#(plan.id) />
+			<form class="layui-tab-content layui-form3" action="/admin/groupInsurancePlan/saveGuaranteeDesc">
+				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="#(plan.id)" />
 				<div class="layui-form-item layui-form-text">
 					<label class="layui-form-label">产品保障说明</label>
 					<div class="layui-input-block" style="margin-left: 114px;">
@@ -190,7 +188,7 @@
 				</div>
 				<div class="layui-form-item" style="text-align: center;">
 					<button class="layui-btn" lay-submit lay-filter="submit3">保存</button>
-					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurance'>返回</a>
+					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurancePlan'>返回</a>
 				</div>
 			</form>
 		</div> 
@@ -365,169 +363,11 @@
 			  console.log(verify_layedit.options)
 			  form.verify(verify_layedit.options)	 */
 
-			layui.use(['element', 'upload'], function() {
-				upload = layui.upload;
-				//指定允许上传的文件类型
-				upload.render({
-					elem: '#exportPersonBtn',
-					url: '/common/file/upload',
-					accept: 'file' //普通文件
-						,
-					multiple: true,
-					done: function(res) {
-						var hiddenOrderIdForImport = $("input[name='hiddenOrderIdForGuarantee3']").val();
-						console.log(hiddenOrderIdForImport);
-						if (hiddenOrderIdForImport == undefined || hiddenOrderIdForImport == null || hiddenOrderIdForImport == "") {
-							layer.msg("请先保存产品保障说明！");
-							return false;
-						}
-						$.ajax({
-							type: 'POST',
-							url: '/admin/groupInsurance/importPerson',
-							data: {
-								hiddenOrderIdForImport: hiddenOrderIdForImport,
-								filePath: res.data.filePath.trim()
-							},
-							dataType: "json",
-							success: function(data) {
-								// layer.msg(data.msg);
-								// if (data.code == ) {
-									// reloadPersonTable(data.orderId).
-									// then(function() { //成功
-									// 		form.render() //再选染
-									// 		
-									// 		
-									// 		
-									// 	})
-									// 	.catch(function(err) { //失败
-									// 		console.error('The code from queryPersonByOrderId = ' + err)
-									// 	})
-								// }
-								function trim(val){
-									return val == null ? '' : val
-								}
-								var html = '';
-								var lengths=data.persons.length;
-								data.persons.forEach(function(person, index) {
-									var selectHtml="";
-									$.ajax({
-										type: 'GET',
-										url: "/admin/groupInsurance/findGuaranteeSchemes",
-										data: {
-											orderId: hiddenOrderIdForImport
-										},
-										async: false,
-										dataType: "json",
-										success: function(data2) {
-											 selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
-											$.each(data2.guarantees, function(key, val) {
-												if (val == trim(person.guarantee_name)) {
-													selectHtml += '<option value="' + val + '" selected="selected">' + val + '</option>';
-												} else {
-													selectHtml += '<option value="' + val + '">' + val + '</option>';
-												}
-											});
-											selectHtml += '</select>';
-										}
-									})
-									
-									html += '<tr ';
-									if(person.isFail==1){
-										html += 'class="isFail" ';
-									}
-										html += '><td>'+
-										"<input type='text' name='name' groupInsurancePersonName id='' value='" + trim(person.name) + "' />"+
-										"</td><td>";
-										html +='<select name="gender" groupInsurancePersonGender class="layui-input">' +
-										'<option value="1"';
-									if (trim(person.genderStr) == "男") {
-										html += ' selected';
-									}
-									html += '>男</option><option value="0" ';
-									if (trim(person.genderStr) == "女") {
-										html += ' selected';
-									}
-									html += '>女</option>';
-									html += '</select>';
-									html +=	"</td><td>"+
-											"<input type='text' name='id_type' groupInsurancePersonId_type id='' disabled  value='" + trim(person.idTypeStr) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='id_num' groupInsurancePersonId_num id='' value='" + trim(person.id_num )+ "' />"+
-										"</td><td>"+
-											"<input type='text' name='phone' groupInsurancePersonPhone id='' value='" + trim(person.phone) + "' />"+
-										"</td><td>";
-										html +='<select  name="occupation_category" groupInsurancePersonOccupation_category class="layui-input">' +
-										'<option value="1"';
-									if (trim(person.occupation_category) == 1) {
-										html += 'selected';
-									}
-									html += '>1</option><option value="2"';
-									if (trim(person.occupation_category) == 2) {
-										html += 'selected';
-									}
-									html += '>2</option><option value="3"';
-									if (trim(person.occupation_category) == 3) {
-										html += 'selected';
-									}
-									html += '>3</option><option value="4"';
-									if (trim(person.occupation_category) == 4) {
-										html += 'selected';
-									}
-									html += '>4</option><option value="5"';
-									if (trim(person.occupation_category) == 5) {
-										html += 'selected';
-									}
-									html += '>5</option><option value="6"';
-									if (trim(person.occupation_category) == 6) {
-										html += 'selected';
-									}
-									html += '>6</option>';
-									html += '</select>' +
-										"</td><td>";
-									 html+=selectHtml;
-										html+="</td><td>"+
-											"<input type='text' name='policy_effective_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_effective_date id='' class='layui-input person_policy_effective_date"+index+"'  value='" + trim(person.policy_effective_date) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(person.policy_expiration_date) + "' />"+
-										"</td><td>"+
-											"<input type='text' name='policy_num' policy_num id='' value='" + trim(person.policy_num) + "' />"+
-										"</td></tr>";
-										/* "<div class='btn ok'"  +
-											
-											" data-name='"+ trim(person.name) + "' data-gender='"+ trim(person.gender) + "' data-id_type='" + trim(person.id_type) + "' data-id_num='" + trim(person.id_num) + "' data-phone='" + trim(person.phone) + "' data-occupation_category='" + trim(person.occupation_category) + "' data-guarantee_id='" + trim(person.guarantee_id) + "' data-remark='" + trim(person.remark) + "' data-policy_effective_date='" + trim(person.policy_effective_date) + "' data-policy_expiration_date='" + trim(person.policy_expiration_date) + "' data-policy_num='" + trim(person.policy_num) + "' data-id='" + trim(person.id) + "'" +
-											
-											" >修改</div>" +
-										
-										"</td> </tr>"*/
-								})
-								$('.show-excel-data').show();
-								$('.excel-cover').show();
-								$('.show-excel-data').find('tbody').append(html)
-								$('.show-excel-data').find('.tip').html(data.message)
-								form.render();
-								for(var i=0;i<lengths;i++){
-								laydate.render({
-									elem: '.person_policy_effective_date'+i,
-									format: 'yyyy-MM-dd HH:mm:ss',
-									trigger: 'click'
-								});
-								laydate.render({
-									elem: '.person_policy_expiration_date'+i,
-									format: 'yyyy-MM-dd HH:mm:ss',
-									trigger: 'click'
-								});
-								}
-								$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
-							}
-						});
-					}
-				})
-			})
 			form.on('submit(submit1)',
 				function(data) {
 					$.post($(".layui-form1").attr('action'), $(".layui-form1").serialize(),
 						function(res) {
-							layer.msg(res.msg);
+							layer.msg(res.message);
 							if (res.code == 1) {
 								$("input[name='groupInsuranceOrder.id']").val(res.orderId);
 								$("input[name='hiddenOrderIdForGuarantee']").val(res.orderId);
@@ -548,7 +388,7 @@
 					parameterss = serilize('#guaranteeTable')
 					data.field.guaranteeList = serilize('#guaranteeTable')
 					data.field.premiumList = serilizePremium('.planPremiumTable')
-					data.field.hiddenOrderIdForGuarantee = $("input[name='hiddenOrderIdForGuarantee']").val();
+					data.field.hiddenPlanForGuarantee = $("input[name='hiddenOrderIdForGuarantee']").val();
 					$.ajax({
 						url: $(".layui-form2").attr('action'),
 						type: 'post',
@@ -573,7 +413,7 @@
 						layer.msg("产品保障说明超出字数限制！");
 						return false;
 					}
-					var maxOccpation = $("input[name='groupInsuranceOrder.max_occupation_category']").val();
+					var maxOccpation = $("input[name='groupInsurancePlan.max_occupation_category']").val();
 					if(!(/^(\+|-)?\d+$/.test(maxOccpation)) || maxOccpation < 0){
 						layer.msg("最高职业类别必须是正整数！");   
 					    return false;  
@@ -585,7 +425,7 @@
 					}
 					$.post($(".layui-form3").attr('action'), $(".layui-form3").serialize(),
 						function(res) {
-							layer.msg(res.msg);
+							layer.msg(res.message);
 							if (res.code == 1) {
 								$("input[name='hiddenOrderIdForGuarantee3']").val(res.orderId);
 							}
@@ -670,6 +510,8 @@
 				premiumList.push(formWrap.find('[premium4]').val());
 				premiumList.push(formWrap.find('[premium5]').val());
 				premiumList.push(formWrap.find('[premium6]').val());
+				premiumList.push(formWrap.find('[premium7]').val());
+				premiumList.push(formWrap.find('[premium8]').val());
 				return premiumList
 			}
 
@@ -692,19 +534,7 @@
 			'<\/td>' +
 			'<td>' +
 			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
-			'].quota" param-guarantee-quota class="layui-input"  maxlength="200" style="width: 100px;" \/>' +
-			'<\/td>' +
-			'<td>' +
-			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
 			'].description" param-guarantee-description class="layui-input"  maxlength="200" style="width: 150px;" \/>' +
-			'<\/td>' +
-			'<td>' +
-			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
-			'].claimInfo" param-guarantee-claimInfo class="layui-input" maxlength="200" style="width: 150px;" \/>' +
-			'<\/td>' +
-			'<td>' +
-			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
-			'].tip" param-guarantee-tip class="layui-input"  maxlength="200" style="width: 150px;" \/>' +
 			'<\/td>' +
 			'<td class="planTD">' +
 			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
@@ -733,6 +563,14 @@
 			'<td class="planTD">' +
 			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
 			'].plan[6]" param-guarantee-plan6 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[7]" param-guarantee-plan7 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[8]" param-guarantee-plan8 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
 			'<\/td>' +
 			'<td class="actionTD">' +
 			'	<a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]<\/a>' +

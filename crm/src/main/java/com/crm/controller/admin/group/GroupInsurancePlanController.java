@@ -40,12 +40,23 @@ public class GroupInsurancePlanController extends BaseController {
 		BaseResponse res = new BaseResponse();
 		GroupInsurancePlan plan = getModel(GroupInsurancePlan.class);
 		plan.set("create_time", new Date());
+		if(plan.get("id")==null) {
 		if(plan.save()) {
          res.setCode(Constant.RESPONSE_CODE_SUCCESS);
          res.setData(plan.getLong("id"));
          res.setMessage("保存成功");
           renderJson(res);
 		  return;
+		}
+		}
+		else {
+			if(plan.update()) {
+		         res.setCode(Constant.RESPONSE_CODE_SUCCESS);
+		         res.setData(plan.getLong("id"));
+		         res.setMessage("保存成功");
+		          renderJson(res);
+				  return;
+				}
 		}
 		
 		
@@ -186,7 +197,7 @@ public class GroupInsurancePlanController extends BaseController {
 				pbjj.put("value", plan2.get(j));
 				newAray.add(pbjj);
 				}
-				if(newAray.size() == 0) {
+				if(newAray.size() == 0) { 	
 					continue;
 				}
 				guarant.set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));

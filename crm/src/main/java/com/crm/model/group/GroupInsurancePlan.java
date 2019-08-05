@@ -1,9 +1,8 @@
 package com.crm.model.group;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.List;
 
 import com.crm.component.DataGrid;
-import com.jfinal.core.paragetter.DateGetter;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
@@ -29,6 +28,17 @@ public class GroupInsurancePlan extends Model<GroupInsurancePlan>{
 		dataGrid.setCount(page.getTotalRow());
 		dataGrid.setData(page.getList());
 	return dataGrid;
+	}
+
+
+
+	public static List<GroupInsurancePlan> findList() {
+		SqlPara sqlPara = new SqlPara();
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from crm_group_insurance_plan  ");
+		sql.append("where 1=1 ");
+		sqlPara.setSql(sql.toString());
+		return GroupInsurancePlan.dao.find(sqlPara);
 	}
 
 }

@@ -34,6 +34,16 @@
 		</button>
        #end
        #end
+         #if(nodeUrl??)
+        #if(nodeUrl.contains("/admin/customermanage/customerInfo/export"))
+    	<button class="layui-btn layui-btn-sm" lay-event='export'>
+			<i class="layui-icon layui-icon-add-1"></i>导入
+		</button>
+       #end
+       #end
+	  	<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增客户模板.xls">
+								<i class="layui-icon"></i>导入模板
+							</a>
   	</div>
 </script>
 
@@ -45,6 +55,30 @@
 	  ,layer = layui.layer
 	  ,$ = layui.$;
 	  
+	  layui.use(['element', 'upload'], function() {
+			upload = layui.upload;
+			//指定允许上传的文件类型
+			upload.render({
+				elem: '#exportEmployPersonBtn',
+				url: '/common/file/upload',
+				accept: 'file' //普通文件
+					,
+				multiple: true,
+				done: function(res) {
+					$.ajax({
+						type: 'POST',
+						url: '/admin/groupInsurance/exportEmployerPersonBtn',
+						data: {
+							filePath: res.data.filePath.trim()
+						},
+						dataType: "json",
+						success: function(data) {
+							
+						}
+					})
+				}
+			})
+	  })
 	  
 	  table.render({
 	    elem: '#brandTable'

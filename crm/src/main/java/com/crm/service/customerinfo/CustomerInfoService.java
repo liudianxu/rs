@@ -55,4 +55,10 @@ public interface CustomerInfoService {
 	 * @return
 	 */
 	List<CustomerInfo> findByGroupId(Long id);
+
+	/**
+	 * 设置导入属性
+	 * @param lo
+	 */
+	void setSaveInfo( CustomerInfo customerInfo,List<Object> lo);
 }

@@ -8,8 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.crm.component.DataGrid;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.service.customerinfo.CustomerInfoService;
+import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
+import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
  * 客户信息服务接口实现类
@@ -86,6 +88,16 @@ public class CustomerInfoServiceImpl implements CustomerInfoService {
 	@Override
 	public List<CustomerInfo> findByGroupId(Long id) {
 		return CustomerInfo.dao.find("select * from crm_customer_info where group_id = ?",id);
+	}
+
+	@Override
+	@Before(Tx.class)
+	public void setSaveInfo( CustomerInfo customerInfo,List<Object> lo) {
+		customerInfo.set("name", lo.get(1));
+		customerInfo.set("cert_no", lo.get(2));
+		if(lo.get(3)!=null) {
+			
+		}
 	}
 
 }

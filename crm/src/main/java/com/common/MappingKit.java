@@ -13,6 +13,7 @@ import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Area;
 import com.crm.model.system.Permission;
 import com.crm.model.system.Role;
+import com.crm.model.system.RoleCustomers;
 import com.crm.model.system.RolePermission;
 import com.crm.model.system.Session;
 import com.crm.model.system.Setting;
@@ -31,6 +32,7 @@ public class MappingKit {
 		arp.addMapping("sys_role", Role.class);
 		arp.addMapping("sys_permission", Permission.class);
 		arp.addMapping("sys_role_permission", RolePermission.class);
+		arp.addMapping("sys_role_customer", RoleCustomers.class);
 		arp.addMapping("sys_user_role", UserRole.class);
 		
 		arp.addMapping("crm_setting", Setting.class);

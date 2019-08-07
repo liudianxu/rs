@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.crm.component.AuthTree;
 import com.crm.component.TreeGrid;
+import com.crm.model.cuntomerinfo.CustomerInfo;
+import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Permission;
 import com.crm.service.system.PermissionService;
 import com.jfinal.kit.Ret;
@@ -68,6 +70,57 @@ public class PermissionServiceImpl implements PermissionService {
 	public boolean existChildren(Long id) {
 		Permission permission =  Permission.dao.findFirst("select * from sys_permission where pid = ? ",id );
 		return permission==null?false:true;
+	}
+	
+	/**
+	 * 递归客户权限树
+	 */
+	public AuthTree<GroupInfo> selectGroupInfoAuthTree2(Long roleId){
+		StringBuffer sql = new StringBuffer();
+		sql.append("select * from crm_group_info");
+		List<GroupInfo> groupInfos =  GroupInfo.dao.find(sql.toString());
+		
+		//已选权限
+		List<CustomerInfo> roleCustomers = new ArrayList<>();
+		if(roleId!=null) {
+			roleCustomers =  CustomerInfo.dao.find("select c.* from sys_role_customer sc left join crm_customer_info c on c.id=sc.customerid    where sc.roleid = ? ",roleId);
+		} 
+		
+		StringBuffer customerSql = new StringBuffer();
+		customerSql.append("select * from crm_customer_info");
+		List<CustomerInfo> customerInfos =  CustomerInfo.dao.find(customerSql.toString());
+		
+		// 为一级菜单设置子菜单，list是递归调用的
+		for (GroupInfo groupInfo : groupInfos) {
+			groupInfo.put("list",getGroupInfoChild(groupInfo.getLong("id"), customerInfos,roleCustomers));
+		}
+		
+		 AuthTree<GroupInfo> authTree = new AuthTree<>();
+		 Map<String,List<GroupInfo>> map = new HashMap<>();
+		 map.put("trees", groupInfos);
+		 authTree.setData(map);
+		return authTree;
+		
+	}
+	
+	private List<CustomerInfo> getGroupInfoChild(Long id, List<CustomerInfo> customerInfos,List<CustomerInfo> roleCustomerInfos) {
+		// 子菜单
+		List<CustomerInfo> childList = new ArrayList<>();
+		for (CustomerInfo customerInfo : customerInfos) {
+			// 遍历所有节点，将父菜单id与传过来的id比较
+			if (customerInfo.get("group_id")!=null) {
+				if (customerInfo.get("group_id").equals(id)) {
+					childList.add(customerInfo);
+				}
+			}
+			//判断权限是否选中
+			for (CustomerInfo info : roleCustomerInfos) {//
+				if (customerInfo.getLong("id").equals(info.getLong("id"))) {
+					customerInfo.put("checked", true);
+				}
+			}
+		}
+		return childList;
 	}
 
 	/**

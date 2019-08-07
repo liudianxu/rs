@@ -238,7 +238,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	        List<List<Object>> listob = null;  
 
 	        if(filePath.isEmpty()){  
-	           data.put("msg", "文件导入错误！");  
+	           data.put("message", "文件导入错误！");  
 	        } else {
 	        	filePath = filePath.substring(filePath.indexOf("/upload"));
 	        	String pathPrefix = PathKit.getWebRootPath();
@@ -255,7 +255,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	        }
 	        
 	        if(listob.size() > 514) {
-	        	data.put("msg", "一次导入人数请不要超过500条！");
+	        	data.put("message", "一次导入人数请不要超过500条！");
 	        	renderJson(data);
 	        	return;
 	        }
@@ -264,7 +264,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	            List<Object> lo = listob.get(i);  
 	            if(i == 0) {
 	            	if(!"序号".equals(String.valueOf(lo.get(0)))) {
-	                	data.put("msg", "Excel文件格式不正确，请按模板导入！");
+	                	data.put("message", "Excel文件格式不正确，请按模板导入！");
 	                	renderJson(data);
 	                	return;
 	                } else {
@@ -275,6 +275,18 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	            if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2)))) {
 	            	//mes+="表格第"+i+"行存在未填写信息，请确认！";
 	            	continue;
+	            }
+	            if(customerInfoService.findByName(lo.get(1).toString())!=null) {
+	            	data.put("message", "已存在客户"+lo.get(1));
+                	renderJson(data);
+                	return;
+	            }
+	            if(StringUtils.isNotBlank(lo.get(7).toString())) {
+	            	if(groupInfoService.findByName(lo.get(7).toString())==null) {
+	            		data.put("message", "未找到集团！");
+	                	renderJson(data);
+	                	return;
+	            	}
 	            }
 	            CustomerInfo customerInfo = new CustomerInfo();
 	            customerInfoService.setSaveInfo(customerInfo,lo);

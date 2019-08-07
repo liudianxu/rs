@@ -48,4 +48,13 @@ public interface GroupInfoService {
 	 * @return
 	 */
 	List<GroupInfo> selectList();
+
+	/**
+	 * 根据名称获取集团信息
+	 * @param string
+	 * @return
+	 */
+	GroupInfo findByName(String string);
+
+	void setSaveInfo(GroupInfo groupInfo, List<Object> lo);
 }

@@ -61,4 +61,11 @@ public interface CustomerInfoService {
 	 * @param lo
 	 */
 	void setSaveInfo( CustomerInfo customerInfo,List<Object> lo);
+
+	/**
+	 * 根据名称获取
+	 * @param string
+	 * @return
+	 */
+	CustomerInfo findByName(String string);
 }

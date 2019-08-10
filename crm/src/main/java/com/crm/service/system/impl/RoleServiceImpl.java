@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.crm.component.DataGrid;
 import com.crm.model.system.Role;
+import com.crm.model.system.RoleCustomers;
 import com.crm.model.system.RolePermission;
 import com.crm.service.system.RoleService;
 import com.jfinal.aop.Before;
@@ -61,6 +62,36 @@ public class RoleServiceImpl implements RoleService {
 			rolePermissions.add(rolePermission);
 		}
 		Db.batchSave(rolePermissions, permissions.length);
+		}
+	}
+	
+	@Before(Tx.class)
+	@Override
+	public void saveCustomerAuthorize(Long roleId, String[] customers) {
+		//删除授权信息
+		Db.update("delete from sys_role_customer where roleid = ?", roleId);
+		//保存授权信息
+		if(customers!=null) {
+			
+		StringBuffer inStr = new StringBuffer();
+		for(int i=0; i<customers.length; i++) {
+				inStr.append("'")
+				.append(customers[i])
+				.append("'");
+				if(i < customers.length - 1) {
+					inStr.append(",");
+				}
+		}
+		List<RoleCustomers> roleCustomers = new ArrayList<>();
+		for(String customerId : customers) {
+			if(!customerId.contains("g")) {
+				RoleCustomers roleCustomer = new RoleCustomers();
+				roleCustomer.set("customerid", customerId)
+				.set("roleid", roleId);
+				roleCustomers.add(roleCustomer);
+			}
+		}
+		Db.batchSave(roleCustomers, customers.length);
 		}
 	}
 

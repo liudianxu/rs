@@ -83,6 +83,7 @@ public class RoleController extends BaseController<Role> {
 		Role role = getModel(Role.class);
 		String state = getPara("state");
 		String[] permissions = getParaValues("ids[]");
+		String[] customers = getParaValues("customerids[]");
 		//判断添加或者编辑
 		role.set("state", StrKit.equals(state, "on") ? 1 : 0);
 		if(role.getLong("id") == null) {
@@ -90,6 +91,7 @@ public class RoleController extends BaseController<Role> {
 			try {
 			renderJson(service.add(role));
 			service.saveAuthorize((Long)role.get("id"), permissions);
+			service.saveCustomerAuthorize((Long)role.get("id"), customers);
 			}
 			catch (Exception e) {
 				response.setCode(Constant.RESPONSE_CODE_FAIL);
@@ -100,6 +102,7 @@ public class RoleController extends BaseController<Role> {
 		
 		} else {//编辑
 			service.saveAuthorize((Long)role.get("id"), permissions);
+			service.saveCustomerAuthorize((Long)role.get("id"), customers);
 			renderJson(service.update(role));
 		}
 		response.setCode(Constant.RESPONSE_CODE_SUCCESS);

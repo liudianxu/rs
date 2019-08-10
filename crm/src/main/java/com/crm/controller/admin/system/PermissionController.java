@@ -2,7 +2,6 @@ package com.crm.controller.admin.system;
 
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.crm.controller.admin.BaseController;
@@ -39,8 +38,30 @@ public class PermissionController extends BaseController<Permission> {
 		renderJson(service.selectAuthTree2(roleId));
 	}
 	
+	/**
+	 * 查询授权树
+	 */
+	public void selectCustomerAuthTree() {
+		Long roleId = getParaToLong("roleId");
+		renderJson(service.selectGroupInfoAuthTree(roleId));
+	}
+	
    //	@Before(PermissionSaveValidator.class)
 	public void save() {
+		String state = getPara("state");
+		Permission permission = getModel(Permission.class);
+		permission.set("state", StrKit.equals(state, "on") ? 1 : 0);
+		if(permission.getLong("id")==null) {
+		permission.set("create_time", DateUtil.now());
+		renderJson(service.add(permission));
+		}
+		else {
+		renderJson(service.update(permission));
+		}
+		
+	}
+	
+	public void saveCustomer() {
 		String state = getPara("state");
 		Permission permission = getModel(Permission.class);
 		permission.set("state", StrKit.equals(state, "on") ? 1 : 0);

@@ -75,7 +75,7 @@ public class PermissionServiceImpl implements PermissionService {
 	/**
 	 * 递归客户权限树
 	 */
-	public AuthTree<GroupInfo> selectGroupInfoAuthTree2(Long roleId){
+	public AuthTree<GroupInfo> selectGroupInfoAuthTree(Long roleId){
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from crm_group_info");
 		List<GroupInfo> groupInfos =  GroupInfo.dao.find(sql.toString());
@@ -92,21 +92,44 @@ public class PermissionServiceImpl implements PermissionService {
 		
 		// 为一级菜单设置子菜单，list是递归调用的
 		for (GroupInfo groupInfo : groupInfos) {
-			groupInfo.put("list",getGroupInfoChild(groupInfo.getLong("id"), customerInfos,roleCustomers));
+			groupInfo.put("name",groupInfo.get("group_name"));
+			groupInfo.put("value",groupInfo.get("id")+"g");
+			List<CustomerInfo> childList = getGroupInfoChild(groupInfo.getLong("id"), groupInfo,customerInfos,roleCustomers);
+			for (CustomerInfo customerInfo : childList) {
+				if(customerInfo.get("checked").equals(true)) {
+					groupInfo.put("checked", true);
+					break;
+				}
+			}
+			groupInfo.put("list",childList);
 		}
 		
 		 AuthTree<GroupInfo> authTree = new AuthTree<>();
 		 Map<String,List<GroupInfo>> map = new HashMap<>();
-		 map.put("trees", groupInfos);
+		 List<GroupInfo> tops = new ArrayList<>();
+		 GroupInfo info = new GroupInfo();
+		 info.put("name","顶级");
+		 info.put("value","g");
+		 info.put("list",groupInfos);
+		 for (GroupInfo groupInfo : groupInfos) {
+			 if(groupInfo.get("checked")!=null) {
+				 info.put("checked", true);
+				}
+		}
+		 tops.add(info);
+		 map.put("trees", tops);
 		 authTree.setData(map);
 		return authTree;
 		
 	}
 	
-	private List<CustomerInfo> getGroupInfoChild(Long id, List<CustomerInfo> customerInfos,List<CustomerInfo> roleCustomerInfos) {
+	private List<CustomerInfo> getGroupInfoChild(Long id,GroupInfo groupInfo, List<CustomerInfo> customerInfos,List<CustomerInfo> roleCustomerInfos) {
 		// 子菜单
 		List<CustomerInfo> childList = new ArrayList<>();
 		for (CustomerInfo customerInfo : customerInfos) {
+			customerInfo.put("checked", false);
+			customerInfo.put("name",customerInfo.get("customer_name"));
+			customerInfo.put("value",customerInfo.get("id"));
 			// 遍历所有节点，将父菜单id与传过来的id比较
 			if (customerInfo.get("group_id")!=null) {
 				if (customerInfo.get("group_id").equals(id)) {

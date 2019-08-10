@@ -23,6 +23,8 @@ public interface RoleService {
 	 * @param permissions
 	 */
 	void saveAuthorize(Long roleId, String[] permissions);
+	
+	void saveCustomerAuthorize(Long roleId, String[] customers);
 
 	DataGrid<Role> selectByPage(Page<Role> page, Kv params);
 

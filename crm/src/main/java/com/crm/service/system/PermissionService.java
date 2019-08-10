@@ -4,10 +4,11 @@ package com.crm.service.system;
 import java.util.List;
 import java.util.Map;
 
-import com.crm.model.system.Permission;
-import com.jfinal.kit.Ret;
 import com.crm.component.AuthTree;
 import com.crm.component.TreeGrid;
+import com.crm.model.groupinfo.GroupInfo;
+import com.crm.model.system.Permission;
+import com.jfinal.kit.Ret;
 
 public interface PermissionService {
 
@@ -25,6 +26,8 @@ public interface PermissionService {
 	boolean existChildren(Long id);
 
 	AuthTree<Permission> selectAuthTree2(Long roleId);
+	
+	AuthTree<GroupInfo> selectGroupInfoAuthTree(Long roleId);
 
 	int deletePermissionByRoleId(Long long1);
 

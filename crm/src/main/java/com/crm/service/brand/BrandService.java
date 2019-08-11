@@ -53,4 +53,6 @@ public interface BrandService {
 	 * @return
 	 */
 	List<Brand> selectList();
+
+	Brand findByName(String string);
 }

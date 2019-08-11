@@ -76,8 +76,18 @@
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/add"))
   		<div class='layui-btn-container'>
 			 <button class="layui-btn layui-btn-sm" lay-event='add'><i class="layui-icon layui-icon-add-1"></i>添加</button>
-       <!-- <button class="layui-btn layui-btn-sm" lay-event='add'>导出Excel</button> -->
-		</div>
+		
+    #if(nodeUrl??)
+        #if(nodeUrl.contains("/admin/groupInsurance/export"))
+    	<button class="layui-btn layui-btn-sm" id="export" lay-event='export'>
+			<i class="layui-icon layui-icon-add-1"></i>导入
+		</button>
+       #end
+       #end
+	  	<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增保单模板.xls">
+								<i class="layui-icon"></i>导入模板
+							</a>
+</div>
 #end#end
 	</script>
 <!-- {{#  } else if(d.status==2||d.status==3){ }}
@@ -107,7 +117,7 @@
 	    ,url:'/admin/groupInsurance/selectByPage?insurance_type=3'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
-	    ,defaultToolbar: ['filter','print','exports']
+	    ,defaultToolbar: ['filter','print']
 	    ,title: ''
 	    ,cols: [[
 		  // {field:'status', title:'状态'},
@@ -188,6 +198,164 @@
 	    };
 	  });
 
+	  
+	  
+	  
+	  layui.use(['element', 'upload'], function() {
+			upload = layui.upload;
+			//指定允许上传的文件类型
+			upload.render({
+				elem: '#export',
+				url: '/common/file/upload',
+				accept: 'file' //普通文件
+					,
+				multiple: true,
+				done: function(res) {
+					$.ajax({
+						type: 'POST',
+						url: '/admin/groupInsurance/importOrder',
+						data: {
+							filePath: res.data.filePath.trim()
+						},
+						dataType: "json",
+						success: function(data) {
+							// layer.msg(data.msg);
+							// if (data.code == ) {
+								// reloadPersonTable(data.orderId).
+								// then(function() { //成功
+								// 		form.render() //再选染
+								// 		
+								// 		
+								// 		
+								// 	})
+								// 	.catch(function(err) { //失败
+								// 		console.error('The code from queryPersonByOrderId = ' + err)
+								// 	})
+							// }
+							function trim(val){
+								return val == null ? '' : val
+							}
+							var html = '';
+							var lengths=data.persons.length;
+							data.persons.forEach(function(person, index) {
+								var selectHtml="";
+								$.ajax({
+									type: 'GET',
+									url: "/admin/groupInsurance/findGuaranteeSchemes",
+									data: {
+										orderId: hiddenOrderIdForImport
+									},
+									async: false,
+									dataType: "json",
+									success: function(data2) {
+										 selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
+										$.each(data2.guarantees, function(key, val) {
+											if (val == trim(person.guarantee_name)) {
+												selectHtml += '<option value="' + val + '" selected="selected">' + val + '</option>';
+											} else {
+												selectHtml += '<option value="' + val + '">' + val + '</option>';
+											}
+										});
+										selectHtml += '</select>';
+									}
+								})
+								
+								html += '<tr ';
+								if(person.isFail==1){
+									html += 'class="isFail" ';
+								}
+									html += '><td>'+
+									"<input type='text' name='name' groupInsurancePersonName id='' value='" + trim(person.name) + "' />"+
+									"</td><td>";
+									html +='<select name="gender" groupInsurancePersonGender class="layui-input">' +
+									'<option value="1"';
+								if (trim(person.genderStr) == "男") {
+									html += ' selected';
+								}
+								html += '>男</option><option value="0" ';
+								if (trim(person.genderStr) == "女") {
+									html += ' selected';
+								}
+								html += '>女</option>';
+								html += '</select>';
+								html +=	"</td><td>"+
+										"<input type='text' name='id_type' groupInsurancePersonId_type id='' disabled  value='" + trim(person.idTypeStr) + "' />"+
+									"</td><td>"+
+										"<input type='text' name='id_num' groupInsurancePersonId_num id='' value='" + trim(person.id_num )+ "' />"+
+									"</td><td>"+
+										"<input type='text' name='phone' groupInsurancePersonPhone id='' value='" + trim(person.phone) + "' />"+
+									"</td><td>";
+									html +='<select  name="occupation_category" groupInsurancePersonOccupation_category class="layui-input">' +
+									'<option value="1"';
+								if (trim(person.occupation_category) == 1) {
+									html += 'selected';
+								}
+								html += '>1</option><option value="2"';
+								if (trim(person.occupation_category) == 2) {
+									html += 'selected';
+								}
+								html += '>2</option><option value="3"';
+								if (trim(person.occupation_category) == 3) {
+									html += 'selected';
+								}
+								html += '>3</option><option value="4"';
+								if (trim(person.occupation_category) == 4) {
+									html += 'selected';
+								}
+								html += '>4</option><option value="5"';
+								if (trim(person.occupation_category) == 5) {
+									html += 'selected';
+								}
+								html += '>5</option><option value="6"';
+								if (trim(person.occupation_category) == 6) {
+									html += 'selected';
+								}
+								html += '>6</option>';
+								html += '</select>' +
+									"</td><td>";
+								 html+=selectHtml;
+									html+="</td><td>"+
+										"<input type='text' name='policy_effective_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_effective_date id='' class='layui-input person_policy_effective_date"+index+"'  value='" + trim(person.policy_effective_date) + "' />"+
+									"</td><td>"+
+										"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(person.policy_expiration_date) + "' />"+
+									"</td><td>"+
+										"<input type='text' name='policy_num' policy_num id='' value='" + trim(person.policy_num) + "' />"+
+									"</td></tr>";
+									/* "<div class='btn ok'"  +
+										
+										" data-name='"+ trim(person.name) + "' data-gender='"+ trim(person.gender) + "' data-id_type='" + trim(person.id_type) + "' data-id_num='" + trim(person.id_num) + "' data-phone='" + trim(person.phone) + "' data-occupation_category='" + trim(person.occupation_category) + "' data-guarantee_id='" + trim(person.guarantee_id) + "' data-remark='" + trim(person.remark) + "' data-policy_effective_date='" + trim(person.policy_effective_date) + "' data-policy_expiration_date='" + trim(person.policy_expiration_date) + "' data-policy_num='" + trim(person.policy_num) + "' data-id='" + trim(person.id) + "'" +
+										
+										" >修改</div>" +
+									
+									"</td> </tr>"*/
+							})
+							$('.show-excel-data').show();
+							$('.excel-cover').show();
+							$('.show-excel-data').find('tbody').append(html)
+							$('.show-excel-data').find('.tip').html(data.message)
+							form.render();
+							for(var i=0;i<lengths;i++){
+							laydate.render({
+								elem: '.person_policy_effective_date'+i,
+								format: 'yyyy-MM-dd HH:mm:ss',
+								trigger: 'click'
+							});
+							laydate.render({
+								elem: '.person_policy_expiration_date'+i,
+								format: 'yyyy-MM-dd HH:mm:ss',
+								trigger: 'click'
+							});
+							}
+							$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
+						}
+					});
+				}
+			})
+		})
+	  
+	  
+	  
+	  
 	  //监听行工具事件
 	  table.on('tool(test)', function(obj){
 	    var data = obj.data;

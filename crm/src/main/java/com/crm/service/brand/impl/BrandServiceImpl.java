@@ -85,4 +85,9 @@ public class BrandServiceImpl implements BrandService {
 		return Brand.dao.find("select * from crm_brand  ");
 	}
 
+	@Override
+	public Brand findByName(String string) {
+		return Brand.dao.findFirst("select * from crm_brand  where name = ?",string);
+	}
+
 }

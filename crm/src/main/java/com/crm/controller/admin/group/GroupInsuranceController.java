@@ -16,11 +16,11 @@ import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
+import com.crm.model.brand.Brand;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceGuarantee;
 import com.crm.model.group.GroupInsuranceOrder;
@@ -29,6 +29,7 @@ import com.crm.model.group.GroupInsurancePersonLog;
 import com.crm.model.group.GroupInsurancePlan;
 import com.crm.model.group.Guarantee;
 import com.crm.model.group.GuaranteeDetail;
+import com.crm.model.groupinfo.GroupInfo;
 import com.crm.poi.ImportExcelUtil;
 import com.crm.service.brand.BrandService;
 import com.crm.service.customerinfo.CustomerInfoService;
@@ -42,7 +43,6 @@ import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
 import com.crm.util.DateUtil;
 import com.crm.util.IDCardUtils;
-import com.crm.util.JsonUtil;
 import com.crm.util.ModelUtil;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.paragetter.Para;
@@ -470,6 +470,107 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		return;
 	}
 	
+	/**
+	 * 导入保单
+	 */
+	public void importOrder(@Para("filePath") String filePath) {
+		Map<String, Object> data = new HashMap<>();
+        InputStream in =null;  
+        List<List<Object>> listob = null;  
+        if(filePath.isEmpty()){  
+           data.put("msg", "文件导入错误！");  
+        } else {
+        	filePath = filePath.substring(filePath.indexOf("/upload"));
+        	String pathPrefix = PathKit.getWebRootPath();
+        	File file = new File(pathPrefix + filePath);
+        	try {
+    			in = new FileInputStream(file);
+    			listob = new ImportExcelUtil().getBankListByExcel(in, file.getName(), 14);  
+    			in.close();  
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}  
+        }
+        
+        if(listob.size() > 514) {
+        	data.put("msg", "一次导入人数请不要超过500条！");
+        	renderJson(data);
+        	return;
+        }
+        List<GroupInsuranceOrder> orders = new ArrayList<>();
+        String mes="";
+        //该处可调用service相应方法进行数据保存到数据库中，现只对数据输出  
+        for (int i = 0; i < listob.size(); i++) {  
+            List<Object> lo = listob.get(i);  
+            if(i == 0) {
+            	if(!"序号".equals(String.valueOf(lo.get(0)))) {
+                	data.put("msg", "Excel文件格式不正确，请按模板导入！");
+                	renderJson(data);
+                	return;
+                } else {
+                	continue;
+                }
+            }
+            GroupInsuranceOrder insuranceOrder = new GroupInsuranceOrder();
+            //姓名、证件类型、证件号码、保障方案、职位类别中有一项为空就不保存
+            if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2))) 
+            		|| StringUtils.isBlank(String.valueOf(lo.get(3))) || StringUtils.isBlank(String.valueOf(lo.get(4))) 
+            		|| StringUtils.isBlank(String.valueOf(lo.get(5)))||
+            		StringUtils.isBlank(String.valueOf(lo.get(6)))||
+            				StringUtils.isBlank(String.valueOf(lo.get(7)))||
+                    		StringUtils.isBlank(String.valueOf(lo.get(8)))||
+                    		StringUtils.isBlank(String.valueOf(lo.get(9)))||
+                    		StringUtils.isBlank(String.valueOf(lo.get(10)))||
+                            		StringUtils.isBlank(String.valueOf(lo.get(11)))) {
+            	mes+="表格第"+i+"行存在未填写信息，请确认！";
+            	continue;
+            }
+            GroupInfo group=groupInfoService.findByName(lo.get(1).toString());
+            if(group==null) {
+            	mes+="表格第"+i+"行未找到该集团名称！";
+            }
+            insuranceOrder.put("groupName",lo.get(1).toString());
+            CustomerInfo customerInfo=customerInfoService.findByName(String.valueOf(lo.get(2)).toString());
+            if(customerInfo==null) {
+            	mes+="表格第"+i+"行未找到该客户名称！";
+            }
+            insuranceOrder.put("customerName",lo.get(2).toString());
+            Brand brand = brandService.findByName(lo.get(3).toString());
+            if(brand==null) {
+            	mes+="表格第"+i+"行未找到该保险公司名称！";
+            }
+            insuranceOrder.put("brandName",lo.get(3).toString());
+            CustomerInfo customerInfo2=customerInfoService.findByName(String.valueOf(lo.get(4)).toString());
+            if(customerInfo2==null) {
+            	mes+="表格第"+i+"行未找到该投保人名称！";
+            }
+            insuranceOrder.put("insureName",lo.get(4).toString());
+            Brand brand2 = brandService.findByName(lo.get(5).toString());
+            if(brand2==null) {
+            	mes+="表格第"+i+"行未找到该保险人名称！";
+            }
+            insuranceOrder.put("insuranceName",lo.get(5).toString());
+            insuranceOrder.set("policy_num",lo.get(6).toString());
+            GroupInsurancePlan plan = GroupInsurancePlan.findBySn(lo.get(7).toString());
+            if(plan==null) {
+            	mes+="表格第"+i+"行未找到该计划编号！";
+            }
+            insuranceOrder.put("planSn",lo.get(7).toString());
+            insuranceOrder.set("policy_effective_date",lo.get(8).toString() + " 00:00:00");
+            insuranceOrder.set("policy_expiration_date",lo.get(9).toString() + " 23:59:59");
+            insuranceOrder.set("premium",lo.get(10).toString());
+            insuranceOrder.set("person_num",lo.get(11).toString());
+            insuranceOrder.set("contacts",lo.get(12).toString());
+            insuranceOrder.set("phone",lo.get(13).toString());
+            insuranceOrder.set("email",lo.get(14).toString());
+            insuranceOrder.set("brokerage_charges",lo.get(15).toString());
+
+
+        }
+	}
+        
 	/**
 	 * 保存保障方案
 	 * 

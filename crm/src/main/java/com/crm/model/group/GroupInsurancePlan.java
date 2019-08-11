@@ -41,4 +41,10 @@ public class GroupInsurancePlan extends Model<GroupInsurancePlan>{
 		return GroupInsurancePlan.dao.find(sqlPara);
 	}
 
+
+
+	public static GroupInsurancePlan findBySn(String string) {
+		return GroupInsurancePlan.dao.findFirst("select * from crm_group_insurance_plan   where sn = ? ",string);
+	}
+
 }

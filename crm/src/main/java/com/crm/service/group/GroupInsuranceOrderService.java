@@ -102,4 +102,6 @@ public interface GroupInsuranceOrderService {
 	boolean isComplete(Long orderId);
 
 	GroupInsuranceOrder findByPolicyNum(String string);
+	
+	List<GroupInsuranceOrder> selectAll(String substring, String type);
 }

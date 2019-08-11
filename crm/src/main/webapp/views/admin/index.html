@@ -15,79 +15,20 @@
      </tr>
     </thead>
     <tbody>
-     <tr>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
+    #for(groupInsuranceOrder:groupInsuranceOrders)
+    <tr>
+      <td>#(groupInsuranceOrder.groupName)</td>
+      <td>#(groupInsuranceOrder.order_sn)</td>
+      <td>#(groupInsuranceOrder.premium)</td>
+      <td>#(groupInsuranceOrder.person_num*groupInsuranceOrder.premium)</td>
+      <td>#(groupInsuranceOrder.person_num)</td>
       <td>
-    		<div class="btns">
-    			<div class="btn_detail">查看</div>
-     		</div>
+           <a class="btns" href="/admin/groupInsurance/edit?id=#(groupInsuranceOrder.id)">
+               <div class="btn_detail">查看</div>
+           </a>
       </td>
      </tr>
-     <tr>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>
-    		<div class="btns">
-    			<div class="btn_detail">查看</div>
-     		</div>
-      </td>
-     </tr>
-     <tr>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>
-    		<div class="btns">
-    			<div class="btn_detail">查看</div>
-     		</div>
-      </td>
-     </tr>
-     <tr>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>
-    		<div class="btns">
-    			<div class="btn_detail">查看</div>
-     		</div>
-      </td>
-     </tr>
-     <tr>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>
-    		<div class="btns">
-    			<div class="btn_detail">查看</div>
-     		</div>
-      </td>
-     </tr>
-     <tr>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>
-    		<div class="btns">
-    			<div class="btn_detail">查看</div>
-     		</div>
-      </td>
-     </tr>
-     
+    #end
     </tbody>
    </table>
   </div>

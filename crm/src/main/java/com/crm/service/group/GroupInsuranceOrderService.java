@@ -100,4 +100,6 @@ public interface GroupInsuranceOrderService {
 	 * @return
 	 */
 	boolean isComplete(Long orderId);
+
+	List<GroupInsuranceOrder> selectAll(String substring, String type);
 }

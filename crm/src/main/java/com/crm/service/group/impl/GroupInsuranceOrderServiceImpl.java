@@ -80,6 +80,26 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		dataGrid.setData(page.getList());
 	return dataGrid;
 	}
+	
+	@Override
+	public List<GroupInsuranceOrder> selectAll(String customerIds,String type) {
+		SqlPara sqlPara = new SqlPara();
+		StringBuffer sql = new StringBuffer();
+		sql.append("select o.*,p.name as planName,b.name as BrandName,c.customer_name as customerName,(select count(p.id) from crm_group_insurance_person p where p.order_id=o.id and p.status in (0,1))  as person_num from crm_group_insurance_orders o ");
+		sql.append("left join crm_brand b on b.id=o.brand_id ");
+		sql.append("left join crm_group_insurance_plan p on p.id=o.plan_id ");
+		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
+		sql.append("where 1=1 ");
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and c.id in ("+customerIds+")");
+		}
+		if(StringUtils.isNotBlank(type)){
+			sql.append(" and o.insurance_type = "+type);
+		}
+		sql.append(" order by o.create_time desc ");
+		sqlPara.setSql(sql.toString());
+		return GroupInsuranceOrder.dao.find(sqlPara);
+	}
 
 	@Override
 	public GroupInsuranceOrder create(GroupInsuranceOrder order) throws Exception {

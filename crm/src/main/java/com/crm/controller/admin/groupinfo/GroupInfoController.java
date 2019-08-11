@@ -273,7 +273,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 	            	continue;
 	            }
 	            if(groupInfoService.findByName(lo.get(1).toString())!=null) {
-	            	data.put("message", "已存在客户"+lo.get(1));
+	            	data.put("message", "已存在集团"+lo.get(1));
               	renderJson(data);
               	return;
 	            }

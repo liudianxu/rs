@@ -199,4 +199,9 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		return GroupInsuranceOrder.dao.findFirst("select * from crm_group_insurance_orders where policy_num = ?",string);
 	}
 
+	@Override
+	public List<GroupInsuranceOrder> findByGroupId(Long long1) {
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ?",long1);
+	}
+
 }

@@ -11,19 +11,54 @@
       <td>合同金额</td>
       <td>当前金额</td>
       <td>合同人数</td>
+      <td>当前人数</td>
+     <!--  <td>操作</td> -->
+     </tr>
+    </thead>
+    <tbody>
+    #for(info:infos)
+    <tr>
+      <td>#(info.group_name)</td>
+      <td>#(info.orderCount)</td>
+      <td>#(info.totalPre)</td>
+      <td>#(info.fre)</td>
+      <td>#(info.totalNum)</td>
+        <td>#(info.personNum)</td>
+    <!--   <td>
+           <a class="btns" href="/admin/groupInsurance/edit?id=">
+               <div class="btn_detail">查看</div>
+           </a>
+      </td> -->
+     </tr>
+    #end
+    </tbody>
+   </table>
+  </div>
+  
+    <div class="table_index">
+   <table>
+    <thead>
+     <tr>
+      <td>客户</td>
+      <td>合同</td>
+      <td>合同金额</td>
+      <td>当前金额</td>
+      <td>合同人数</td>
+      <td>当前人数</td>
       <td>操作</td>
      </tr>
     </thead>
     <tbody>
-    #for(groupInsuranceOrder:groupInsuranceOrders)
+    #for(customer:customers)
     <tr>
-      <td>#(groupInsuranceOrder.groupName)</td>
-      <td>#(groupInsuranceOrder.order_sn)</td>
-      <td>#(groupInsuranceOrder.premium)</td>
-      <td>#(groupInsuranceOrder.person_num*groupInsuranceOrder.premium)</td>
-      <td>#(groupInsuranceOrder.person_num)</td>
+      <td>#(customer.customer_name)</td>
+      <td>#(customer.orderCount)</td>
+      <td>#(customer.totalPre)</td>
+      <td>#(customer.fre)</td>
+      <td>#(customer.totalNum)</td>
+        <td>#(customer.personNum)</td>
       <td>
-           <a class="btns" href="/admin/groupInsurance/edit?id=#(groupInsuranceOrder.id)">
+           <a class="btns" href="/admin/groupInsurance">
                <div class="btn_detail">查看</div>
            </a>
       </td>

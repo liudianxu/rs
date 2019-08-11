@@ -685,6 +685,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            groupInsuranceOrder.set("brokerage_charges", job.get("brokerage_charges"));
 	            groupInsuranceOrder.set("create_time", new Date());
 	            groupInsuranceOrder.set("insurance_type", 3);
+	            groupInsuranceOrder.set("relation_type", 0);
 	            groupInsuranceOrder.set("order_sn", snService.generate(Sn.Type.groupInsuranceOrder));
 	            groupInsuranceOrder.set("status",GroupInsuranceOrder.Status.unfinished.ordinal());
 	            groupInsuranceOrder.set("step_one", 1);

@@ -58,4 +58,6 @@ public interface GroupInfoService {
 	GroupInfo findByName(String string);
 
 	void setSaveInfo(GroupInfo groupInfo, List<Object> lo);
+
+	List<GroupInfo> findByCustomerIds(String substring);
 }

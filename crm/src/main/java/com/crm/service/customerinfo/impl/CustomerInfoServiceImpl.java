@@ -168,4 +168,9 @@ private GroupInfoService groupInfoService;
 		return CustomerInfo.dao.findFirst("select * from crm_customer_info where customer_name =? ",string);
 	}
 
+	@Override
+	public List<CustomerInfo> findByIds(String customerIds) {
+		return CustomerInfo.dao.find("select * from crm_customer_info where id in("+customerIds+")");
+	}
+
 }

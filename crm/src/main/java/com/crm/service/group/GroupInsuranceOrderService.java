@@ -104,4 +104,6 @@ public interface GroupInsuranceOrderService {
 	GroupInsuranceOrder findByPolicyNum(String string);
 	
 	List<GroupInsuranceOrder> selectAll(String substring, String type);
+
+	List<GroupInsuranceOrder> findByGroupId(Long long1);
 }

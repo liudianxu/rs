@@ -1,5 +1,6 @@
 package com.crm.service.groupinfo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -7,8 +8,15 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.crm.component.DataGrid;
+import com.crm.model.cuntomerinfo.CustomerInfo;
+import com.crm.model.group.GroupInsuranceOrder;
+import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.groupinfo.GroupInfo;
+import com.crm.service.customerinfo.CustomerInfoService;
+import com.crm.service.group.GroupInsuranceOrderService;
+import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.groupinfo.GroupInfoService;
+import com.jfinal.aop.Inject;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
 
@@ -19,6 +27,12 @@ import com.jfinal.plugin.activerecord.SqlPara;
  */
 public class GroupInfoServiceImpl implements GroupInfoService {
 
+	@Inject
+    private GroupInsuranceOrderService ordersService;
+	@Inject
+	private GroupInsurancePersonService personService;
+	@Inject
+	private CustomerInfoService cusService;
 	/**
 	 * 分页列表
 	 */
@@ -26,17 +40,17 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	public DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page,String customerIds) {
 		DataGrid<GroupInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from crm_group_info g ");
-		sql.append("left join crm_customer_info c on c.group_id =g.id where 1=1");
+		sql.append("select DISTINCT g.* from crm_group_info g ");
+		//sql.append("left join crm_customer_info c on c.group_id =g.id where 1=1");
 		if(StringUtils.isNotBlank(params.get("groupName"))){
 			sql.append(" and g.group_name like '%").append(params.get("groupName")).append("%' ");
 		}
 		if(StringUtils.isNotBlank(params.get("certNo"))){
 			sql.append(" and g.cert_no ="+params.get("certNo"));
 		}
-		if(StringUtils.isNotBlank(customerIds)){
+		/*if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" and c.id in ("+customerIds+")");
-		}
+		}*/
 		sql.append(" order by g.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
@@ -153,6 +167,48 @@ public class GroupInfoServiceImpl implements GroupInfoService {
         	groupInfo.set("email",lo.get(6));
         }
         groupInfo.set("create_time", new Date()).save();		
+	}
+
+	@Override
+	public List<GroupInfo> findByCustomerIds(String customerIds) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select DISTINCT g.* from crm_group_info g ");
+		sql.append("left join crm_customer_info c on c.group_id =g.id  ");
+		//sql.append("left join crm_group_insurance_orders o on o.insure_customer_id =c.id where 1=1");
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and c.id in ("+customerIds+")");
+		}
+		sql.append(" order by g.create_time desc ");
+		SqlPara sqlPara = new SqlPara();
+		sqlPara.setSql(sql.toString());
+		
+		List<GroupInfo> infos = GroupInfo.dao.find(sqlPara);
+		for (GroupInfo groupInfo : infos) {
+			 List<GroupInsuranceOrder> orders = ordersService.findByGroupId(groupInfo.getLong("id"));
+			 groupInfo.put("orderCount",orders.size());
+			 BigDecimal amount = BigDecimal.ZERO;
+			 BigDecimal fre = BigDecimal.ZERO;
+			 int num=0;
+			 int personNum=0;
+			 for (GroupInsuranceOrder order : orders) {
+				 amount=amount.add(order.getBigDecimal("premium"));
+				 num=num+order.getInt("person_num");
+				 List<GroupInsurancePerson> persons = personService.findByOrderId(order.getLong("id"));
+				   for (GroupInsurancePerson person : persons) {
+	    			   if(person.get("premium")!=null) {
+	    				   if(person.getInt("status")==0||person.getInt("status")==1) {
+	    				   fre = fre.add(person.getBigDecimal("premium"));
+	    				   personNum=personNum+1;
+	    				   }
+				}
+	    		   }
+			 }
+			 groupInfo.put("totalPre",amount);
+			 groupInfo.put("totalNum",num);
+			 groupInfo.put("fre",fre);
+			 groupInfo.put("personNum",personNum);
+		}
+		return infos;
 	}
 
 

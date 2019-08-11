@@ -69,4 +69,6 @@ public interface CustomerInfoService {
 	 * @return
 	 */
 	CustomerInfo findByName(String string);
+
+	List<CustomerInfo> findByIds(String customerIds);
 }

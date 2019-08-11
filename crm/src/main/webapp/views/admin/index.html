@@ -2,6 +2,151 @@
 #define main()
 <!-- 内容主体区域 -->
 <div id="container">
-	
+  <div class="table_index">
+   <table>
+    <thead>
+     <tr>
+      <td>集团</td>
+      <td>合同</td>
+      <td>合同金额</td>
+      <td>当前金额</td>
+      <td>合同人数</td>
+      <td>操作</td>
+     </tr>
+    </thead>
+    <tbody>
+     <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>
+    		<div class="btns">
+    			<div class="btn_detail">查看</div>
+     		</div>
+      </td>
+     </tr>
+     <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>
+    		<div class="btns">
+    			<div class="btn_detail">查看</div>
+     		</div>
+      </td>
+     </tr>
+     <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>
+    		<div class="btns">
+    			<div class="btn_detail">查看</div>
+     		</div>
+      </td>
+     </tr>
+     <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>
+    		<div class="btns">
+    			<div class="btn_detail">查看</div>
+     		</div>
+      </td>
+     </tr>
+     <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>
+    		<div class="btns">
+    			<div class="btn_detail">查看</div>
+     		</div>
+      </td>
+     </tr>
+     <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>
+    		<div class="btns">
+    			<div class="btn_detail">查看</div>
+     		</div>
+      </td>
+     </tr>
+     
+    </tbody>
+   </table>
+  </div>
 </div>
+<style>
+  .table_index{
+   margin: 15px;
+   display: block;
+   box-shadow: 3px 3px 6px #b6bbbb;
+  }
+  .table_index table{
+   width: 100%;
+   border-collapse: collapse;
+   border: none;
+   table-layout: fixed;
+  }
+   .table_index table tbody td{
+   	border: 1px solid #009688;
+   	padding: 5px;
+   	text-align: left;
+   	font-size: 14px;
+   	color: #666;
+	vertical-align: middle;
+   }
+    .table_index table tbody tr:nth-child(2n+1){
+   	background-color:#d4e3e5
+   }
+    .table_index table tbody tr:nth-child(2n){
+    background-color:#c3dde0;
+   }
+   
+  
+   .table_index table thead td{
+   border: 1px solid #ededed;
+   	padding: 5px;
+   	text-align: left;
+   	font-size: 14px;
+   	font-weight: 600;
+   	text-align: center;
+   	color: #fff;
+   	background: #009688;
+   }
+    .table_index table tbody td .btns{
+    	display: block;
+    	font-size: 0;
+    	background: transparents;
+    	text-align: center;
+    }
+     .table_index table tbody td .btns .btn_detail{
+     	display: inline-block;
+     	padding: 1px;
+     	background: #009688;
+     	border: 2px solid #009688;
+     	font-size: 12px;
+     	color: #fff;
+     	min-width: 35px;
+     	text-align: center;
+     	white-space: nowrap;
+     	border-radius: 2px;
+     }
+ </style>
 #end

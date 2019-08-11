@@ -55,10 +55,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 		//查询参数
 		params.put("groupName", getPara("group_name"));
 		params.put("certNo", getPara("certn_no"));
-		DataGrid<GroupInfo> dataGrid = groupInfoService.selectPage(params, getPage());
-		List<GroupInfo> groupInfos = dataGrid.getData();
-		List<GroupInfo> infos = new ArrayList<GroupInfo>();
-		List<Long> groupIds = new ArrayList<Long>();
+		String customerIds = "";
 		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
 		if (sessionId != null) {
 			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
@@ -70,21 +67,12 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
 				if(CollectionUtil.isNotEmpty(customers)) {
 					for (CustomerInfo customerInfo : customers) {
-						CustomerInfo customerInfo2 = CustomerInfo.dao.findById(customerInfo.getLong("id"));
-						groupIds.add(customerInfo2.getLong("group_id"));
+						customerIds += customerInfo.getLong("id")+",";
 					}
 				}
 			}
 		}
-		if(CollectionUtil.isNotEmpty(groupInfos)) {
-			for (GroupInfo groupInfo : groupInfos) {
-				if(groupIds.contains(groupInfo.getLong("id"))) {
-					infos.add(groupInfo);
-				}
-			}
-		}
-		dataGrid.setData(infos);
-		renderJson(dataGrid);
+		renderJson(groupInfoService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1)));
 	}
 	
 	/**

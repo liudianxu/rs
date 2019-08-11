@@ -23,17 +23,21 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	 * 分页列表
 	 */
 	@Override
-	public DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page) {
+	public DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page,String customerIds) {
 		DataGrid<GroupInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from crm_group_info where 1=1 ");
+		sql.append("select * from crm_group_info g ");
+		sql.append("left join crm_customer_info c on c.group_id =g.id where 1=1");
 		if(StringUtils.isNotBlank(params.get("groupName"))){
-			sql.append(" and group_name like '%").append(params.get("groupName")).append("%' ");
+			sql.append(" and g.group_name like '%").append(params.get("groupName")).append("%' ");
 		}
 		if(StringUtils.isNotBlank(params.get("certNo"))){
-			sql.append(" and cert_no ="+params.get("certNo"));
+			sql.append(" and g.cert_no ="+params.get("certNo"));
 		}
-		sql.append(" order by create_time desc ");
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and c.id in ("+customerIds+")");
+		}
+		sql.append(" order by g.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<GroupInfo> groupInfos = GroupInfo.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);

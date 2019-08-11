@@ -1,17 +1,32 @@
 package com.crm.controller.admin.group;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
+import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
+import com.crm.model.system.User;
 import com.crm.service.group.GroupInsurancePersonService;
+import com.crm.service.system.AdminLoginService;
+import com.crm.service.system.PermissionService;
+import com.crm.util.Constant;
 import com.jfinal.aop.Inject;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
 
 public class GroupInsurancePersonController extends BaseController<GroupInsurancePerson>{
 	@Inject
 	private GroupInsurancePersonService personService;
+	@Inject
+    private AdminLoginService adminLoginService;
+	@Inject
+	private PermissionService permissionService;
 	
 	
 	public void index() {
@@ -35,7 +50,24 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
        params.put("orderId", getPara("orderId"));
        params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
-		renderJson(personService.selectPage(params, getPage()));
+       String customerIds = "";
+     		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+     		if (sessionId != null) {
+     			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+     			if (admin == null) {
+     				String loginIp = HttpUtil.getClientIP(this.getRequest());
+     				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+     			}
+     			if (admin != null) {
+     				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+     				if(CollectionUtil.isNotEmpty(customers)) {
+     					for (CustomerInfo customerInfo : customers) {
+     						customerIds += customerInfo.getLong("id")+",";
+     					}
+     				}
+     			}
+     		}
+	   renderJson(personService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1)));
 	}
 	
 	public void add() {

@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,8 @@ import com.crm.model.group.GroupInsurancePlan;
 import com.crm.model.group.Guarantee;
 import com.crm.model.group.GuaranteeDetail;
 import com.crm.model.groupinfo.GroupInfo;
+import com.crm.model.system.Sn;
+import com.crm.model.system.User;
 import com.crm.poi.ImportExcelUtil;
 import com.crm.service.brand.BrandService;
 import com.crm.service.customerinfo.CustomerInfoService;
@@ -37,7 +40,10 @@ import com.crm.service.group.GroupInsuranceGuaranteeService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.groupinfo.GroupInfoService;
+import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.EmailService;
+import com.crm.service.system.PermissionService;
+import com.crm.service.system.SnService;
 import com.crm.service.system.UserService;
 import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
@@ -49,6 +55,9 @@ import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
 public class GroupInsuranceController extends BaseController<GroupInsuranceOrder>{
 	@Inject
 	private GroupInsuranceOrderService groupInsuranceOrderService;
@@ -68,6 +77,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	private EmailService emailService;
 	@Inject
 	private GroupInsurancePersonService personService;
+	@Inject
+    private AdminLoginService adminLoginService;
+	@Inject
+	private PermissionService permissionService;
+    @Inject
+    private SnService snService;
 	
 	//团险理赔类型
 	public static final int GROUP_CLAIM_TYPE =1;
@@ -96,8 +111,25 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
        params.put("type", getPara("type"));
        params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
+       String customerIds = "";
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}
+		}
 		
-       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage());
+       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
        List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
        for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
     	   if(groupInsuranceOrder.getInt("insurance_type")==0) {
@@ -485,7 +517,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
         	File file = new File(pathPrefix + filePath);
         	try {
     			in = new FileInputStream(file);
-    			listob = new ImportExcelUtil().getBankListByExcel(in, file.getName(), 14);  
+    			listob = new ImportExcelUtil().getBankListByExcel(in, file.getName(), 13);  
     			in.close();  
     		} catch (IOException e) {
     			e.printStackTrace();
@@ -557,20 +589,131 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             if(plan==null) {
             	mes+="表格第"+i+"行未找到该计划编号！";
             }
+            GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(lo.get(6).toString());
+            if(order2!=null) {
+            	mes+="表格第"+i+"行已存在该保单号！";
+            }
             insuranceOrder.put("planSn",lo.get(7).toString());
-            insuranceOrder.set("policy_effective_date",lo.get(8).toString() + " 00:00:00");
-            insuranceOrder.set("policy_expiration_date",lo.get(9).toString() + " 23:59:59");
+            
+            String date1=(String) lo.get(8);
+            String date2=(String) lo.get(9);
+            Date String1=getDate(Integer.parseInt(date1.substring(0,date1.length()-3)));
+            Date String2=getDate(Integer.parseInt(date2.substring(0,date2.length()-3)));
+            DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+            insuranceOrder.set("policy_effective_date", formater.format(String1) + " 00:00:00");
+            insuranceOrder.set("policy_expiration_date",formater.format(String2) + " 23:59:59");
             insuranceOrder.set("premium",lo.get(10).toString());
             insuranceOrder.set("person_num",lo.get(11).toString());
             insuranceOrder.set("contacts",lo.get(12).toString());
             insuranceOrder.set("phone",lo.get(13).toString());
             insuranceOrder.set("email",lo.get(14).toString());
             insuranceOrder.set("brokerage_charges",lo.get(15).toString());
-
-
+            if(StringUtils.isNotBlank(mes)) {
+            	insuranceOrder.put("isFail",1);
+            }
+            else {
+            	insuranceOrder.put("isFail",0);
+            }
+            orders.add(insuranceOrder);
+            if(StringUtils.isNotBlank(mes)) {
+                data.put("code", Constant.RESPONSE_CODE_FAIL);
+                data.put("message", mes);
+            }
+            else {
+                data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+                data.put("message", "导入成功");
+            }
+            data.put("orders", orders);
+        	renderJson(data);
+        	return;
         }
 	}
         
+	public void saveImportOrder() throws Exception {
+		Map<String, Object> resp = new HashMap<>();
+
+		String data = HttpKit.readData(getRequest());
+		JSONArray jsonArray = JSONArray.parseArray(data);
+		List<GroupInsuranceOrder> orders = new ArrayList<>();
+		//List<GroupInsurancePerson> persons = JsonUtil.jsonToList(JsonKit.toJson(data),GroupInsurancePerson.class);
+		String mes="";
+		 for (int m=0;m<jsonArray.size();m++) {  
+			 int h=m+1;
+			JSONObject job = jsonArray.getJSONObject(m); 
+			 GroupInsuranceOrder groupInsuranceOrder = new GroupInsuranceOrder();
+			 GroupInfo group=groupInfoService.findByName(job.getString("groupName"));
+	            if(group==null) {
+	            	mes+="表格第"+h+"行未找到该集团名称！";
+	            }
+	            else {
+	            	groupInsuranceOrder.set("insure_group_id", group.getLong("id"));
+	            }
+	            CustomerInfo customerInfo=customerInfoService.findByName(job.getString("customerName"));
+	            if(customerInfo==null) {
+	            	mes+="表格第"+h+"行未找到该客户名称！";
+	            }
+	            else {
+	            	groupInsuranceOrder.set("insure_customer_id", customerInfo.getLong("id"));
+	            }
+	            Brand brand = brandService.findByName(job.getString("brandName"));
+	            if(brand==null) {
+	            	mes+="表格第"+h+"行未找到该保险公司名称！";
+	            }
+	            else {
+	            	groupInsuranceOrder.set("brand_id", brand.getLong("id"));
+	            }	            	
+
+	            GroupInsurancePlan plan = GroupInsurancePlan.findBySn(job.getString("planSn"));
+	            if(plan==null) {
+	            	mes+="表格第"+h+"行未找到该计划编号！";
+	            }
+	            else {
+	            	groupInsuranceOrder.set("plan_id", plan.getLong("id"));
+	            }
+	            GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(job.getString("policy_num"));
+	            if(order2!=null) {
+	            	mes+="表格第"+h+"行已存在该保单号！";
+	            }
+	            groupInsuranceOrder.set("policy_num", job.get("policy_num"));
+	            groupInsuranceOrder.set("policy_effective_date", job.get("policy_effective_date"));
+	            groupInsuranceOrder.set("policy_expiration_date", job.get("policy_expiration_date"));
+	            groupInsuranceOrder.set("premium", job.get("premium"));
+	            groupInsuranceOrder.set("person_num", job.get("person_num"));
+	            groupInsuranceOrder.set("contacts", job.get("contacts"));
+	            groupInsuranceOrder.set("phone", job.get("phone"));
+	            groupInsuranceOrder.set("email", job.get("email"));
+	            groupInsuranceOrder.set("brokerage_charges", job.get("brokerage_charges"));
+	            groupInsuranceOrder.set("create_time", new Date());
+	            groupInsuranceOrder.set("insurance_type", 3);
+	            groupInsuranceOrder.set("order_sn", snService.generate(Sn.Type.groupInsuranceOrder));
+	            groupInsuranceOrder.set("status",GroupInsuranceOrder.Status.unfinished.ordinal());
+	            groupInsuranceOrder.set("step_one", 1);
+	            groupInsuranceOrder.set("step_two", 1);
+	            groupInsuranceOrder.set("step_three", 1);
+	            //是雇主责任险 直接为已出单
+	    		//已过生效时间
+	    		Date date = new Date();
+	    		/*if(date.getTime()>policyEffectiveDate.getTime()) {
+	    			order.set("status", 3);
+	    		}*/
+	            orders.add(groupInsuranceOrder);
+	            
+	            if(StringUtils.isNotBlank(mes)) {
+	  	    	  resp.put("code", Constant.RESPONSE_CODE_FAIL);
+	  	    	  resp.put("message", mes);
+	  	        }
+	  	        else {
+	  	        	resp.put("code", Constant.RESPONSE_CODE_SUCCESS);
+	  	        	resp.put("message", "导入成功");
+	  	        	Db.batchSave(orders, 1000);
+	  	        }
+	            resp.put("orders", orders);
+	        	renderJson(resp);
+	        	return;
+		 }
+		
+		
+	}
 	/**
 	 * 保存保障方案
 	 * 
@@ -3106,7 +3249,31 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		String insurance_type = getPara("insurance_type");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
-		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type));
+		String customerIds = "";
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}
+		}
+		DataGrid<GroupInsurancePersonLog> dataGrid = GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type,customerIds.substring(0,customerIds.length()-1));
+		renderJson(dataGrid);
 	}
 	
+	public static Date getDate(int days) {  
+	    Calendar c = Calendar.getInstance();  
+	    c.set(1900, 0, 1);  
+	    c.add(Calendar.DATE, days - 2);  
+	    return c.getTime();  
+	}  
 }

@@ -31,7 +31,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
     @Inject
     private SnService snService;
 	@Override
-	public DataGrid<GroupInsuranceOrder> selectPage(Map<String, String> map, Page<GroupInsuranceOrder> page) {
+	public DataGrid<GroupInsuranceOrder> selectPage(Map<String, String> map, Page<GroupInsuranceOrder> page,String customerIds) {
 		DataGrid<GroupInsuranceOrder> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
@@ -69,6 +69,9 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		}
 		if(StringUtils.isNotBlank(map.get("policy_expiration_date"))){
 			sql.append(" and o.policy_expiration_date = "+"'"+map.get("policy_expiration_date")+" 23:59:59'");
+		}
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and c.id in ("+customerIds+")");
 		}
 		sql.append(" order by o.create_time desc ");
 		sqlPara.setSql(sql.toString());
@@ -169,6 +172,11 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 	@Override
 	public List<GroupInsuranceOrder> queryByCustomerId(Long id) {
 		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_customer_id = ?",id);
+	}
+
+	@Override
+	public GroupInsuranceOrder findByPolicyNum(String string) {
+		return GroupInsuranceOrder.dao.findFirst("select * from crm_group_insurance_orders where policy_num = ?",string);
 	}
 
 }

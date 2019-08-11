@@ -70,7 +70,161 @@
 		</div>
 		<table class="layui-hide" id="branchTable" lay-filter="test"></table>
 	</div>
+	<div class="excel-cover" style="display: none"></div>
+<div class='show-excel-data' style="display: none">
+	<div class='inner'>
+		<div class="ttl">表格信息</div>
+		<table id="excel-table-id">
+			<thead>
+				<tr>
+					<td>集团名称</td>
+					<td>客户名称</td>
+				    <td>保险公司名称</td>
+					<td>投保人</td>
+					<td>保险人</td>
+					<td>保单号</td>
+					<td>计划编号</td>
+					<td>生效日期</td>
+					<td>终止日期</td>
+					<td>保费</td>
+					<td>人数</td>
+					<td>联系人</td>
+					<td>联系电话</td>
+					<td>联系邮箱</td>
+					<td>经纪费比例</td>
+				<!-- 	<td>操作</td> -->
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<div class="tip"></div>
+		<div class="btns">
+			<div class="btn submit" onclick="submitExcel()">提交</div>
+			<div class="btn cancel" onclick="hideExcel()">取消</div>
+		</div>
+	</div>
 </div>
+</div>
+<style type="text/css">
+	.show-excel-data {
+		position: fixed;
+		max-height: 90%;
+		max-width: 90%;
+		top: 50%;
+		left: 50%;
+		transform: translate3d(-50%, -50%, 0);
+		background: #fff;
+		padding: 10px;
+		border: 2px solid #009688;
+		z-index: 10000000000000000;
+	}
+
+	.show-excel-data .isFail td {
+		border-bottom: solid 1px red;
+	}
+
+	.show-excel-data .ttl {
+		padding: 0 80px 0 20px;
+		height: 42px;
+		line-height: 42px;
+		border-bottom: 1px solid #eee;
+		font-size: 14px;
+		color: #fff;
+		overflow: hidden;
+		background-color: #009688;
+		margin: -12px -12px 0;
+		border: 0;
+		margin-bottom: 10px;
+	}
+
+	.excel-cover {
+		position: fixed;
+		background: #1c1d1d;
+		opacity: 0.8;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		z-index: 99999999999;
+	}
+
+	.show-excel-data #excel-table-id {
+		table-layout: fixed;
+		border: none;
+		border-collapse: collapse;
+		width: 100%;
+		font-size: 12px;
+	}
+
+	.show-excel-data td {
+		border: 1px solid #b6bbbb;
+	}
+
+	.show-excel-data #excel-table-id thead {
+		background: #efefef;
+	}
+
+	.show-excel-data #excel-table-id thead td {
+		padding: 5px;
+		color: #000;
+	}
+
+	.show-excel-data #excel-table-id tbody td {
+		padding: 0;
+		background: #fff;
+	}
+
+	.show-excel-data #excel-table-id tbody td input {
+		padding: 5px;
+		font-size: 12px;
+		color: #1C1D1D;
+		width: 100%;
+		box-sizing: border-box;
+		outline: none;
+		border: none;
+	}
+
+	.show-excel-data .tip {
+		line-height: 20px;
+		color: #FD482C;
+		font-size: 12px;
+	}
+
+	.btns {
+		padding: 5px;
+		text-align: right;
+	}
+
+	.show-excel-data .btn {
+		margin: 0 10px;
+		cursor: pointer;
+
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		margin: 5px 5px 0;
+		border: 1px solid #1E9FFF;
+		background-color: #009688;
+		color: #fff;
+		border-radius: 2px;
+		font-weight: 400;
+		cursor: pointer;
+		text-decoration: none;
+		min-width: 48px;
+		text-align: center;
+	}
+
+	.show-excel-data .btn.ok,
+	.show-excel-data .btn.submit {
+		background-color: #009688;
+		color: #fff;
+	}
+
+	.show-excel-data .btn.cancel {
+		background-color: #fff;
+		color: #333;
+	}
+</style>
 
 <script type="text/html" id="headBar">
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/add"))
@@ -105,6 +259,45 @@
         <a class="layui-btn  layui-btn-xs" lay-event="view">查看</a>
 #end#end
 		</script>
+		<script type="text/javascript">
+	function submitExcel(){
+		var data = [];
+		
+		var $tr = $('#excel-table-id').find("tbody tr");
+		
+		$tr.each(function(key, val){
+			var _data = {}
+			$(val).find('input[type=text]').each(function(key,val){
+				_data[$(val).attr('name')] = $(val).val();
+			})
+			$(val).find('select').each(function(key,val){
+				_data[$(val).attr('name')] = $(val).val();
+			})
+			data.push(_data)
+		})
+		dataJson = JSON.stringify(data);
+		console.log('data',data);
+		
+		$.post({
+			url: '/admin/groupInsurance/saveImportOrder',
+			data: dataJson,
+			contentType: 'application/json',
+			success: function(res){
+				res.code || $('.tip').html(res.message);
+				if(res.code){
+					setTimeout("location.href='/admin/groupInsurance'", 500);
+				}
+			}
+		})
+		
+	}
+	function hideExcel(){
+		$('.show-excel-data').hide();
+		$('.show-excel-data').find('tbody').html('');
+		$('.show-excel-data').find('tip').html('');
+		$('.excel-cover').hide();
+	}
+</script>
 <script>
 	layui.use(['table','layedit','laydate','form'], function(){
 	  var table = layui.table
@@ -236,90 +429,44 @@
 								return val == null ? '' : val
 							}
 							var html = '';
-							var lengths=data.persons.length;
-							data.persons.forEach(function(person, index) {
-								var selectHtml="";
-								$.ajax({
-									type: 'GET',
-									url: "/admin/groupInsurance/findGuaranteeSchemes",
-									data: {
-										orderId: hiddenOrderIdForImport
-									},
-									async: false,
-									dataType: "json",
-									success: function(data2) {
-										 selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
-										$.each(data2.guarantees, function(key, val) {
-											if (val == trim(person.guarantee_name)) {
-												selectHtml += '<option value="' + val + '" selected="selected">' + val + '</option>';
-											} else {
-												selectHtml += '<option value="' + val + '">' + val + '</option>';
-											}
-										});
-										selectHtml += '</select>';
-									}
-								})
+							var lengths=data.orders.length;
+							data.orders.forEach(function(order, index) {
+								
 								
 								html += '<tr ';
-								if(person.isFail==1){
+								if(order.isFail==1){
 									html += 'class="isFail" ';
 								}
 									html += '><td>'+
-									"<input type='text' name='name' groupInsurancePersonName id='' value='" + trim(person.name) + "' />"+
-									"</td><td>";
-									html +='<select name="gender" groupInsurancePersonGender class="layui-input">' +
-									'<option value="1"';
-								if (trim(person.genderStr) == "男") {
-									html += ' selected';
-								}
-								html += '>男</option><option value="0" ';
-								if (trim(person.genderStr) == "女") {
-									html += ' selected';
-								}
-								html += '>女</option>';
-								html += '</select>';
-								html +=	"</td><td>"+
-										"<input type='text' name='id_type' groupInsurancePersonId_type id='' disabled  value='" + trim(person.idTypeStr) + "' />"+
+									"<input type='text' name='groupName' groupName id='' value='" + trim(order.groupName) + "' />"+
 									"</td><td>"+
-										"<input type='text' name='id_num' groupInsurancePersonId_num id='' value='" + trim(person.id_num )+ "' />"+
+										"<input type='text' name='customerName' customerName id=''   value='" + trim(order.customerName) + "' />"+
 									"</td><td>"+
-										"<input type='text' name='phone' groupInsurancePersonPhone id='' value='" + trim(person.phone) + "' />"+
-									"</td><td>";
-									html +='<select  name="occupation_category" groupInsurancePersonOccupation_category class="layui-input">' +
-									'<option value="1"';
-								if (trim(person.occupation_category) == 1) {
-									html += 'selected';
-								}
-								html += '>1</option><option value="2"';
-								if (trim(person.occupation_category) == 2) {
-									html += 'selected';
-								}
-								html += '>2</option><option value="3"';
-								if (trim(person.occupation_category) == 3) {
-									html += 'selected';
-								}
-								html += '>3</option><option value="4"';
-								if (trim(person.occupation_category) == 4) {
-									html += 'selected';
-								}
-								html += '>4</option><option value="5"';
-								if (trim(person.occupation_category) == 5) {
-									html += 'selected';
-								}
-								html += '>5</option><option value="6"';
-								if (trim(person.occupation_category) == 6) {
-									html += 'selected';
-								}
-								html += '>6</option>';
-								html += '</select>' +
-									"</td><td>";
-								 html+=selectHtml;
-									html+="</td><td>"+
-										"<input type='text' name='policy_effective_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_effective_date id='' class='layui-input person_policy_effective_date"+index+"'  value='" + trim(person.policy_effective_date) + "' />"+
+										"<input type='text' name='brandName' brandName id='' value='" + trim(order.brandName )+ "' />"+
 									"</td><td>"+
-										"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(person.policy_expiration_date) + "' />"+
+										"<input type='text' name='insureName' insureName id='' value='" + trim(order.insureName) + "' />"+
 									"</td><td>"+
-										"<input type='text' name='policy_num' policy_num id='' value='" + trim(person.policy_num) + "' />"+
+									"<input type='text' name='insuranceName' insuranceName id='' value='" + trim(order.insuranceName) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='policy_num' policy_num id='' value='" + trim(order.policy_num) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='planSn' planSn id='' value='" + trim(order.planSn) + "' />"+
+									"</td><td>"+
+										"<input type='text' name='policy_effective_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_effective_date id='' class='layui-input person_policy_effective_date"+index+"'  value='" + trim(order.policy_effective_date) + "' />"+
+									"</td><td>"+
+										"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(order.policy_expiration_date) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='premium' premium id='' value='" + trim(order.premium) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='person_num' person_num id='' value='" + trim(order.person_num) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='contacts' contacts id='' value='" + trim(order.contacts) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='phone' phone id='' value='" + trim(order.phone) + "' />"+
+									"</td><td>"+
+									"<input type='text' name='email' email id='' value='" + trim(order.email) + "' />"+
+									"</td><td>"+
+										"<input type='text' name='brokerage_charges' brokerage_charges id='' value='" + trim(order.brokerage_charges) + "' />"+
 									"</td></tr>";
 									/* "<div class='btn ok'"  +
 										

@@ -312,6 +312,17 @@ public class PermissionServiceImpl implements PermissionService {
 		}
 		return Permission.dao.find(sb.toString(), userId,type);
 	}
+	
+	@Override
+	public List<CustomerInfo> findCustomerByUserId(Long userId) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("select s.* from crm_customer_info s  ");
+		sb.append("left join sys_role_customer sp on sp.customerid = s.id ");
+		sb.append("left join sys_role sr on sr.id = sp.roleid ");
+		sb.append("left join sys_user_role sur on sur.roleid=sr.id ");
+		sb.append("where sur.userid = ? ");
+		return CustomerInfo.dao.find(sb.toString(), userId);
+	}
 
 	@Override
 	public List<Permission> findChildren(Long id) {

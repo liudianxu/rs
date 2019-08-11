@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.groupinfo.GroupInfo;
@@ -19,12 +21,16 @@ import com.crm.poi.ImportExcelUtil;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.AreaService;
+import com.crm.service.system.PermissionService;
 import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
 /**
  * 客户信息控制类
  * @author chenglongw
@@ -38,6 +44,8 @@ public class GroupInfoController extends BaseController<GroupInfo> {
     private AdminLoginService adminLoginService;
     @Inject
 	private AreaService areaService;
+    @Inject
+	private PermissionService permissionService;
     
      /**
       * 列表获取
@@ -47,8 +55,36 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 		//查询参数
 		params.put("groupName", getPara("group_name"));
 		params.put("certNo", getPara("certn_no"));
-		
-		renderJson(groupInfoService.selectPage(params, getPage()));
+		DataGrid<GroupInfo> dataGrid = groupInfoService.selectPage(params, getPage());
+		List<GroupInfo> groupInfos = dataGrid.getData();
+		List<GroupInfo> infos = new ArrayList<GroupInfo>();
+		List<Long> groupIds = new ArrayList<Long>();
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						CustomerInfo customerInfo2 = CustomerInfo.dao.findById(customerInfo.getLong("id"));
+						groupIds.add(customerInfo2.getLong("group_id"));
+					}
+				}
+			}
+		}
+		if(CollectionUtil.isNotEmpty(groupInfos)) {
+			for (GroupInfo groupInfo : groupInfos) {
+				if(groupIds.contains(groupInfo.getLong("id"))) {
+					infos.add(groupInfo);
+				}
+			}
+		}
+		dataGrid.setData(infos);
+		renderJson(dataGrid);
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.crm.component.AuthTree;
 import com.crm.component.TreeGrid;
+import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Permission;
 import com.jfinal.kit.Ret;
@@ -32,6 +33,8 @@ public interface PermissionService {
 	int deletePermissionByRoleId(Long long1);
 
 	List<Permission> findByUserId(Long long1, int i);
+	
+	List<CustomerInfo> findCustomerByUserId(Long long1);
 
 	List<Permission> findChildren(Long id);
 

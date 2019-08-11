@@ -23,12 +23,14 @@ import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Area;
+import com.crm.model.system.Permission;
 import com.crm.model.system.User;
 import com.crm.poi.ImportExcelUtil;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.AreaService;
+import com.crm.service.system.PermissionService;
 import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
 import com.crm.util.DateUtil;
@@ -38,6 +40,9 @@ import com.jfinal.aop.Inject;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
 /**
  * 客户信息控制类
  * @author chenglongw
@@ -53,6 +58,8 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
     private AdminLoginService adminLoginService;
     @Inject
 	private AreaService areaService;
+	@Inject
+	private PermissionService permissionService;
     
      /**
       * 列表获取
@@ -64,13 +71,41 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		params.put("certNo", getPara("cert_no"));
 		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage());
 		List<CustomerInfo> customerInfos = dataGrid.getData();
-		for (CustomerInfo customerInfo : customerInfos) {
+		List<CustomerInfo> infos = new ArrayList<>();
+		List<CustomerInfo> customers = new ArrayList<>();
+		
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+			}
+		}
+		
+		if(CollectionUtil.isNotEmpty(customerInfos)) {
+			for (CustomerInfo customerInfo : customerInfos) {
+				Long id = customerInfo.getLong("id");
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo2 : customers) {
+						if(customerInfo2.getLong("id")==id) {
+							infos.add(customerInfo);
+						}
+					}
+				}
+			}
+		}
+		
+		for (CustomerInfo customerInfo : infos) {
 			if(customerInfo.get("group_id")!=null){
 				GroupInfo groupInfo = GroupInfo.dao.findById(customerInfo.getLong("group_id"));
 				customerInfo.put("groupName", groupInfo.getStr("group_name"));
 			}
 		}
-		dataGrid.setData(customerInfos);
+		dataGrid.setData(infos);
 		renderJson(dataGrid);
 	}
 	

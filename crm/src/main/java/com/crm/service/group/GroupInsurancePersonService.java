@@ -47,7 +47,7 @@ public interface GroupInsurancePersonService {
 
 	void deleteByOrderId(Long hiddenOrderIdForGuarantee3);
 
-	DataGrid<GroupInsurancePerson> selectPage(Map<String, String> params, Page<GroupInsurancePerson> page);
+	DataGrid<GroupInsurancePerson> selectPage(Map<String, String> params, Page<GroupInsurancePerson> page, String customerIds);
 	
 	GroupInsurancePerson findById(Long id, int type);
 

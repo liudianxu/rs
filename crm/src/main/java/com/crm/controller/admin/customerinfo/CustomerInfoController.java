@@ -69,11 +69,8 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		//查询参数
 		params.put("customerName", getPara("customer_name"));
 		params.put("certNo", getPara("cert_no"));
-		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage());
-		List<CustomerInfo> customerInfos = dataGrid.getData();
-		List<CustomerInfo> infos = new ArrayList<>();
-		List<CustomerInfo> customers = new ArrayList<>();
 		
+		String customerIds = "";
 		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
 		if (sessionId != null) {
 			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
@@ -82,30 +79,24 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
 			}
 			if (admin != null) {
-				customers = permissionService.findCustomerByUserId(admin.getLong("id"));
-			}
-		}
-		
-		if(CollectionUtil.isNotEmpty(customerInfos)) {
-			for (CustomerInfo customerInfo : customerInfos) {
-				Long id = customerInfo.getLong("id");
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
 				if(CollectionUtil.isNotEmpty(customers)) {
-					for (CustomerInfo customerInfo2 : customers) {
-						if(customerInfo2.getLong("id")==id) {
-							infos.add(customerInfo);
-						}
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
 					}
 				}
 			}
 		}
 		
-		for (CustomerInfo customerInfo : infos) {
+		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
+		List<CustomerInfo> customers = dataGrid.getData();
+		for (CustomerInfo customerInfo : customers) {
 			if(customerInfo.get("group_id")!=null){
 				GroupInfo groupInfo = GroupInfo.dao.findById(customerInfo.getLong("group_id"));
 				customerInfo.put("groupName", groupInfo.getStr("group_name"));
 			}
 		}
-		dataGrid.setData(infos);
+		dataGrid.setData(customers);
 		renderJson(dataGrid);
 	}
 	

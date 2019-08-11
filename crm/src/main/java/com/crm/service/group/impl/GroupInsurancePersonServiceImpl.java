@@ -63,11 +63,11 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 	}
 
 	@Override
-	public DataGrid<GroupInsurancePerson> selectPage(Map<String, String> map, Page<GroupInsurancePerson> page) {
+	public DataGrid<GroupInsurancePerson> selectPage(Map<String, String> map, Page<GroupInsurancePerson> page,String customerIds) {
 		DataGrid<GroupInsurancePerson> dataGrid = new DataGrid<>();
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select p.*,c.customer_name as customerName,o.insurance_type as insuranceType from crm_group_insurance_person p ");
+		sql.append("select p.*,c.customer_name as customerName,c.id as customerId,o.insurance_type as insuranceType from crm_group_insurance_person p ");
 		sql.append("left join crm_group_insurance_orders o on o.id=p.order_id ");
 		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
 		sql.append("where 1=1 ");
@@ -95,6 +95,9 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 		}
 		if(StringUtils.isNotBlank(map.get("type"))){
 			sql.append(" and o.insurance_type= "+map.get("type"));
+		}
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and c.id in ("+customerIds+")");
 		}
 		sql.append(" order by o.create_time desc ");
 		sqlPara.setSql(sql.toString());

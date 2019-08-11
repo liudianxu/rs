@@ -28,7 +28,7 @@ private GroupInfoService groupInfoService;
 	 * 分页列表
 	 */
 	@Override
-	public DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page) {
+	public DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page,String customerIds) {
 		DataGrid<CustomerInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from crm_customer_info where 1=1 ");
@@ -37,6 +37,9 @@ private GroupInfoService groupInfoService;
 		}
 		if(StringUtils.isNotBlank(params.get("certNo"))){
 			sql.append(" and cert_no ="+params.get("certNo"));
+		}
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and id in ("+customerIds+")");
 		}
 		sql.append(" order by create_time desc ");
 		SqlPara sqlPara = new SqlPara();

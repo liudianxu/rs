@@ -7,13 +7,21 @@ import java.util.Map;
 
 import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
+import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
+import com.crm.model.system.User;
 import com.crm.service.brand.BrandService;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
+import com.crm.service.system.AdminLoginService;
+import com.crm.service.system.PermissionService;
+import com.crm.util.Constant;
 import com.jfinal.aop.Inject;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
 
 public class EmployerInsuranceController extends BaseController<GroupInsuranceOrder>{
 	
@@ -25,6 +33,10 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
 	private GroupInsuranceOrderService groupInsuranceOrderService;
 	@Inject
 	private GroupInsurancePersonService personService;
+	@Inject
+    private AdminLoginService adminLoginService;
+	@Inject
+	private PermissionService permissionService;
 	
 	/**
 	 * 列表分页查询
@@ -46,7 +58,24 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
        params.put("policy_effective_date", getPara("policy_effective_date"));
        params.put("policy_expiration_date", getPara("policy_expiration_date"));
        params.put("status", getPara("status"));
-       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage());
+       String customerIds = "";
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}
+		}
+       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
        List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
        for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
     	   groupInsuranceOrder.put("person", groupInsuranceOrder.get("person_num")+"/"+groupInsuranceOrder.get("total_person_sum"));

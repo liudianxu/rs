@@ -22,8 +22,9 @@ public interface GroupInsuranceOrderService {
 
 	/**
 	 * 列表分页查询
+	 * @param customerIds 
 	 */
-	DataGrid<GroupInsuranceOrder> selectPage(Map<String, String> params, Page<GroupInsuranceOrder> page);
+	DataGrid<GroupInsuranceOrder> selectPage(Map<String, String> params, Page<GroupInsuranceOrder> page, String customerIds);
 
 	/**
 	 * 创建订单

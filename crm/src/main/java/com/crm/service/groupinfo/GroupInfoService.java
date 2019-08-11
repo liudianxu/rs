@@ -18,9 +18,10 @@ public interface GroupInfoService {
 	 *  列表查询
 	 * @param params
 	 * @param page
+	 * @param customerIds 
 	 * @return
 	 */
-	DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page);
+	DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page, String customerIds);
 	
 	/**
 	 * 新增

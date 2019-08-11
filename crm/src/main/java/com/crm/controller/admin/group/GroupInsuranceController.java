@@ -29,6 +29,7 @@ import com.crm.model.group.GroupInsurancePersonLog;
 import com.crm.model.group.GroupInsurancePlan;
 import com.crm.model.group.Guarantee;
 import com.crm.model.group.GuaranteeDetail;
+import com.crm.model.system.User;
 import com.crm.poi.ImportExcelUtil;
 import com.crm.service.brand.BrandService;
 import com.crm.service.customerinfo.CustomerInfoService;
@@ -36,7 +37,9 @@ import com.crm.service.group.GroupInsuranceGuaranteeService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.groupinfo.GroupInfoService;
+import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.EmailService;
+import com.crm.service.system.PermissionService;
 import com.crm.service.system.UserService;
 import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
@@ -49,6 +52,9 @@ import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
+
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
 public class GroupInsuranceController extends BaseController<GroupInsuranceOrder>{
 	@Inject
 	private GroupInsuranceOrderService groupInsuranceOrderService;
@@ -68,6 +74,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	private EmailService emailService;
 	@Inject
 	private GroupInsurancePersonService personService;
+	@Inject
+    private AdminLoginService adminLoginService;
+	@Inject
+	private PermissionService permissionService;
 	
 	//团险理赔类型
 	public static final int GROUP_CLAIM_TYPE =1;
@@ -96,8 +106,25 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
        params.put("type", getPara("type"));
        params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
+       String customerIds = "";
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}
+		}
 		
-       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage());
+       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
        List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
        for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
     	   if(groupInsuranceOrder.getInt("insurance_type")==0) {
@@ -3005,7 +3032,25 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		String insurance_type = getPara("insurance_type");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
-		renderJson(GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type));
+		String customerIds = "";
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		if (sessionId != null) {
+			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}
+		}
+		DataGrid<GroupInsurancePersonLog> dataGrid = GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type,customerIds.substring(0,customerIds.length()-1));
+		renderJson(dataGrid);
 	}
 	
 }

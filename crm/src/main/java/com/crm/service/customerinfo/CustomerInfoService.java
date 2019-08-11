@@ -18,9 +18,10 @@ public interface CustomerInfoService {
 	 *  列表查询
 	 * @param params
 	 * @param page
+	 * @param customerIds 
 	 * @return
 	 */
-	DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page);
+	DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page, String customerIds);
 	
 	/**
 	 * 新增

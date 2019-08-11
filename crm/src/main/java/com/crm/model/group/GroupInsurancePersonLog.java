@@ -19,7 +19,7 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 
 
 	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,String customerName,
-			String policyNum,String name,String createTime,String policyEffectiveDate,String insurance_type) {
+			String policyNum,String name,String createTime,String policyEffectiveDate,String insurance_type, String customerIds) {
 		Page<GroupInsurancePersonLog> page = new Page<>();
 		DataGrid<GroupInsurancePersonLog> dataGrid = new DataGrid<>();
 		String createBeginTime = null;
@@ -42,6 +42,9 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 		sql.append("left join crm_customer_info c on c.id =g.customer_id left join crm_group_insurance_orders o on o.id=g.order_id where 1=1");
 		if(StringUtils.isNotBlank(customerName)){
 			sql.append(" and c.customer_name like '%").append(customerName + "%' ");
+		}
+		if(StringUtils.isNotBlank(customerIds)){
+			sql.append(" and c.id in ("+customerIds+")");
 		}
 		if(StringUtils.isNotBlank(policyNum)){
 			sql.append(" and g.policy_num like '%").append(policyNum + "%' ");

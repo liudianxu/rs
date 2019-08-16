@@ -1,0 +1,811 @@
+#@layout() #define main()
+<div class="headerttl">添加保障计划</div>
+<div class="layui-card-body">
+
+	<div class='layui-tab layui-tab-brief' lay-filter='TabBrief'>
+		<ul class="layui-tab-title">
+					<li class="layui-this">基本信息</li>
+			<li>保障方案</li>
+			<li>保障说明</li>
+		</ul>
+			<div class='layui-tab-item layui-show'>
+						<form class="layui-tab-content layui-form1" action="/admin/groupInsurancePlan/savePlan">
+						<div class='layui-inline theme-required'>
+						<div class='layui-inline '>
+							<div class='layui-form-label'>计划名称</div>
+							<div class='layui-input-inline'>
+								<input name='groupInsurancePlan.name' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+					<div class='layui-form-item' style="display: inline-block;">
+						<div class='layui-inline '>
+							<div class='layui-form-label'>计划编码</div>
+							<div class='layui-input-inline'>
+								<input name='groupInsurancePlan.sn' class='layui-input' autocomplete='off' placeholder='请输入' />
+							</div>
+						</div>
+					</div>
+						<div class="layui-form-item" style="margin-top: 15px;text-align: center;">
+					<button class="layui-btn" lay-submit lay-filter="submit1">保存</button>
+					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurancePlan'>返回</a>
+				</div>
+				</form>
+			</div>
+		<div class='layui-tab-item'>
+			<form class="layui-tab-content layui-form2" action="/admin/groupInsurancePlan/saveGrantee">
+				<input type="hidden" name="groupInsurancePlan" value="" />
+				<div class="bar">
+					<div class="buttonGroup">
+						<a class="layui-btn layui-btn-sm" id='addGuaranteeBtn'>
+							<i class="layui-icon layui-icon-add-1"></i>新增保障
+						</a>
+					</div>
+				</div>
+				<div style="overflow-x: auto">
+					<table id="guaranteeTable" class="input layui-table">
+						<tr class="tbttl">
+							<th>保障项目
+							</th>
+							<!-- <th>保障额度
+							</th> -->
+							<th>保障说明
+							</th>
+							<!-- <th>理赔说明
+							</th>
+							<th>保障提示
+							</th> -->
+							<th>方案一保额
+							</th>
+							<th>方案二保额
+							</th>
+							<th>方案三保额
+							</th>
+							<th>方案四保额
+							</th>
+							<th>方案五保额
+							</th>
+							<th>方案六保额
+							</th>
+							<th>方案七保额
+							</th>
+							<th>方案八保额
+							</th>
+							<th>方案九保额
+							</th>
+							<th>操作
+							</th>
+						</tr>
+
+						#for(guarantee:guarantees)
+						<tr class="guaranteeClass">
+							<td><input type="text" name="guaranteeList[#(for.index)].item" param-guarantee-item class="layui-input"
+								 placeholder="保障项目" maxlength="200" style="width: 150px;" value="#(guarantee.name )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].quota" param-guarantee-quota class="layui-input"
+								 placeholder="保障额度" maxlength="200" style="width: 100px;" value="#(guarantee.quota )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].description" class="layui-input" placeholder="保障说明"
+								 param-guarantee-description maxlength="200" style="width: 480px;" value="#(guarantee.description )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].plan[0]" param-guarantee-plan0 class="layui-input plans"
+								 placeholder="方案一保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[0] )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].plan[1]" param-guarantee-plan1 class="layui-input plans"
+								 placeholder="方案二保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[1] )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].plan[2]" param-guarantee-plan2 class="layui-input plans"
+								 placeholder="方案三保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[2] )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].plan[3]" param-guarantee-plan3 class="layui-input plans"
+								 placeholder="方案四保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[3] )" /></td>
+							<td><input type="text" name="guaranteeList[#(for.index)].plan[4]" param-guarantee-plan4 class="layui-input plans"
+								 placeholder="方案五保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[4] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[5]" param-guarantee-plan5 class="layui-input plans"
+								 placeholder="方案六保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[5] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[6]" param-guarantee-plan6 class="layui-input plans"
+								 placeholder="方案七保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[6] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[7]" param-guarantee-plan7 class="layui-input plans"
+								 placeholder="方案八保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[7] )" /></td>
+								 <td><input type="text" name="guaranteeList[#(for.index)].plan[8]" param-guarantee-plan8 class="layui-input plans"
+								 placeholder="方案九保额" maxlength="200" style="width: 100px;" value="#(guarantee.plan[8] )" /></td>
+						</tr>
+						#end
+					</table>
+				</div>
+				<table class="planPremiumTable layui-table" style="width: 600px;margin: 10px auto;">
+					<tr class="tbttl">
+						<th colspan="9" style="text-align: center;">方案保费</th>
+					</tr>
+					<tr class="tbttl">
+						<th>方案1</th>
+						<th>方案2</th>
+						<th>方案3</th>
+						<th>方案4</th>
+						<th>方案5</th>
+						<th>方案6</th>
+						<th>方案7</th>
+						<th>方案8</th>
+						<th>方案9</th>
+					</tr>
+					<tr class="planPremium">
+						<td style="padding: 9px 15px;"><input type="text" name="premium[0]" premium0 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[1]" premium1 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[2]" premium2 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[3]" premium3 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[4]" premium4 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[5]" premium5 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[6]" premium6 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[7]" premium7 class="layui-input" style="width: 100px;"></td>
+						<td style="padding: 9px 15px;"><input type="text" name="premium[8]" premium8 class="layui-input" style="width: 100px;"></td>
+					
+					</tr>
+				</table>	
+				<div class="layui-form-item" style="margin-top: 15px;text-align: center;">
+					<button class="layui-btn" lay-submit lay-filter="submit2">保存</button>
+					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurancePlan'>返回</a>
+				</div>
+			</form>
+		</div>
+		<!-- <div class='layui-tab-item'>
+			<form class="layui-tab-content layui-form  layui-form-claim"
+				action="/admin/groupInsurance/saveClaim">
+				<input type="hidden" id="hiddenOrderIdForClaim" name="hiddenOrderIdForClaim" value="" />
+				 <a id="addClaim" class="layui-btn">新增理赔理算</a>
+				<table id="claimTable" class="claimTable layui-table">
+					<thead>
+						<tr>
+							<th>保障利益</th>
+							<th>理赔类型</th>
+							<th>理赔申请类别</th>
+							<th>一级理赔项目</th>
+							<th>二级理赔项目</th>
+							<th>理赔申请资料</th>
+							<th>理赔方式</th>
+							<th>事故原因</th>
+							<th>赔偿条件(赔偿原因)</th>
+							<th>理算公式</th>
+							<th>保障利益理算限额关系</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</form>
+		</div> -->
+		<div class='layui-tab-item'>
+			<form class="layui-tab-content layui-form3" action="/admin/groupInsurancePlan/saveGuaranteeDesc">
+				<input type="hidden" name="hiddenOrderIdForGuarantee2" value="" />
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">产品保障说明</label>
+					<div class="layui-input-block" style="margin-left: 114px;">
+						<textarea name="groupInsurancePlan.guarantee_desc" id="guarantee_desc" placeholder="请输入内容(不超过1000字)" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class='layui-form-item' style="display: inline-block;">
+					<div class='layui-inline '>
+						<div class='layui-form-label'>最长可追溯日期</div>
+						<div class='layui-input-inline'>
+							<input type="text" class="form-control layui-input" name="groupInsurancePlan.max_review_time">
+						</div>
+					</div>
+				</div>
+				<div class='layui-form-item' style="display: inline-block;">
+					<div class='layui-inline '>
+						<div class='layui-form-label'>最大可承保年龄</div>
+						<div class='layui-input-inline'>
+							<input type="text" class="form-control layui-input" name="groupInsurancePlan.max_insurance_age">
+						</div>
+					</div>
+				</div>
+				<div class='layui-form-item' style="display: inline-block;">
+					<div class='layui-inline '>
+						<div class='layui-form-label'>最小可承保年龄</div>
+						<div class='layui-input-inline'>
+							<input type="text" class="form-control layui-input" name="groupInsurancePlan.min_insurance_age">
+						</div>
+					</div>
+				</div>
+				<div class='layui-form-item' style="display: inline-block;">
+					<div class='layui-inline '>
+						<div class='layui-form-label' style="width: 103px">最高承保职业类别</div>
+						<div class='layui-input-inline'>
+							<input type="text" class="form-control layui-input" name="groupInsurancePlan.max_occupation_category">
+						</div>
+					</div>
+				</div>
+				<div style="text-align: center;">
+					<button class="layui-btn" lay-submit lay-filter="submit3">保存</button>
+					<a class="layui-btn layui-btn-primary" href='/admin/groupInsurancePlan'>返回</a>
+				</div>
+			</form>
+		</div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+	function wangedit(id) {
+		var E = window.wangEditor
+		var editor = new E('#editor' + id)
+		//或者 var editor = new E( document.getElementById('editor') )
+		editor.customConfig.uploadFileName = 'file';
+		editor.customConfig.uploadImgMaxSize = 2 * 800 * 800;
+		editor.customConfig.uploadImgMaxLength = 4;
+		editor.customConfig.uploadImgServer = '/common/file/wangUpload' // 上传图片到服务器
+		editor.customConfig.uploadImgHooks = {
+			customInsert: function(insertImg, result, editor) {
+				// 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+				// insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+				// 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+				var url = result.data.src;
+				insertImg(url);
+				// result 必须是一个 JSON 格式字符串！！！否则报错
+			}
+		}
+		editor.customConfig.onchange = function(html) {
+			// 监控变化，同步更新到 textarea
+			$('#editorTextarea' + id).val(html)
+		}
+		editor.create()
+	}
+
+
+
+	for (var i = 1; i < 4; i++) {
+		wangedit(i);
+	}
+
+	var parameterss;
+	$guaranteeTable = $("#guaranteeTable");
+	var form;
+	var laydate;
+	layui.use(['table', 'element', 'form', 'laydate', 'layedit', 'upload'],
+		function() {
+			var table = layui.table
+			laydate = layui.laydate;
+			var element = layui.element;
+			form = layui.form;
+			var layedit = layui.layedit,
+				$ = layui.$;
+			window.G = {};
+			window.G.form = form;
+			//一些事件监听
+			element.on('tab(TabBrief)', function(data) {
+				$(".layui-tab-item").each(function(item) {
+					$(this).removeClass('layui-show');
+					if (item === data.index) {
+						$(this).addClass('layui-show');
+					}
+				});
+			});
+
+			laydate.render({
+				elem: '#policy_effective_date' //指定元素
+					,
+				format: 'yyyy-MM-dd',
+				trigger: 'click'
+			});
+
+			laydate.render({
+				elem: '#policy_expiration_date' //指定元素
+					,
+				format: 'yyyy-MM-dd',
+				trigger: 'click'
+			});
+
+
+			form.render()
+
+
+			form.on('select(group)', function(data) {
+				if (data.value != "") {
+					$.ajax({
+						type: "get",
+						url: '/admin/groupInsurance/selectCustomer',
+						async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
+						data: {
+							id: data.value,
+						},
+						success: function(result) {
+							$("select[name='groupInsuranceOrder.insure_customer_id']").val("");
+							var options = "<option>请选择<option>"
+							for (var i = 0; i < result.length; i++) {
+								options += "<option value=" + result[i].value + ">" + result[i].name + "<option>";
+							}
+							$("select[name='groupInsuranceOrder.insure_customer_id']").html(options);
+							form.render();
+						}
+					});
+				}
+			});
+
+			form.on('select(relationCustomer)', function(data) {
+				if (data.value != "") {
+					$.ajax({
+						type: "get",
+						url: '/admin/groupInsurance/selectCustomerById',
+						async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
+						data: {
+							id: data.value,
+						},
+						success: function(result) {
+							
+							$("input[name='groupInsuranceOrder.insure_id_num']").val(result.data.cert_no);
+						}
+					});
+				}
+			});
+			
+			form.on('select(relationGroup)', function(data) {
+				if (data.value != "") {
+					$.ajax({
+						type: "get",
+						url: '/admin/groupInsurance/selectCustomer',
+						async: false, //同步提交。不设置则默认异步，异步的话，最后执行ajax
+						data: {
+							id: data.value,
+						},
+						success: function(result) {
+							$("select[name='groupInsuranceOrder.relation_customer_id']").val("");
+							var options = "<option>请选择<option>"
+							for (var i = 0; i < result.length; i++) {
+								options += "<option value=" + result[i].value + ">" + result[i].name + "<option>";
+							}
+							$("select[name='groupInsuranceOrder.relation_customer_id']").html(options);
+							form.render();
+						}
+					});
+				}
+			});
+			
+			
+
+			/* 	  layui.layedit.set({
+							    uploadImage: {
+							        url: '/common/file/layeditUpload' //接口url
+							        ,type: 'post' //默认post
+							    }
+							}); */
+
+
+			//-------yzr-------
+			/*   function verify_layedit(edit_class){
+				   var edit;
+				   var options = verify_layedit.options || {};
+				   edit = layedit.build(edit_class,'uploadImage');
+				   options[edit_class] = function(val) {
+					   layedit.sync(edit);
+				   }
+				   verify_layedit.options = options
+			   }
+			  for(var i=0;i<3;i++){
+				 verify_layedit('laydit'+i);
+			  }
+			  console.log(verify_layedit.options)
+			  form.verify(verify_layedit.options)	 */
+
+			layui.use(['element', 'upload'], function() {
+				upload = layui.upload;
+				//指定允许上传的文件类型
+				upload.render({
+					elem: '#exportPersonBtn',
+					url: '/common/file/upload',
+					accept: 'file' //普通文件
+						,
+					multiple: true,
+					done: function(res) {
+						var hiddenOrderIdForImport = $("input[name='hiddenOrderIdForGuarantee3']").val();
+						console.log(hiddenOrderIdForImport);
+						if (hiddenOrderIdForImport == undefined || hiddenOrderIdForImport == null || hiddenOrderIdForImport == "") {
+							layer.msg("请先保存产品保障说明！");
+							return false;
+						}
+						$.ajax({
+							type: 'POST',
+							url: '/admin/groupInsurance/importPerson',
+							data: {
+								hiddenOrderIdForImport: hiddenOrderIdForImport,
+								filePath: res.data.filePath
+							},
+							dataType: "json",
+							success: function(data) {
+								// layer.msg(data.msg);
+								// if (data.code == 1) {
+								// 	reloadPersonTable(data.orderId).
+								// 	then(function() { //成功
+								// 			form.render() //再选染
+								// 		})
+								// 		.catch(function(err) { //失败
+								// 			console.error('The code from queryPersonByOrderId = ' + err)
+								// 		})
+								// }
+								function trim(val){
+									return val == null ? '' : val
+								}
+								var html = '';
+								var lengths=data.persons.length;
+								data.persons.forEach(function(person, index) {
+									var selectHtml="";
+									$.ajax({
+										type: 'GET',
+										url: "/admin/groupInsurance/findGuaranteeSchemes",
+										data: {
+											orderId: hiddenOrderIdForImport
+										},
+										async: false,
+										dataType: "json",
+										success: function(data2) {
+											 selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
+											$.each(data2.guarantees, function(key, val) {
+												if (val == trim(person.guarantee_name)) {
+													selectHtml += '<option value="' + val + '" selected="selected">' + val + '</option>';
+												} else {
+													selectHtml += '<option value="' + val + '">' + val + '</option>';
+												}
+											});
+											selectHtml += '</select>';
+										}
+									})
+									
+									html += '<tr ';
+									if(person.isFail==1){
+										html += 'class="isFail" ';
+									}
+										html += '><td>'+
+										"<input type='text' name='name' groupInsurancePersonName id='' value='" + trim(person.name) + "' />"+
+										"</td><td>";
+										html +='<select name="gender" groupInsurancePersonGender class="layui-input">' +
+										'<option value="1"';
+									if (trim(person.genderStr) == "男") {
+										html += ' selected';
+									}
+									html += '>男</option><option value="0" ';
+									if (trim(person.genderStr) == "女") {
+										html += ' selected';
+									}
+									html += '>女</option>';
+									html += '</select>';
+									html +=	"</td><td>"+
+											"<input type='text' name='id_type' groupInsurancePersonId_type disabled id='' value='" + trim(person.idTypeStr) + "' />"+
+										"</td><td>"+
+											"<input type='text' name='id_num' groupInsurancePersonId_num id='' value='" + trim(person.id_num )+ "' />"+
+										"</td><td>"+
+											"<input type='text' name='phone' groupInsurancePersonPhone id='' value='" + trim(person.phone) + "' />"+
+										"</td><td>";
+										html +='<select  name="occupation_category" groupInsurancePersonOccupation_category class="layui-input">' +
+										'<option value="1"';
+									if (trim(person.occupation_category) == 1) {
+										html += 'selected';
+									}
+									html += '>1</option><option value="2"';
+									if (trim(person.occupation_category) == 2) {
+										html += 'selected';
+									}
+									html += '>2</option><option value="3"';
+									if (trim(person.occupation_category) == 3) {
+										html += 'selected';
+									}
+									html += '>3</option><option value="4"';
+									if (trim(person.occupation_category) == 4) {
+										html += 'selected';
+									}
+									html += '>4</option><option value="5"';
+									if (trim(person.occupation_category) == 5) {
+										html += 'selected';
+									}
+									html += '>5</option><option value="6"';
+									if (trim(person.occupation_category) == 6) {
+										html += 'selected';
+									}
+									html += '>6</option>';
+									html += '</select>' +
+										"</td><td>";
+									 html+=selectHtml;
+										html+="</td><td>"+
+											"<input type='text' name='policy_effective_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_effective_date id='' class='layui-input person_policy_effective_date"+index+"'  value='" + trim(person.policy_effective_date) + "' />"+
+										"</td><td>"+
+											"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(person.policy_expiration_date) + "' />"+
+										"</td><td>"+
+											"<input type='text' name='policy_num' policy_num id='' value='" + trim(person.policy_num) + "' />"+
+										"</td></tr>";
+										/* "<div class='btn ok'"  +
+											
+											" data-name='"+ trim(person.name) + "' data-gender='"+ trim(person.gender) + "' data-id_type='" + trim(person.id_type) + "' data-id_num='" + trim(person.id_num) + "' data-phone='" + trim(person.phone) + "' data-occupation_category='" + trim(person.occupation_category) + "' data-guarantee_id='" + trim(person.guarantee_id) + "' data-remark='" + trim(person.remark) + "' data-policy_effective_date='" + trim(person.policy_effective_date) + "' data-policy_expiration_date='" + trim(person.policy_expiration_date) + "' data-policy_num='" + trim(person.policy_num) + "' data-id='" + trim(person.id) + "'" +
+											
+											" >修改</div>" +
+										
+										"</td> </tr>"*/
+								})
+								$('.show-excel-data').show();
+								$('.excel-cover').show();
+								$('.show-excel-data').find('tbody').append(html)
+								$('.show-excel-data').find('.tip').html(data.message)
+								form.render();
+								for(var i=0;i<lengths;i++){
+								laydate.render({
+									elem: '.person_policy_effective_date'+i,
+									format: 'yyyy-MM-dd HH:mm:ss',
+									trigger: 'click'
+								});
+								laydate.render({
+									elem: '.person_policy_expiration_date'+i,
+									format: 'yyyy-MM-dd HH:mm:ss',
+									trigger: 'click'
+								});
+								}
+								$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
+							}
+						});
+					}
+				})
+			})
+
+			form.on('submit(submit1)',
+				function(data) {
+					$.post($(".layui-form1").attr('action'), $(".layui-form1").serialize(),
+						function(res) {
+							layer.msg(res.message);
+							if (res.code == 1) {
+								$("input[name='groupInsurancePlan']").val(res.data);
+								$("input[name='hiddenOrderIdForGuarantee']").val(res.data);
+								$("input[name='hiddenOrderIdForGuarantee2']").val(res.data);
+								$("input[name='hiddenOrderIdForGuarantee5']").val(res.data);
+							}
+						}, "json");
+
+					return false;
+				})
+
+			form.on('submit(submit2)',
+				function(data) {
+					if ($("#guaranteeTable").find("tr").length < 1) {
+						layer.msg("请先新增保障！");
+						return false;
+					}
+					parameterss = serilize('#guaranteeTable')
+					data.field.guaranteeList = serilize('#guaranteeTable')
+					data.field.premiumList = serilizePremium('.planPremiumTable')
+					data.field.hiddenPlanForGuarantee = $("input[name='groupInsurancePlan']").val();
+					$.ajax({
+						url: $(".layui-form2").attr('action'),
+						type: 'post',
+						data: JSON.stringify(data.field),
+						contentType: 'application/json',
+						success: function(res) {
+							layer.msg(res.msg);
+							if (res.code == 1) {
+								$("input[name='hiddenOrderIdForGuarantee']").val(res.planId);
+								$("input[name='hiddenOrderIdForGuarantee2']").val(res.planId);
+								$("input[name='hiddenOrderIdForClaim']").val(res.planId);
+							}
+						}
+					})
+					return false;
+				})
+
+			form.on('submit(submit3)',
+				function(data) {
+					var guarantee_desc = $("#guarantee_desc").val().length;
+					if (guarantee_desc > 1000) {
+						layer.msg("产品保障说明超出字数限制！");
+						return false;
+					}
+					if ($('input[name=hiddenOrderIdForGuarantee2]').val() == null || $('input[name=hiddenOrderIdForGuarantee2]').val() ==
+						"") {
+						layer.msg("请先保存保障方案！");
+						return false;
+					}
+					var maxOccpation = $("input[name='groupInsurancePlan.max_occupation_category']").val();
+					if (!(/^(\+|-)?\d+$/.test(maxOccpation)) || maxOccpation < 0) {
+						layer.msg("最高职业类别必须是正整数！");
+						return false;
+					}
+					$.post($(".layui-form3").attr('action'), $(".layui-form3").serialize(),
+						function(res) {
+							layer.msg(res.message);
+							if (res.code == 1) {
+								$("input[name='hiddenOrderIdForGuarantee3']").val(res.orderId);
+							}
+						}, "json");
+
+					return false;
+				})
+
+			form.on('submit(submit4)',
+				function(data) {
+
+					if ($('input[name=hiddenOrderIdForGuarantee3]').val() == null || $('input[name=hiddenOrderIdForGuarantee3]').val() ==
+						"") {
+						layer.msg("请先保存保障说明！");
+						return false;
+					}
+					$.post($(".layui-form4").attr('action'), $(".layui-form4").serialize(),
+						function(res) {
+							layer.msg(res.msg);
+							if (res.code == 1) {
+								$("input[name='hiddenOrderIdForGuarantee3']").val(res.orderId);
+							}
+						}, "json");
+
+					return false;
+				})
+
+
+			form.on('submit(submit5)',
+				function(data) {
+					$.post($(".layui-form5").attr('action'), $(".layui-form5").serialize(),
+						function(res) {
+							layer.msg(res.msg);
+							if (res.code == 1) {
+								$("input[name='hiddenOrderIdForGuarantee5']").val(res.orderId);
+							}
+						}, "json");
+
+					return false;
+				})
+
+
+			function serilize(id) {
+				var guaranteeList = [],
+					formWrap = $(id)
+				formWrap.find('.guaranteeClass').each(function(k, v) {
+					var guarantee = {};
+					var plans = [];
+					guarantee.item = $(v).find('[param-guarantee-item]').val();
+					guarantee.quota = $(v).find('[param-guarantee-quota]').val();
+					guarantee.description = $(v).find('[param-guarantee-description]').val();
+					guarantee.claimInfo = $(v).find('[param-guarantee-claimInfo]').val();
+					guarantee.tip = $(v).find('[param-guarantee-tip]').val();
+					//guaranteeList.push({
+					//	name: $(v).find('[param-guarantee-name]').val()
+					//	,quota: $(v).find('[param-guarantee-quota]').val()
+					//	,description: $(v).find('[param-guarantee-description]').val()
+					//	})
+					$(v).find('.plans').each(function(k, v) {
+						plans.push($(v).val())
+					});
+					guarantee.plan = plans;
+					guaranteeList.push(guarantee);
+				})
+				console.log(guaranteeList)
+				return guaranteeList
+			}
+
+
+			function serilizePremium(id) {
+				var premiumList = [],
+					formWrap = $(id)
+				premiumList.push(formWrap.find('[premium0]').val());
+				premiumList.push(formWrap.find('[premium1]').val());
+				premiumList.push(formWrap.find('[premium2]').val());
+				premiumList.push(formWrap.find('[premium3]').val());
+				premiumList.push(formWrap.find('[premium4]').val());
+				premiumList.push(formWrap.find('[premium5]').val());
+				premiumList.push(formWrap.find('[premium6]').val());
+				premiumList.push(formWrap.find('[premium7]').val());
+				premiumList.push(formWrap.find('[premium8]').val());
+
+				return premiumList
+			}
+
+		})
+
+	//新增保障方案
+	$("#addGuaranteeBtn").click(function() {
+		guaranteeIndex = $guaranteeTable.children("tr").length;
+		$(
+			'<tr class="guaranteeClass">' +
+			'<td>' +
+			'<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].item" param-guarantee-item class="layui-input"  maxlength="200" style="width: 100px;" \/> ' +
+			'<\/td>' +
+		/* 	'<td>' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].quota" param-guarantee-quota class="layui-input"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +*/
+			'<td>' + 
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].description" param-guarantee-description class="layui-input"  maxlength="200" style="width: 150px;" \/>' +
+			'<\/td>' +
+			/* '<td>' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].claimInfo" param-guarantee-claimInfo class="layui-input" maxlength="200" style="width: 150px;" \/>' +
+			'<\/td>' +
+			'<td>' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].tip" param-guarantee-tip class="layui-input"  maxlength="200" style="width: 150px;" \/>' +
+			'<\/td>' + */
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[0]" param-guarantee-plan0 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[1]" param-guarantee-plan1 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[2]" param-guarantee-plan2 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[3]" param-guarantee-plan3 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[4]" param-guarantee-plan4 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[5]" param-guarantee-plan5 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[6]" param-guarantee-plan6 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[7]" param-guarantee-plan7 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="planTD">' +
+			'	<input type="text" name="guaranteeList[' + guaranteeIndex +
+			'].plan[8]" param-guarantee-plan8 class="layui-input plans"  maxlength="200" style="width: 100px;" \/>' +
+			'<\/td>' +
+			'<td class="actionTD">' +
+			'	<a href="javascript:;" id="removeGuarantee" class="layui-btn layui-btn-danger layui-btn-xs">[删除]<\/a>' +
+			'<\/td>' + '<\/tr>').appendTo(
+			$guaranteeTable).find("table").data(
+			"guaranteeIndex", guaranteeIndex);
+		guaranteeIndex++;
+
+		$(".planPremiumTable").show();
+	});
+
+
+
+	//删除方案
+	$("#guaranteeTable").on("click", "#removeGuarantee", function() {
+		$(this).parents("tr").remove();
+	});
+
+</script>
+<style>
+	.layui-form-label {
+		white-space: nowrap;
+		width: 93px
+	}
+
+	.layui-tab-content {
+		padding: 20px 10px 10px 0
+	}
+
+	.layui-form-item .layui-inline {
+		margin-bottom: 0
+	}
+
+	/*
+	.theme-required .layui-form-label:before{position: absolute;display: block;width: 5px;height:5px;border-radius: 50%;top:50%;left:0px;transform:translate3d(0,-50%,0);background-color: #c00;content:''}
+	*/
+	.theme-required .layui-form-label:before {
+		display: inline-block;
+		vertical-align: top;
+		margin-right: 3px;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background-color: #c00;
+		content: ''
+	}
+
+	.layui-elem-quote .layui-form-item:last-of-type {
+		margin-bottom: 0
+	}
+
+	.w-e-toolbar {
+		background-color: #009688 !important;
+	}
+
+	.w-e-toolbar .w-e-menu i {
+		color: #fff;
+	}
+</style>
+#end

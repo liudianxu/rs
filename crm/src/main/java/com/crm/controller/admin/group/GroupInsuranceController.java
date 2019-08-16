@@ -91,6 +91,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void index() {
 		//获取品牌集合
+		setAttr("groupId",getPara("groupId"));
 		setAttr("brands", brandService.selectList());
 		render("index.html");
 	}
@@ -109,6 +110,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
        params.put("company_name", getPara("company_name"));
        params.put("status", getPara("status"));
        params.put("type", getPara("type"));
+       params.put("groupId", getPara("groupId"));
        params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
        String customerIds = "";

@@ -39,6 +39,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		sql.append("left join crm_brand b on b.id=o.brand_id ");
 		sql.append("left join crm_group_insurance_plan p on p.id=o.plan_id ");
 		sql.append("left join crm_customer_info c on c.id=o.insure_customer_id ");
+		sql.append("left join crm_group_info g on g.id=o.insure_group_id ");
 		sql.append("where 1=1 ");
 		if(StringUtils.isNotBlank(map.get("order_sn"))){
 			sql.append(" and o.order_sn like '%").append(map.get("order_sn")).append("%' ");
@@ -48,6 +49,9 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		}
 		if(StringUtils.isNotBlank(map.get("status"))){
 			sql.append(" and o.status = "+map.get("status"));
+		}
+		if(StringUtils.isNotBlank(map.get("groupId"))){
+			sql.append(" and g.id = "+map.get("groupId"));
 		}
 		if(StringUtils.isNotBlank(map.get("policy_num"))){
 			sql.append(" and o.policy_num like '%").append(map.get("policy_num")).append("%' ");

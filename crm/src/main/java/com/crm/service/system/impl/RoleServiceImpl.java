@@ -30,7 +30,7 @@ public class RoleServiceImpl implements RoleService {
 		sqlSb.append("select r.id,r.name,case when ar.userid=?")
 			.append(" then 1 else 0 end checked ")
 			.append("from sys_role r left join sys_user_role ar on ")
-			.append("(r.id=ar.roleid and ar.userid=?) where r.state=1 ")
+			.append(" r.id=ar.roleid  where  ar.userid=? and r.state=1 ")
 			.append("order by convert(name using gbk)");
 		
 		return Role.dao.find(sqlSb.toString(), userId, userId);

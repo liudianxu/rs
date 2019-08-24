@@ -299,7 +299,7 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public List<Permission> findByUserId(Long userId,int type) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("select s.* from sys_permission s  ");
+		sb.append("select DISTINCT s.* from sys_permission s  ");
 		sb.append("left join sys_role_permission sp on sp.permissionid = s.id ");
 		sb.append("left join sys_role sr on sr.id = sp.roleid ");
 		sb.append("left join sys_user_role sur on sur.roleid=sr.id ");

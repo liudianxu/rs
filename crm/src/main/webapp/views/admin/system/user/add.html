@@ -54,7 +54,7 @@
 						<span style="vertical-align: bottom;">
 							#(role.name)
 						</span>
-						<input type="checkbox" lay-filter="conf" name="roleIds" lay-skin='switch' lay-text="ON|OFF" value="#(role.id)" />
+						<input type="checkbox" lay-filter="conf" name="roleIds"  value="#(role.id)" />
 						#end
 					</div>
 				</div>
@@ -119,6 +119,7 @@
 }
 </style>
 <script type="text/javascript">
+
 	layui.use(['form', 'layer', 'layedit'], function() {
 		var form = layui.form,
 			layer = layui.layer,
@@ -127,7 +128,7 @@
 		form.render();
 
 		var listVal = [];
-		form.on('checkbox(conf)', function(data) {
+		form.on('switch(conf)', function(data) {
 			if (data.elem.checked) {
 				listVal.push(data.value);
 			} else {
@@ -139,6 +140,14 @@
 		//监听提交
 		form.on('submit(save)', function(data) {
 			data.field.roleIds = listVal;
+			var listVal2 = [];
+			$("input[name=roleIds]").each(function() {
+				$(this).attr("checked", true);
+				if ($(this).prop("checked")) {
+					listVal2.push($(this).val());
+				}
+			});
+			data.field.roleIds = listVal2;
 			var password = $("input[name='user.password']").val();
 			var rePassword = $("input[name='user.rePassword']").val();
 			if (password != rePassword) {

@@ -75,11 +75,13 @@ public class UserServiceImpl implements UserService {
 		if(roles != null && roles.length > 0) {
 					if(user.save()) {
 						List<UserRole> userRoles = new ArrayList<>();
-						for(long roleId : roles) {
+						for(Long roleId : roles) {
+							if(roleId!=null) {
 							UserRole userRole = new UserRole();
 							userRole.set("userid", user.getLong("id"));
 							userRole.set("roleid", roleId);
 							userRoles.add(userRole);
+						}
 						}
 						Db.batch("insert into sys_user_role(userid, roleid) values(?, ?)", 
 								"userid,roleid", userRoles, 100);

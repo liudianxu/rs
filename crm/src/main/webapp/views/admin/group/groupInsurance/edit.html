@@ -567,7 +567,7 @@
 					</div>
 				</div>
 				<div id="personDiv">
-					<input type="hidden" name="hiddenOrderIdForGuarantee3" value="#if(order.step_three==1)#(order.id)#end" />
+					<input type="hidden" name="hiddenOrderIdForGuarantee3" value="#(order.id)" />
 					<div class="bar">
 						<div class="buttonGroup">
 							<a class="layui-btn layui-btn-sm" id='addPersonBtn'>
@@ -640,7 +640,7 @@
 		</div>
 		<div class='layui-tab-item'>
 			<form class="layui-tab-content layui-form5" action="/admin/groupInsurance/saveServiceInfo">
-				<input type="hidden" name="hiddenOrderIdForGuarantee5" value="#if(order.step_one==1)#(order.id)#end" />
+				<input type="hidden" name="hiddenOrderIdForGuarantee5" value="#(order.id)" />
 				<div class='layui-form-item'>
 					<div class='layui-inline '>
 						<div class='layui-form-label'>服务人员</div>
@@ -1326,6 +1326,7 @@
 							layer.msg("请先保存产品保障说明！");
 							return false;
 						}
+						
 						$.ajax({
 							type: 'POST',
 							url: '/admin/groupInsurance/importPerson',
@@ -1359,7 +1360,7 @@
 										type: 'GET',
 										url: "/admin/groupInsurance/findGuaranteeSchemes",
 										data: {
-											orderId: hiddenOrderIdForImport
+											orderId: $("#planId").val()
 										},
 										async: false,
 										dataType: "json",
@@ -1703,7 +1704,7 @@
 			type: 'GET',
 			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
-				orderId: hiddenOrderId
+				orderId: $("#planId").val()
 			},
 			dataType: "json",
 			success: function(data) {
@@ -1884,7 +1885,7 @@
 			type: 'GET',
 			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
-				orderId: hiddenOrderId
+				orderId: $("#planId").val()
 			},
 			dataType: "json",
 			success: function(data) {
@@ -2101,7 +2102,7 @@
 			type: 'GET',
 			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
-				orderId: hiddenOrderId
+				orderId: $("#planId").val()
 			},
 			dataType: "json",
 			success: function(data) {

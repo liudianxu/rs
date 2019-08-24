@@ -55,6 +55,7 @@ public class AdminController extends Controller {
 			}
 		}
 		String type="3";
+		if(customerIds.length()>0) {
 		List<GroupInsuranceOrder> groupInsuranceOrders = groupInsuranceOrderService.selectAll(customerIds.substring(0,customerIds.length()-1),type);
 		if(CollectionUtil.isNotEmpty(groupInsuranceOrders)) {
 			for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
@@ -77,6 +78,7 @@ public class AdminController extends Controller {
 			 int personNum2=0;
 			 for (GroupInsuranceOrder order2 : order) {
 				 amount2=amount2.add(order2.getBigDecimal("premium"));
+				 if(order2.get("person_num")!=null) {
 				 num2=num2+order2.getInt("person_num");
 				 List<GroupInsurancePerson> persons = personService.findByOrderId(order2.getLong("id"));
 				   for (GroupInsurancePerson person : persons) {
@@ -92,8 +94,10 @@ public class AdminController extends Controller {
 			 customer.put("totalNum",num2);
 			 customer.put("fre",fre2);
 			 customer.put("personNum",personNum2);
+			 }
 		 }
 		 setAttr("customers", customers);
+		}
 		render("index.html");
 	}
 	

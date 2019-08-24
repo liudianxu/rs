@@ -192,6 +192,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 			 int personNum=0;
 			 for (GroupInsuranceOrder order : orders) {
 				 amount=amount.add(order.getBigDecimal("premium"));
+				 if(order.get("person_num")!=null) {
 				 num=num+order.getInt("person_num");
 				 List<GroupInsurancePerson> persons = personService.findByOrderId(order.getLong("id"));
 				   for (GroupInsurancePerson person : persons) {
@@ -207,6 +208,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 			 groupInfo.put("totalNum",num);
 			 groupInfo.put("fre",fre);
 			 groupInfo.put("personNum",personNum);
+			 }
 		}
 		return infos;
 	}

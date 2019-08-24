@@ -57,8 +57,8 @@
 						<span style="vertical-align: bottom;">
 							#(role.name)
 						</span>
-						<input type="checkbox" lay-filter="conf" name="roleIds" lay-skin='switch' lay-text="ON|OFF"
-						 #for(role2:roles)#if(role.id==role2.id) checked='checked' #end#end value="#(role.id)" />
+						<input type="checkbox" lay-filter="conf" name="roleIds" 
+						 #for(role2:roles)#if(role.id==role2.id)checked="checked" #end#end value="#(role.id)" />
 						#end
 					</div>
 				</div>
@@ -124,12 +124,6 @@
 </style>
 <script type="text/javascript">
 	var listVal = [];
-	$("input[name=roleIds]").each(function() {
-		$(this).attr("checked", true);
-		if ($(this).prop("checked")) {
-			listVal.push($(this).val());
-		}
-	});
 	layui.use(['form', 'layer', 'layedit'], function() {
 		var form = layui.form,
 			layer = layui.layer,
@@ -137,7 +131,7 @@
 			$ = layui.$;
 		form.render();
 
-		form.on('checkbox(conf)', function(data) {
+		form.on('switch(conf)', function(data) {
 			console.log("哈哈")
 			if (data.elem.checked) {
 				listVal.push(data.value);
@@ -149,7 +143,14 @@
 		//监听提交
 		form.on('submit(save)', function(data) {
 			data.field.roleIds = listVal;
-
+			var listVal2 = [];
+			$("input[name=roleIds]").each(function() {
+				$(this).attr("checked", true);
+				if ($(this).prop("checked")) {
+					listVal2.push($(this).val());
+				}
+			});
+			data.field.roleIds = listVal2;
 			var password = $("input[name='user.password']").val();
 			var rePassword = $("input[name='user.rePassword']").val();
 			if (password != rePassword) {

@@ -7,7 +7,7 @@
 			<div class='layui-row layui-col-space5'>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
 					<input name='customer_name' autocomplete='off' class='layui-input'
-						placeholder='客户名' />
+						placeholder='客户名'  value="#(customerName??)"/>
 				</div>
 				<div class="layui-input-inline layui-col-sm4 layui-col-md2">
 					<input name='policy_num' autocomplete='off' class='layui-input'
@@ -66,7 +66,7 @@
 	  
 	  table.render({
 	    elem: '#brandTable'
-	    ,url:'/admin/groupInsurance/getPersonLog?insurance_type=#(type)'
+	    ,url:'/admin/groupInsurance/getPersonLog?insurance_type=#(type)&orderId=#(orderId)'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,title: '人员增减记录'

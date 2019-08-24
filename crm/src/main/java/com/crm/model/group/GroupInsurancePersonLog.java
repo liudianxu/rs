@@ -19,7 +19,7 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 
 
 	public static DataGrid<GroupInsurancePersonLog> selectPage(int num,int size,String customerName,
-			String policyNum,String name,String createTime,String policyEffectiveDate,String insurance_type, String customerIds) {
+			String policyNum,String name,String createTime,String policyEffectiveDate,String insurance_type, String customerIds,String orderId) {
 		Page<GroupInsurancePersonLog> page = new Page<>();
 		DataGrid<GroupInsurancePersonLog> dataGrid = new DataGrid<>();
 		String createBeginTime = null;
@@ -55,7 +55,9 @@ public class GroupInsurancePersonLog extends Model<GroupInsurancePersonLog>{
 		if(StringUtils.isNotBlank(insurance_type)){
 			sql.append(" and o.insurance_type = "+insurance_type);
 		}
-		
+		if(StringUtils.isNotBlank(orderId)){
+			sql.append(" and o.id = "+orderId);
+		}
 		if(StringUtils.isNotBlank(createBeginTime)&&StringUtils.isNotBlank(createEndTime)){
 			sql.append(" and g.create_time > '"+createBeginTime+"' and g.create_time <'"+createEndTime+"'");
 		}

@@ -56,9 +56,11 @@ public interface GroupInsuranceOrderService {
 	/**
 	 * 根据customerId查找订单
 	 * @param id
+	 * @param type 
 	 * @return
 	 */
 	List<GroupInsuranceOrder> queryByCustomerId(Long id);
+
 
 	/**
 	 * 分页列表

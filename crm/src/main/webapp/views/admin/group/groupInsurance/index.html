@@ -253,6 +253,10 @@
 {{#if(d.step_one==0||d.step_two==0||d.step_three==0||d.step_four==0||d.step_fifth==0){ }}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 {{#  }  }}
+{{#if(d.step_one==1&&d.step_two==1&&d.step_three==1&&d.step_four==1&&d.step_fifth==1){ }}
+		<a class="layui-btn layui-btn-xs" lay-event="viewPerson">查看人员</a>
+<a class="layui-btn layui-btn-xs" lay-event="preveLog">保全记录</a>
+{{#  }  }}
 ]]#
 #end#end
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/view"))
@@ -307,7 +311,7 @@
 	  
 	 var branchTable =  table.render({
 	    elem: '#branchTable'
-	    ,url:'/admin/groupInsurance/selectByPage?insurance_type=3&groupId=#(groupId)'
+	    ,url:'/admin/groupInsurance/selectByPage?insurance_type=3&groupId=#(groupId)&customerId=#(customerId)'
 	    ,cellMinWidth: 80
 	    ,toolbar: '#headBar'
 	    ,defaultToolbar: ['filter','print']
@@ -315,21 +319,22 @@
 	    ,cols: [[
 		  // {field:'status', title:'状态'},
 	      {field:'order_sn', title:'订单编号'}
-	      ,{field:'planName', title:'方案名称'}
-	      ,{field:'customerName', title:'单位名称'}
+	      /* ,{field:'planName', title:'方案名称'} */
+	      ,{field:'customerName', title:'客户名'}
 	      ,{field:'policy_num', title:'保单号'}
-	      ,{field:'insurance_type', title:'险种类型'}
-	      ,{field:'type', title:'订单类型'}
+	       ,{field:'insurance_type', title:'险种类型'} 
+	     /*  ,{field:'type', title:'订单类型'} */
 	     // ,{field:'contacts', title:'联系人'}
 	     // ,{field:'email', title:'联系邮箱'}
 	      //,{field:'phone', title:'联系电话'}
 	      ,{field:'BrandName', title:'保险公司'}
 	      ,{field:'premium', title:'保费'}
-	      ,{field:'remark', title:'备注'}
+	     
 	      ,{field:'policy_effective_date', title:'保单生效日期'}
 	      ,{field:'policy_expiration_date', title:'保单终止日期'}
-	    
-	      ,{fixed: 'right', title:'操作',width : 150,align : 'center', toolbar: '#actionBar'}
+	      ,{field:'create_time', title:'订单创建时间'}
+	      ,{field:'remark', title:'备注'}
+	      ,{fixed: 'right', title:'操作',width : 250,align : 'center', toolbar: '#actionBar'}
 	    ]]
 	 ,done: function(res, page, count){
 			$("[data-field='status']").children().each(function(){
@@ -522,6 +527,12 @@
 	    }
 	    else if(obj.event === 'preserve'){
 			  location.href="/admin/groupInsurance/preserve?id="+data.id;
+	    }
+	    else if(obj.event === 'preveLog'){
+			  location.href="/admin/groupInsurance/personLog?type=3&id="+data.id;
+	    }
+	    else if(obj.event === 'viewPerson'){
+			  location.href="/admin/groupInsurance/view?type=2&id="+data.id;
 	    }
 	    else if(obj.event === 'view'){
 	    	console.log('view')

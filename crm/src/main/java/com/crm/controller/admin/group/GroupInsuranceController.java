@@ -92,6 +92,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	public void index() {
 		//获取品牌集合
 		setAttr("groupId",getPara("groupId"));
+		setAttr("customerId",getPara("customerId"));
 		setAttr("brands", brandService.selectList());
 		render("index.html");
 	}
@@ -111,6 +112,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
        params.put("status", getPara("status"));
        params.put("type", getPara("type"));
        params.put("groupId", getPara("groupId"));
+       params.put("customerId", getPara("customerId"));
        params.put("insurance_type", getPara("insurance_type"));
        //params.put("is_on_sale", getPara("is_on_sale"));
        String customerIds = "";
@@ -344,7 +346,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		setAttr("brands", brandService.selectList());
 		setAttr("groups", groupInfoService.selectList());
 		setAttr("admins", userService.selectList());
-		
+		setAttr("type", getPara("type"));
 		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
 		//GroupInsuranceCompany company = GroupInsuranceCompany.dao.findById((Long)order.get("company_id"));
 		//setAttr("brands", brandService.selectList());
@@ -3240,6 +3242,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void personLog() {
 		setAttr("type", getPara("type"));
+		setAttr("orderId", getPara("id"));
+		setAttr("customerName", CustomerInfo.dao.findById(GroupInsuranceOrder.dao.findById(getParaToLong("id")).getLong("insure_customer_id")).get("customer_name"));
 		render("personLog.html");
 	}
 	
@@ -3250,6 +3254,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		String createTime = getPara("create_time");
 		String policyEffectiveDate = getPara("policy_effective_date");
 		String insurance_type = getPara("insurance_type");
+		String orderId = getPara("orderId");
 		int page = getParaToInt("page");
 		int size = getParaToInt("limit");
 		String customerIds = "";
@@ -3269,7 +3274,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				}
 			}
 		}
-		DataGrid<GroupInsurancePersonLog> dataGrid = GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type,customerIds.substring(0,customerIds.length()-1));
+		DataGrid<GroupInsurancePersonLog> dataGrid = GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type,customerIds.substring(0,customerIds.length()-1),orderId);
 		renderJson(dataGrid);
 	}
 	

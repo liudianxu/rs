@@ -53,6 +53,10 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		if(StringUtils.isNotBlank(map.get("groupId"))){
 			sql.append(" and g.id = "+map.get("groupId"));
 		}
+		if(StringUtils.isNotBlank(map.get("customerId"))){
+			sql.append(" and c.id = "+map.get("customerId"));
+		}
+		
 		if(StringUtils.isNotBlank(map.get("policy_num"))){
 			sql.append(" and o.policy_num like '%").append(map.get("policy_num")).append("%' ");
 		}
@@ -205,7 +209,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 
 	@Override
 	public List<GroupInsuranceOrder> findByGroupId(Long long1) {
-		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ?",long1);
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ? and insurance_type =3 ",long1);
 	}
 
 }

@@ -7,6 +7,7 @@
     <thead>
      <tr>
       <td>集团</td>
+      <td>合同类型</td>
       <td>合同</td>
       <td>合同金额</td>
       <td>当前金额</td>
@@ -19,6 +20,7 @@
     #for(info:infos)
     <tr>
       <td>#(info.group_name)</td>
+      <td>团险责任险</td>
       <td>#(info.orderCount)</td>
       <td>#(info.totalPre)</td>
       <td>#(info.fre)</td>
@@ -40,6 +42,7 @@
     <thead>
      <tr>
       <td>客户</td>
+      <td>合同类型</td>
       <td>合同</td>
       <td>合同金额</td>
       <td>当前金额</td>
@@ -52,6 +55,7 @@
     #for(customer:customers)
     <tr>
       <td>#(customer.customer_name)</td>
+       <td>团险责任险</td>
       <td>#(customer.orderCount)</td>
       <td>#(customer.totalPre)</td>
       <td>#(customer.fre)</td>

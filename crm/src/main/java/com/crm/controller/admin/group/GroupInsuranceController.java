@@ -3243,7 +3243,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	public void personLog() {
 		setAttr("type", getPara("type"));
 		setAttr("orderId", getPara("id"));
+		if(GroupInsuranceOrder.dao.findById(getParaToLong("id"))!=null){
 		setAttr("customerName", CustomerInfo.dao.findById(GroupInsuranceOrder.dao.findById(getParaToLong("id")).getLong("insure_customer_id")).get("customer_name"));
+		}
 		render("personLog.html");
 	}
 	

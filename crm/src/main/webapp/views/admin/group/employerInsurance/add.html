@@ -1029,7 +1029,8 @@
 	function reloadPersonTable(orderId) {
 		$personTable = $("#personTable");
 		$personTable.find("tbody").html('');
-		return new Promise(function(resolve, reject) {
+		var then = function(){}
+		var error = function(){}
 			$.ajax({
 				type: 'GET',
 				url: "/admin/groupInsurance/queryPersonByOrderId",
@@ -1103,13 +1104,23 @@
 						}
 						var tbody = $personTable.find("tbody")
 						tbody.html(html);
-						resolve(tbody)
+						then(tbody)
 					} else {
-						reject(data.code)
+						error(data.code)
 					}
 				}
 			})
-		})
+			var promise = {
+				then: function(fn){
+					then = fn;
+					return promise
+				},
+				catch: function(fn){
+					error = fn;
+					return promise
+				}
+			}
+			return promise
 	}
 </script>
 <style>

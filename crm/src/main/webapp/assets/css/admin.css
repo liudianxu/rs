@@ -65,3 +65,7 @@
 	border-bottom: 1px solid #009a00;
 	box-shadow: 0 0 3px #009688;
 }
+
+.layui-unselect span{
+	height: auto !important;
+}

@@ -81,6 +81,13 @@ public class RoleController extends BaseController<Role> {
 	public void save() {
 		BaseResponse response = new BaseResponse();
 		Role role = getModel(Role.class);
+		if(role.get("insurance_type")==null||role.get("insurance_type").equals(""))
+		{
+			response.setCode(Constant.RESPONSE_CODE_FAIL);
+			response.setMessage("请选择险种类型");
+			renderJson(response);
+			return;
+		}
 		String state = getPara("state");
 		String[] permissions = getParaValues("ids[]");
 		String[] customers = getParaValues("customerids[]");

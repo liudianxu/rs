@@ -59,5 +59,5 @@ public interface GroupInfoService {
 
 	void setSaveInfo(GroupInfo groupInfo, List<Object> lo);
 
-	List<GroupInfo> findByCustomerIds(String substring);
+	List<GroupInfo> findByCustomerIds(String substring,String type);
 }

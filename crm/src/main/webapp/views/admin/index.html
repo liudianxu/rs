@@ -18,20 +18,22 @@
     </thead>
     <tbody>
     #for(info:infos)
+        #if(info.orderCount>0)
     <tr>
       <td>#(info.group_name)</td>
-      <td>团险责任险</td>
+       <td>#if(type=='0')雇主责任险#else团体意外险 #end</td>
       <td>#(info.orderCount)</td>
       <td>#(info.totalPre)</td>
       <td>#(info.fre)</td>
       <td>#(info.totalNum)</td>
         <td>#(info.personNum)</td>
       <td>
-           <a class="btns" href="/admin/groupInsurance?groupId=#(info.id)">
+           <a class="btns" #if(type=='3') href="/admin/groupInsurance?groupId=#(info.id)" #else href="/admin/employerInsurance?groupId=#(info.id)"  #end>
                <div class="btn_detail">查看</div>
            </a>
       </td> 
      </tr>
+     #end
     #end
     </tbody>
    </table>
@@ -53,20 +55,22 @@
     </thead>
     <tbody>
     #for(customer:customers)
+    #if(customer.orderCount>0)
     <tr>
       <td>#(customer.customer_name)</td>
-       <td>团险责任险</td>
+       <td>#if(type=='0')雇主责任险#else团体意外险 #end</td>
       <td>#(customer.orderCount)</td>
       <td>#(customer.totalPre)</td>
       <td>#(customer.fre)</td>
       <td>#(customer.totalNum)</td>
         <td>#(customer.personNum)</td>
       <td>
-           <a class="btns" href="/admin/groupInsurance?customerId=#(customer.id)">
+           <a class="btns"  #if(type=='3') href="/admin/groupInsurance?customerId=#(customer.id)" #else href="/admin/employerInsurance?customerId=#(customer.id)" #end>
                <div class="btn_detail">查看</div>
            </a>
       </td>
      </tr>
+     #end
     #end
     </tbody>
    </table>

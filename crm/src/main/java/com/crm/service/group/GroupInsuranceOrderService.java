@@ -59,7 +59,7 @@ public interface GroupInsuranceOrderService {
 	 * @param type 
 	 * @return
 	 */
-	List<GroupInsuranceOrder> queryByCustomerId(Long id);
+	List<GroupInsuranceOrder> queryByCustomerId(Long id,String type);
 
 
 	/**
@@ -107,5 +107,7 @@ public interface GroupInsuranceOrderService {
 	
 	List<GroupInsuranceOrder> selectAll(String substring, String type);
 
-	List<GroupInsuranceOrder> findByGroupId(Long long1);
+	List<GroupInsuranceOrder> findByGroupId(Long long1,String type);
+
+	List<GroupInsuranceOrder> queryByCustomerId(Long customerId);
 }

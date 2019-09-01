@@ -8,6 +8,7 @@ import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.groupinfo.GroupInfo;
+import com.crm.model.system.Role;
 import com.crm.model.system.User;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.group.GroupInsuranceOrderService;
@@ -15,6 +16,7 @@ import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.PermissionService;
+import com.crm.service.system.RoleService;
 import com.crm.util.Constant;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.Controller;
@@ -35,10 +37,13 @@ public class AdminController extends Controller {
 	private GroupInsurancePersonService personService;
 	@Inject
 	private CustomerInfoService cusService;
+	@Inject
+	private RoleService roleService;
 	
 	public void index() {
 		String customerIds = "";
 		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		List<Role> roles=null;
 		if (sessionId != null) {
 			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
 			if (admin == null) {
@@ -52,9 +57,15 @@ public class AdminController extends Controller {
 						customerIds += customerInfo.getLong("id")+",";
 					}
 				}
+				roles=roleService.selectRolesByUserId(admin.getLong("id"));
 			}
 		}
-		String type="3";
+		String type="";
+
+		if(roles.get(0).get("insurance_type")!=null) {
+		 type=roles.get(0).get("insurance_type").toString();
+		}
+		setAttr("type", type);
 		if(customerIds.length()>0) {
 		List<GroupInsuranceOrder> groupInsuranceOrders = groupInsuranceOrderService.selectAll(customerIds.substring(0,customerIds.length()-1),type);
 		if(CollectionUtil.isNotEmpty(groupInsuranceOrders)) {
@@ -65,12 +76,12 @@ public class AdminController extends Controller {
 				}
 			}	
 		}
-		List<GroupInfo>  infos=infoService.findByCustomerIds(customerIds.substring(0,customerIds.length()-1));
+		List<GroupInfo>  infos=infoService.findByCustomerIds(customerIds.substring(0,customerIds.length()-1),type);
 		setAttr("infos", infos);
 		
 		 List<CustomerInfo> customers=cusService.findByIds(customerIds.substring(0,customerIds.length()-1));
 		 for (CustomerInfo customer : customers) {
-			 List<GroupInsuranceOrder> order = groupInsuranceOrderService.queryByCustomerId(customer.getLong("id"));
+			 List<GroupInsuranceOrder> order = groupInsuranceOrderService.queryByCustomerId(customer.getLong("id"),type);
 			 customer.put("orderCount",order.size());
 			 BigDecimal amount2 = BigDecimal.ZERO;
 			 BigDecimal fre2 = BigDecimal.ZERO;
@@ -96,6 +107,8 @@ public class AdminController extends Controller {
 			 customer.put("personNum",personNum2);
 			 }
 		 }
+		 
+		 
 		 setAttr("customers", customers);
 		}
 		render("index.html");

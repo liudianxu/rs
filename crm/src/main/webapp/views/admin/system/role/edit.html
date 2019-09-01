@@ -20,6 +20,11 @@
 	     	<label class="layui-form-label"><span style="color: red">*</span>描述</label>
 	      	<input type="text" name="role.description" value="#(role.description)" lay-verify="required" autocomplete="off" class="layui-input" style="width: 250px;">
 	   	</div>
+	   		<div class="layui-form-item">
+	     	<label class="layui-form-label"><span style="color: red">*</span>险种类型</label>
+	     	<input type="radio" lay-filter="conf" name="role.insurance_type" #if(role.insurance_type==0)checked='checked' #end  value="0" />雇主责任险
+	     	<input type="radio" lay-filter="conf" name="role.insurance_type"  #if(role.insurance_type==3)checked='checked' #end value="3" />团体意外险
+	   	</div>
 	   	<div class="layui-form-item">
 	     	<label class="layui-form-label">角色授权</label>
 	     	<div class="layui-input-block">

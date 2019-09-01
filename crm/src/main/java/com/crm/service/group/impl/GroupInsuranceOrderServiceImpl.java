@@ -47,6 +47,12 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		if(StringUtils.isNotBlank(map.get("brand_id"))){
 			sql.append(" and o.brand_id = "+map.get("brand_id"));
 		}
+		if(StringUtils.isNotBlank(map.get("groupId"))){
+			sql.append(" and g.id = "+map.get("groupId"));
+		}
+		if(StringUtils.isNotBlank(map.get("customerId"))){
+			sql.append(" and c.id = "+map.get("customerId"));
+		}
 		if(StringUtils.isNotBlank(map.get("status"))){
 			sql.append(" and o.status = "+map.get("status"));
 		}
@@ -198,8 +204,8 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 	}
 
 	@Override
-	public List<GroupInsuranceOrder> queryByCustomerId(Long id) {
-		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_customer_id = ?",id);
+	public List<GroupInsuranceOrder> queryByCustomerId(Long id,String type) {
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_customer_id = ? and insurance_type= ?",id,type);
 	}
 
 	@Override
@@ -208,8 +214,13 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 	}
 
 	@Override
-	public List<GroupInsuranceOrder> findByGroupId(Long long1) {
-		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ? and insurance_type =3 ",long1);
+	public List<GroupInsuranceOrder> findByGroupId(Long long1,String type) {
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ? and insurance_type = ? ",long1,type);
+	}
+
+	@Override
+	public List<GroupInsuranceOrder> queryByCustomerId(Long customerId) {
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_customer_id = ? ",customerId);
 	}
 
 }

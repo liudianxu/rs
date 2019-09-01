@@ -37,7 +37,12 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
     private AdminLoginService adminLoginService;
 	@Inject
 	private PermissionService permissionService;
-	
+	public void index() {
+		//获取品牌集合
+		setAttr("groupId",getPara("groupId"));
+		setAttr("customerId",getPara("customerId"));
+		render("index.html");
+	}
 	/**
 	 * 列表分页查询
 	 */
@@ -53,6 +58,8 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
        params.put("type", getPara("type"));
        params.put("insurance_type", getPara("insurance_type"));*/
        //params.put("is_on_sale", getPara("is_on_sale"));
+       params.put("groupId", getPara("groupId"));
+       params.put("customerId", getPara("customerId"));
        params.put("insurance_type", "0");
        params.put("customer_name", getPara("customer_name"));
        params.put("policy_effective_date", getPara("policy_effective_date"));

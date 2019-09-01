@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public List<Role> selectRolesByUserId(Long userId) {
 		StringBuffer sqlSb = new StringBuffer();
-		sqlSb.append("select r.id,r.name,case when ar.userid=?")
+		sqlSb.append("select r.insurance_type,r.id,r.name,case when ar.userid=?")
 			.append(" then 1 else 0 end checked ")
 			.append("from sys_role r left join sys_user_role ar on ")
 			.append(" r.id=ar.roleid  where  ar.userid=? and r.state=1 ")

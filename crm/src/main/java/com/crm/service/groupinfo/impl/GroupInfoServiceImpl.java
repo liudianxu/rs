@@ -170,7 +170,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	}
 
 	@Override
-	public List<GroupInfo> findByCustomerIds(String customerIds) {
+	public List<GroupInfo> findByCustomerIds(String customerIds,String type) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("select DISTINCT g.* from crm_group_info g ");
 		sql.append("left join crm_customer_info c on c.group_id =g.id  ");
@@ -184,7 +184,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		
 		List<GroupInfo> infos = GroupInfo.dao.find(sqlPara);
 		for (GroupInfo groupInfo : infos) {
-			 List<GroupInsuranceOrder> orders = ordersService.findByGroupId(groupInfo.getLong("id"));
+			 List<GroupInsuranceOrder> orders = ordersService.findByGroupId(groupInfo.getLong("id"),type);
 			 groupInfo.put("orderCount",orders.size());
 			 BigDecimal amount = BigDecimal.ZERO;
 			 BigDecimal fre = BigDecimal.ZERO;

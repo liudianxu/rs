@@ -480,6 +480,7 @@
 								// 		console.error('The code from queryPersonByOrderId = ' + err)
 								// 	})
 							// }
+							showLoading()
 							function trim(val){
 								return val == null ? '' : val
 							}
@@ -550,6 +551,7 @@
 							}
 							$('.show-excel-data').find('.tip').html(data.message)
 							$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
+							hideLoading()
 						}
 					});
 				}

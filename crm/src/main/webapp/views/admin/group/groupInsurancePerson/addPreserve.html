@@ -674,6 +674,7 @@
 									// 		console.error('The code from queryPersonByOrderId = ' + err)
 									// 	})
 								// }
+								showLoading()
 								function trim(val){
 									return val == null ? '' : val
 								}
@@ -762,6 +763,7 @@
 								});
 								}
 								$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
+								hideLoading()
 							}
 						});
 					}
@@ -810,6 +812,7 @@
 									// 		console.error('The code from queryPersonByOrderId = ' + err)
 									// 	})
 								// }
+								showLoading()
 								function trim(val){
 									return val == null ? '' : val
 								}
@@ -890,6 +893,7 @@
 								});
 								}
 								$('.show-excel-data2').find('.btn.ok').click(editPersonFunc2)
+								hideLoading()
 							}
 						});
 					}

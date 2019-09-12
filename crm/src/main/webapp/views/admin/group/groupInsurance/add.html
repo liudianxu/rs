@@ -1282,6 +1282,7 @@
 						,
 					multiple: true,
 					done: function(res) {
+						showLoading()
 						var hiddenOrderIdForImport = $("input[name='hiddenOrderIdForGuarantee3']").val();
 						console.log(hiddenOrderIdForImport);
 						if (hiddenOrderIdForImport == undefined || hiddenOrderIdForImport == null || hiddenOrderIdForImport == "") {
@@ -1422,6 +1423,7 @@
 								});
 								}
 								$('.show-excel-data').find('.btn.ok').click(editPersonFunc1)
+								hideLoading()
 							}
 						});
 					}

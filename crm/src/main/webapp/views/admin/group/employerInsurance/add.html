@@ -589,7 +589,7 @@
 						function(res) {
 							layer.msg(res.msg);
 							if (res.code == 1) {
-								//location.href = "/admin/employerInsurance";
+								location.href = "/admin/employerInsurance";
 								$("input[name='hiddenOrderId']").val(res.orderId);
 							}
 						}, "json");

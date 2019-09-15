@@ -34,4 +34,9 @@ public class GroupInsuranceGuaranteeServiceImpl implements GroupInsuranceGuarant
 		return GroupInsuranceGuarantee.dao.findFirst("select * from crm_group_insurance_guarantee where plan_id=? and name =? ",hiddenOrderIdForImport,name);
 	}
 
+	@Override
+	public GroupInsuranceGuarantee findByEOrderIdAndPlan(Long long1, String string) {
+		return GroupInsuranceGuarantee.dao.findFirst("select * from crm_group_insurance_guarantee where order_id=? and name =? ",long1,string);
+	}
+
 }

@@ -487,7 +487,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			JSONArray newAray = new JSONArray();
 			if(order.getInt("insurance_type")==0) {
 			//groupInsuranceGuaranteeService.deleteByOrderId(order.get("id"));
-			GroupInsuranceGuarantee guarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), "方案1");
+				GroupInsuranceGuarantee guarantee = groupInsuranceGuaranteeService.findByEOrderIdAndPlan(order.getLong("id"), "方案1");
 			newAray.add(new GuaranteeDetail("身故赔偿限额",order.get("death_compensation")));
 			newAray.add(new GuaranteeDetail("残疾赔偿限额",order.get("disability_compensation")));
 			newAray.add(new GuaranteeDetail("医疗补偿限额",order.get("medical_compensation")));
@@ -562,42 +562,42 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                     		StringUtils.isBlank(String.valueOf(lo.get(9)))||
                     		StringUtils.isBlank(String.valueOf(lo.get(10)))||
                             		StringUtils.isBlank(String.valueOf(lo.get(11)))) {
-            	mes+="表格第"+i+"行存在未填写信息，请确认！";
+            	//mes+="表格第"+i+"行存在未填写信息，请确认！";
             	continue;
             }
             GroupInfo group=groupInfoService.findByName(lo.get(1).toString());
             if(group==null) {
-            	mes+="表格第"+i+"行未找到该集团名称！";
+            	mes+="表格第"+i+"行未找到该集团名称！</br>";
             }
             insuranceOrder.put("groupName",lo.get(1).toString());
             CustomerInfo customerInfo=customerInfoService.findByName(String.valueOf(lo.get(2)).toString());
             if(customerInfo==null) {
-            	mes+="表格第"+i+"行未找到该客户名称！";
+            	mes+="表格第"+i+"行未找到该客户名称！</br>";
             }
             insuranceOrder.put("customerName",lo.get(2).toString());
             Brand brand = brandService.findByName(lo.get(3).toString());
             if(brand==null) {
-            	mes+="表格第"+i+"行未找到该保险公司名称！";
+            	mes+="表格第"+i+"行未找到该保险公司名称！</br>";
             }
             insuranceOrder.put("brandName",lo.get(3).toString());
             CustomerInfo customerInfo2=customerInfoService.findByName(String.valueOf(lo.get(4)).toString());
             if(customerInfo2==null) {
-            	mes+="表格第"+i+"行未找到该投保人名称！";
+            	mes+="表格第"+i+"行未找到该投保人名称！</br>";
             }
             insuranceOrder.put("insureName",lo.get(4).toString());
             Brand brand2 = brandService.findByName(lo.get(5).toString());
             if(brand2==null) {
-            	mes+="表格第"+i+"行未找到该保险人名称！";
+            	mes+="表格第"+i+"行未找到该保险人名称！</br>";
             }
             insuranceOrder.put("insuranceName",lo.get(5).toString());
             insuranceOrder.set("policy_num",lo.get(6).toString());
             GroupInsurancePlan plan = GroupInsurancePlan.findBySn(lo.get(7).toString());
             if(plan==null) {
-            	mes+="表格第"+i+"行未找到该计划编号！";
+            	mes+="表格第"+i+"行未找到该计划编号！</br>";
             }
             GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(lo.get(6).toString());
             if(order2!=null) {
-            	mes+="表格第"+i+"行已存在该保单号！";
+            	mes+="表格第"+i+"行已存在该保单号！</br>";
             }
             insuranceOrder.put("planSn",lo.get(7).toString());
             
@@ -621,18 +621,18 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             	insuranceOrder.put("isFail",0);
             }
             orders.add(insuranceOrder);
-            if(StringUtils.isNotBlank(mes)) {
-                data.put("code", Constant.RESPONSE_CODE_FAIL);
-                data.put("message", mes);
-            }
-            else {
-                data.put("code", Constant.RESPONSE_CODE_SUCCESS);
-                data.put("message", "导入成功");
-            }
-            data.put("orders", orders);
-        	renderJson(data);
-        	return;
         }
+        if(StringUtils.isNotBlank(mes)) {
+            data.put("code", Constant.RESPONSE_CODE_FAIL);
+            data.put("message", mes);
+        }
+        else {
+            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+        }
+        data.put("orders", orders);
+    	renderJson(data);
+    	return;
 	}
         
 	public void saveImportOrder() throws Exception {
@@ -649,21 +649,21 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			 GroupInsuranceOrder groupInsuranceOrder = new GroupInsuranceOrder();
 			 GroupInfo group=groupInfoService.findByName(job.getString("groupName"));
 	            if(group==null) {
-	            	mes+="表格第"+h+"行未找到该集团名称！";
+	            	mes+="表格第"+h+"行未找到该集团名称！</br>";
 	            }
 	            else {
 	            	groupInsuranceOrder.set("insure_group_id", group.getLong("id"));
 	            }
 	            CustomerInfo customerInfo=customerInfoService.findByName(job.getString("customerName"));
 	            if(customerInfo==null) {
-	            	mes+="表格第"+h+"行未找到该客户名称！";
+	            	mes+="表格第"+h+"行未找到该客户名称！</br>";
 	            }
 	            else {
 	            	groupInsuranceOrder.set("insure_customer_id", customerInfo.getLong("id"));
 	            }
 	            Brand brand = brandService.findByName(job.getString("brandName"));
 	            if(brand==null) {
-	            	mes+="表格第"+h+"行未找到该保险公司名称！";
+	            	mes+="表格第"+h+"行未找到该保险公司名称！</br>";
 	            }
 	            else {
 	            	groupInsuranceOrder.set("brand_id", brand.getLong("id"));
@@ -671,14 +671,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 
 	            GroupInsurancePlan plan = GroupInsurancePlan.findBySn(job.getString("planSn"));
 	            if(plan==null) {
-	            	mes+="表格第"+h+"行未找到该计划编号！";
+	            	mes+="表格第"+h+"行未找到该计划编号！</br>";
 	            }
 	            else {
 	            	groupInsuranceOrder.set("plan_id", plan.getLong("id"));
 	            }
 	            GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(job.getString("policy_num"));
 	            if(order2!=null) {
-	            	mes+="表格第"+h+"行已存在该保单号！";
+	            	mes+="表格第"+h+"行已存在该保单号！</br>";
 	            }
 	            groupInsuranceOrder.set("policy_num", job.get("policy_num"));
 	            groupInsuranceOrder.set("policy_effective_date", job.get("policy_effective_date"));
@@ -704,8 +704,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	    			order.set("status", 3);
 	    		}*/
 	            orders.add(groupInsuranceOrder);
-	            
-	            if(StringUtils.isNotBlank(mes)) {
+		 }
+		   if(StringUtils.isNotBlank(mes)) {
 	  	    	  resp.put("code", Constant.RESPONSE_CODE_FAIL);
 	  	    	  resp.put("message", mes);
 	  	        }
@@ -717,8 +717,6 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            resp.put("orders", orders);
 	        	renderJson(resp);
 	        	return;
-		 }
-		
 		
 	}
 	/**
@@ -1070,7 +1068,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		else{
 			premium = guarantee.getBigDecimal("premium");
 		}
-		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		//更新
 		if(person.get("id")!=null) {
@@ -1237,7 +1235,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		else{
 			premium = guarantee.getBigDecimal("premium");
 		}
-		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		//更新
 		if(person.get("id")!=null) {
@@ -1473,7 +1471,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                 long[] getDate = DateUtil.getDatePoor(person.get("policy_expiration_date"),person.get("policy_effective_date")); 
         		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
         		BigDecimal premium = guarantee.getBigDecimal("premium");
-        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
         		person.set("premium", totelPre);
         		person.put("guarantee_name", groupInsuranceGuarantee.get("name"));
         		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
@@ -1610,7 +1608,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                long[] getDate = DateUtil.getDatePoor(person.get("policy_expiration_date"),person.get("policy_effective_date")); 
 	        		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 	        		BigDecimal premium = guarantee.getBigDecimal("premium");
-	        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	        		person.set("premium", totelPre);
 	        		//person.put("guarantee_name", groupInsuranceGuarantee.get("name"));
 	        		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
@@ -1865,7 +1863,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                      long[] getDate = DateUtil.getDatePoor(format.parse(exPerson.get("policy_expiration_date").toString()),format.parse(exPerson.get("policy_effective_date").toString())); 
              		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 	             		BigDecimal premium = guarantee.getBigDecimal("premium");
-             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
             		person.put("guarantee_name", groupInsuranceGuarantee.get("name"));
              		exPerson.set("premium", totelPre);
                  }
@@ -2102,7 +2100,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                     long[] getDate = DateUtil.getDatePoor(exPerson.get("policy_expiration_date"),exPerson.get("policy_effective_date")); 
 	             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 		             		BigDecimal premium = guarantee.getBigDecimal("premium");
-	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	             		exPerson.set("premium", totelPre);
 	                 }
 	                 
@@ -2598,7 +2596,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
             		BigDecimal premium = guarantee.getBigDecimal("premium");
-            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
             		person.set("premium", totelPre);
             		//person.update();
             		 if(StringUtils.isNotBlank(mes)) {
@@ -2709,7 +2707,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                      long[] getDate = DateUtil.getDatePoor(exPerson.get("policy_expiration_date"),exPerson.get("policy_effective_date")); 
              		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 	             		BigDecimal premium = guarantee.getBigDecimal("premium");
-             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
              		exPerson.set("premium", totelPre);
                  }
                  else {
@@ -2856,7 +2854,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
 	            		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 	            		BigDecimal premium = guarantee.getBigDecimal("premium");
-	            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	            		person.set("premium", totelPre);
 	            		//person.update();
 	            		exPersons.add(person);
@@ -2959,7 +2957,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                     long[] getDate = DateUtil.getDatePoor(exPerson.get("policy_expiration_date"),exPerson.get("policy_effective_date")); 
 	             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 		             		BigDecimal premium = guarantee.getBigDecimal("premium");
-	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	             		exPerson.set("premium", totelPre);
 	              
 	         		
@@ -3144,7 +3142,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 		if(guarantee!=null) {
 		BigDecimal premium = guarantee.getBigDecimal("premium");
-		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		person.update();
 		}
@@ -3201,7 +3199,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 		if(guarantee!=null) {
 		BigDecimal premium = guarantee.getBigDecimal("premium");
-		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		person.update();
 		}

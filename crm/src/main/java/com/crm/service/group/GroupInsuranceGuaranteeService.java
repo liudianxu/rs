@@ -23,4 +23,6 @@ public interface GroupInsuranceGuaranteeService {
 
 	GroupInsuranceGuarantee findByOrderIdAndPlan(Long hiddenOrderIdForImport, String valueOf);
 
+	GroupInsuranceGuarantee findByEOrderIdAndPlan(Long long1, String string);
+
 }

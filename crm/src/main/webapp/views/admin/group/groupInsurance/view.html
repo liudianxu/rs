@@ -2477,15 +2477,7 @@
 							} else if (data[i].status == 3) {
 								html += '<td>已失效</td>';
 							}
-							html += '<td><a class="layui-btn layui-btn-sm" data-name="' + data[i].name + '" data-gender="' + data[i].gender +
-								'"' +
-								'data-id_type="' + data[i].id_type + '" data-id_num="' + data[i].id_num + '" data-phone="' + data[i].phone +
-								'" data-occupation_category="' + data[i].occupation_category + '" data-guarantee_id="' + data[i].guarantee_id +
-								'" data-remark="' + data[i].remark + '"' +
-								'data-policy_effective_date="' + data[i].policy_effective_date + '" data-policy_expiration_date="' + data[
-									i].policy_expiration_date + '" data-policy_num="' + data[i].policy_num + '"' +
-								'data-id="' + data[i].id + '" id="editPersonBtn"><i class="layui-icon"></i>修改</a>';
-							html += '</td></tr>';
+							html += '</tr>';
 						}
 						var tbody = $personTable.find("tbody")
 						tbody.html(html);

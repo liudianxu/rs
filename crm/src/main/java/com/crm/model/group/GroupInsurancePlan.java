@@ -22,7 +22,7 @@ public class GroupInsurancePlan extends Model<GroupInsurancePlan>{
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from crm_group_insurance_plan  ");
-		sql.append("where 1=1 ");
+		sql.append("where 1=1 order by create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsurancePlan.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
 		dataGrid.setCount(page.getTotalRow());

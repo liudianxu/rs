@@ -93,6 +93,8 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
 	public void addPreserve() {
 		Long id = getParaToLong("id");
 		setAttr("orderId", id);
+		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
+		setAttr("planId", order.getLong("plan_id"));
 		render("addPreserve.html");
 	}
 	

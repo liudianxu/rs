@@ -647,6 +647,7 @@
 					multiple: true,
 					done: function(res) {
 						var hiddenOrderIdForImport = #(orderId);
+						var planId = #(planId);
 						console.log(hiddenOrderIdForImport);
 						$.ajax({
 							type: 'POST',
@@ -686,7 +687,7 @@
 										type: 'GET',
 										url: "/admin/groupInsurance/findGuaranteeSchemes",
 										data: {
-											orderId: hiddenOrderIdForImport
+											orderId: planId
 										},
 										async: false,
 										dataType: "json",
@@ -781,6 +782,7 @@
 					multiple: true,
 					done: function(res) {
 						var hiddenOrderIdForImport =#(orderId);
+						var planId=#(planId);
 						console.log(hiddenOrderIdForImport);
 						if (hiddenOrderIdForImport == undefined || hiddenOrderIdForImport == null || hiddenOrderIdForImport == "") {
 							layer.msg("请先保存产品保障说明！");
@@ -825,13 +827,13 @@
 										type: 'GET',
 										url: "/admin/groupInsurance/findGuaranteeSchemes",
 										data: {
-											orderId: hiddenOrderIdForImport
+											orderId: planId
 										},
 										async: false,
 										dataType: "json",
 										success: function(data2) {
 											guarantees=data2.guarantees;
-											/*  selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
+											  selectHtml +='<select  name="guarantee_id" groupInsurancePersonGuarantee_id class="layui-input">';
 											$.each(data2.guarantees, function(key, val) {
 												if (val == trim(person.guarantee_name)) {
 													selectHtml += '<option value="' + key + '" selected="selected">' + val + '</option>';
@@ -839,7 +841,7 @@
 													selectHtml += '<option value="' + key + '">' + val + '</option>';
 												}
 											});
-											selectHtml += '</select>'; */
+											selectHtml += '</select>'; 
 										}
 									})
 									
@@ -942,13 +944,14 @@
 	  table.on('toolbar(test)', function(obj){
 	    var data = obj.data; 
 	    var hiddenOrderId = #(orderId);
+	    var planId = #(planId);
 	    if(obj.event === 'addPreserveBtn'){
 	    	//查询保障方案
 			$.ajax({
 				type: 'GET',
 				url: "/admin/groupInsurance/findGuaranteeSchemes",
 				data: {
-					orderId: hiddenOrderId
+					orderId: planId
 				},
 				dataType: "json",
 				success: function(data) {
@@ -1167,11 +1170,12 @@
 			var policy_expiration_date = data.policy_expiration_date;
 			var policy_num = data.policy_num;
 			var hiddenOrderId = #(orderId);
+			var planId = #(planId);
 			$.ajax({
 				type: 'GET',
 				url: "/admin/groupInsurance/findGuaranteeSchemes",
 				data: {
-					orderId: hiddenOrderId
+					orderId: planId
 				},
 				dataType: "json",
 				success: function(data) {
@@ -1384,13 +1388,14 @@
 			var policy_num = $(this).attr("data-policy_num");
 			var job_type = $(this).attr("data-job_type");
 			var hiddenOrderId = #(orderId);
+			var planId = #(planId);
 			var that = this;
 			var guarantee;
 			$.ajax({
 				type: 'GET',
 				url: "/admin/groupInsurance/findGuaranteeSchemes",
 				data: {
-					orderId: hiddenOrderId
+					orderId: planId
 				},
 				dataType: "json",
 				success: function(data) {
@@ -1660,13 +1665,14 @@
 			var policy_num = $(this).attr("data-policy_num");
 			var job_type = $(this).attr("data-job_type");
 			var hiddenOrderId = #(orderId);
+			var planId = #(planId);
 			var that = this;
 			var guarantee;
 			$.ajax({
 				type: 'GET',
 				url: "/admin/groupInsurance/findGuaranteeSchemes",
 				data: {
-					orderId: hiddenOrderId
+					orderId: planId
 				},
 				dataType: "json",
 				success: function(data) {

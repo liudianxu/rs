@@ -585,35 +585,35 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             	mes+="表格第"+i+"行未找到该投保人名称！</br>";
             }
             insuranceOrder.put("insureName",lo.get(4).toString());
-            Brand brand2 = brandService.findByName(lo.get(5).toString());
+          /*  Brand brand2 = brandService.findByName(lo.get(5).toString());
             if(brand2==null) {
             	mes+="表格第"+i+"行未找到该保险人名称！</br>";
-            }
-            insuranceOrder.put("insuranceName",lo.get(5).toString());
-            insuranceOrder.set("policy_num",lo.get(6).toString());
-            GroupInsurancePlan plan = GroupInsurancePlan.findBySn(lo.get(7).toString());
+            }*/
+            /*insuranceOrder.put("insuranceName",lo.get(5).toString());*/
+            insuranceOrder.set("policy_num",lo.get(5).toString());
+            GroupInsurancePlan plan = GroupInsurancePlan.findBySn(lo.get(6).toString());
             if(plan==null) {
             	mes+="表格第"+i+"行未找到该计划编号！</br>";
             }
-            GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(lo.get(6).toString());
-            if(order2!=null) {
+            GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(lo.get(5).toString());
+            /*if(order2!=null) {
             	mes+="表格第"+i+"行已存在该保单号！</br>";
-            }
-            insuranceOrder.put("planSn",lo.get(7).toString());
+            }*/
+            insuranceOrder.put("planSn",lo.get(6).toString());
             
-            String date1=(String) lo.get(8);
-            String date2=(String) lo.get(9);
+            String date1=(String) lo.get(7);
+            String date2=(String) lo.get(8);
             Date String1=getDate(Integer.parseInt(date1.substring(0,date1.length()-3)));
             Date String2=getDate(Integer.parseInt(date2.substring(0,date2.length()-3)));
             DateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
             insuranceOrder.set("policy_effective_date", formater.format(String1) + " 00:00:00");
             insuranceOrder.set("policy_expiration_date",formater.format(String2) + " 23:59:59");
-            insuranceOrder.set("premium",lo.get(10).toString());
-            insuranceOrder.set("person_num",lo.get(11).toString());
-            insuranceOrder.set("contacts",lo.get(12).toString());
-            insuranceOrder.set("phone",lo.get(13).toString());
-            insuranceOrder.set("email",lo.get(14).toString());
-            insuranceOrder.set("brokerage_charges",lo.get(15).toString());
+            insuranceOrder.set("premium",lo.get(9).toString());
+            insuranceOrder.set("person_num",lo.get(10).toString());
+            insuranceOrder.set("contacts",lo.get(11).toString());
+            insuranceOrder.set("phone",lo.get(12).toString());
+            insuranceOrder.set("email",lo.get(13).toString());
+            insuranceOrder.set("brokerage_charges",lo.get(14).toString());
             if(StringUtils.isNotBlank(mes)) {
             	insuranceOrder.put("isFail",1);
             }
@@ -677,9 +677,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            	groupInsuranceOrder.set("plan_id", plan.getLong("id"));
 	            }
 	            GroupInsuranceOrder  order2 = groupInsuranceOrderService.findByPolicyNum(job.getString("policy_num"));
-	            if(order2!=null) {
+	           /* if(order2!=null) {
 	            	mes+="表格第"+h+"行已存在该保单号！</br>";
-	            }
+	            }*/
 	            groupInsuranceOrder.set("policy_num", job.get("policy_num"));
 	            groupInsuranceOrder.set("policy_effective_date", job.get("policy_effective_date"));
 	            groupInsuranceOrder.set("policy_expiration_date", job.get("policy_expiration_date"));
@@ -1721,7 +1721,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			}
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
            Date  dayAgo = DateUtil.getDaysAgo(new Date(), 60);
-           Date  firstDay = DateUtil.getPerFirstDayOfMonth();
+           Date  firstDay = DateUtil.getFirstDay();
            Date  datte2 =format.parse(String.valueOf(lo.get(8)));
            if(datte2.getTime()<dayAgo.getTime()||datte2.getTime()<firstDay.getTime()||
         		   datte2.getTime()<order.getDate("policy_effective_date").getTime()) {
@@ -1965,7 +1965,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				 job.put("gender", 1);
 			 }
 	           Date  dayAgo = DateUtil.getDaysAgo(new Date(), 60);
-	           Date  firstDay = DateUtil.getPerFirstDayOfMonth();
+	           Date  firstDay = DateUtil.getFirstDay();
 	           Date  datte2 =format.parse(String.valueOf(job.get("policy_effective_date")));
 	           if(datte2.getTime()<dayAgo.getTime()||datte2.getTime()<firstDay.getTime()||
 	        		   datte2.getTime()<order.getDate("policy_effective_date").getTime()) {
@@ -2097,7 +2097,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	         		}
 	                 if(groupInsuranceGuarantee!=null) {
 	                	 exPerson.set("guarantee_id",groupInsuranceGuarantee.getLong("id"));
-	                     long[] getDate = DateUtil.getDatePoor(exPerson.get("policy_expiration_date"),exPerson.get("policy_effective_date")); 
+	                     long[] getDate = DateUtil.getDatePoor(format.parse(exPerson.get("policy_expiration_date").toString()),format.parse(exPerson.get("policy_effective_date").toString())); 
 	             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 		             		BigDecimal premium = guarantee.getBigDecimal("premium");
 	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
@@ -2245,8 +2245,8 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                      {
                 		mes+="身份证为"+idNum+"的人员信息不匹配</br>";
                      }
-                	 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), String.valueOf(lo.get(7)));
-                     GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), String.valueOf(lo.get(8)));
+                	 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), String.valueOf(lo.get(6)));
+                     GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), String.valueOf(lo.get(7)));
                      if(groupInsuranceGuarantee==null) {
                      	mes="未找到方案"+String.valueOf(lo.get(7))+"";
                      }
@@ -2271,15 +2271,6 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                          person.put("newPlan",guarantee.get("name"));
                          person.put("newPlanId",guarantee.get("id"));
 
-                         if(StringUtils.isNotBlank(mes)) {
-                        	 person.put("isFail",1);
-                         }
-                         else {
-                        	 person.put("isFail",0);
-                         }
-                  		persons.add(person);
-                  		
-                  		
                   		/*GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
                  		groupInsurancePersonLog
                  		.set("customer_id", order.getLong("insure_customer_id"))
@@ -2299,11 +2290,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                      }
                      else {
                      	mes+="未找到变更方案"+String.valueOf(lo.get(7))+"</br>";
-
+                     	 person.put("newPlan",String.valueOf(lo.get(7)));
                      }
+                     if(StringUtils.isNotBlank(mes)) {
+                       	 person.put("isFail",1);
+                        }
+                        else {
+                       	 person.put("isFail",0);
+                        }
+                        persons.add(person);
                 }
                
-        
         }
         
       /* new Thread(new Runnable(){
@@ -2379,12 +2376,12 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
              	
              }
              person.set("id", oldPerson.getLong("id"));
-             GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, oldPlan);
-             GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, newPlan);
+             GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), oldPlan);
+             GroupInsuranceGuarantee newGroupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), newPlan);
              if(groupInsuranceGuarantee==null) {
              	mes="第"+i+"未找到方案"+oldPlan+"</br>";
              }
-             if(newGroupInsuranceGuarantee==null) {
+             if(groupInsuranceGuarantee==null) {
             	 mes+="第"+i+"未找到方案"+String.valueOf(groupInsuranceGuarantee.get("name"))+"</br>";
              }
              if(!person.getLong("guarantee_id").equals(groupInsuranceGuarantee.getLong("id"))) {

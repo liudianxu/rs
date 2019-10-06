@@ -21,6 +21,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crm.component.DataGrid;
 import com.crm.controller.admin.BaseController;
+import com.crm.interceptor.AdminAuthInterceptor;
+import com.crm.interceptor.AdminLoginSessionInterceptor;
 import com.crm.model.brand.Brand;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceGuarantee;
@@ -50,6 +52,7 @@ import com.crm.util.Constant;
 import com.crm.util.DateUtil;
 import com.crm.util.IDCardUtils;
 import com.crm.util.ModelUtil;
+import com.jfinal.aop.Clear;
 import com.jfinal.aop.Inject;
 import com.jfinal.core.paragetter.Para;
 import com.jfinal.kit.HttpKit;
@@ -212,7 +215,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//setAttr("company", company);
 		int size = 0;
 		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
-		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByOrderId(id);
+		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByPlanId(id);
 		List<BigDecimal> premiums =new ArrayList<>();  
 		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
         	  premiums.add(groupInsuranceGuarantee.getBigDecimal("premium"));
@@ -285,7 +288,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//setAttr("company", company);
 		int size = 0;
 		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
-		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByOrderId(id);
+		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByPlanId(id);
 		List<BigDecimal> premiums =new ArrayList<>();  
 		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
         	  premiums.add(groupInsuranceGuarantee.getBigDecimal("premium"));
@@ -359,7 +362,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		//setAttr("company", company);
 		int size = 0;
 		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
-		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByOrderId(id);
+		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByPlanId(id);
 		List<BigDecimal> premiums =new ArrayList<>();  
 		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
         	  premiums.add(groupInsuranceGuarantee.getBigDecimal("premium"));
@@ -921,7 +924,26 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @param orderId
 	 * @return
 	 */
+	@Clear({AdminLoginSessionInterceptor.class,AdminAuthInterceptor.class})
 	public void findGuaranteeSchemes() {
+		Long orderId = getParaToLong("orderId");
+		Map<String, Object> data = new HashMap<>();
+		List<GroupInsuranceGuarantee> guarantees = groupInsuranceGuaranteeService.findByPlanId(orderId);
+		Map<Long, String> resultMap = new HashMap<>();
+		if(!CollectionUtils.isEmpty(guarantees)) {
+			for(GroupInsuranceGuarantee guarantee : guarantees) {
+				resultMap.put(guarantee.get("id"), guarantee.get("name"));
+			}
+		}
+		data.put("guarantees", resultMap);
+		renderJson(data);
+	}
+	
+	/**
+	 * 雇主保单查询保障方案
+	 */
+	@Clear({AdminLoginSessionInterceptor.class,AdminAuthInterceptor.class})
+	public void findGuaranteeSchemesByEmp() {
 		Long orderId = getParaToLong("orderId");
 		Map<String, Object> data = new HashMap<>();
 		List<GroupInsuranceGuarantee> guarantees = groupInsuranceGuaranteeService.findByOrderId(orderId);
@@ -1223,7 +1245,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		person.set("create_time", new Date());
 		person.set("order_id",hiddenOrderId);
 		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(hiddenOrderId);
-        GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"), "方案1");
+        GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByEOrderIdAndPlan(order.getLong("id"), "方案1");
         person.set("guarantee_id", groupInsuranceGuarantee.getLong("id"));
 		//计算保费
 		long[] getDate = DateUtil.getDatePoor(person.getDate("policy_expiration_date"), person.getDate("policy_effective_date")); 
@@ -1327,6 +1349,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @return
 	 * @throws Exception 
 	 */
+	@Clear({AdminLoginSessionInterceptor.class,AdminAuthInterceptor.class})
 	public void importPerson(@Para("filePath") String filePath) throws Exception {
 		Map<String, Object> data = new HashMap<>();
 		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
@@ -1661,6 +1684,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @return
 	 * @throws Exception 
 	 */
+	@Clear({AdminLoginSessionInterceptor.class,AdminAuthInterceptor.class})
 	public void exportBatchPersonBtn(@Para("filePath") String filePath) throws Exception {
 		Map<String, Object> data = new HashMap<>();
 		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
@@ -2179,6 +2203,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @return
 	 * @throws Exception 
 	 */
+	@Clear({AdminLoginSessionInterceptor.class,AdminAuthInterceptor.class})
 	public void exportChangePersonBtn(@Para("filePath") String filePath) throws Exception {
 		Map<String, Object> data = new HashMap<>();
 		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
@@ -2463,6 +2488,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 * @return
 	 * @throws Exception 
 	 */
+	@Clear({AdminLoginSessionInterceptor.class,AdminAuthInterceptor.class})
 	public void exportEmployerPersonBtn(@Para("filePath") String filePath) throws Exception {
 		Map<String, Object> data = new HashMap<>();
 		Long hiddenOrderIdForImport = getParaToLong("hiddenOrderIdForImport");
@@ -2698,7 +2724,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
          			 }
          		}
                  
-                 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(hiddenOrderIdForImport, "方案1");
+                 GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByEOrderIdAndPlan(hiddenOrderIdForImport, "方案1");
                  if(groupInsuranceGuarantee!=null) {
                 	 exPerson.set("guarantee_id",groupInsuranceGuarantee.getLong("id"));
                      long[] getDate = DateUtil.getDatePoor(exPerson.get("policy_expiration_date"),exPerson.get("policy_effective_date")); 
@@ -2806,7 +2832,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			 if(job.getString("gender").equals("男")) {
 				 job.put("gender", 1);
 			 }
-	         GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByOrderIdAndPlan(order.getLong("plan_id"),"方案1");
+	         GroupInsuranceGuarantee groupInsuranceGuarantee = groupInsuranceGuaranteeService.findByEOrderIdAndPlan(order.getLong("id"),"方案1");
 	         if(groupInsuranceGuarantee!=null) {
 	         job.put("guarantee_id", groupInsuranceGuarantee.getLong("id"));
 	         }

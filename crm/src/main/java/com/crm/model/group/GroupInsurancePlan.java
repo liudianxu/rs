@@ -22,7 +22,7 @@ public class GroupInsurancePlan extends Model<GroupInsurancePlan>{
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from crm_group_insurance_plan  ");
-		sql.append("where 1=1 order by create_time desc ");
+		sql.append("where 1=1 and is_del = 0  order by create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsurancePlan.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
 		dataGrid.setCount(page.getTotalRow());
@@ -36,7 +36,7 @@ public class GroupInsurancePlan extends Model<GroupInsurancePlan>{
 		SqlPara sqlPara = new SqlPara();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from crm_group_insurance_plan  ");
-		sql.append("where 1=1 ");
+		sql.append("where 1=1 and is_del = 0 ");
 		sqlPara.setSql(sql.toString());
 		return GroupInsurancePlan.dao.find(sqlPara);
 	}
@@ -44,7 +44,7 @@ public class GroupInsurancePlan extends Model<GroupInsurancePlan>{
 
 
 	public static GroupInsurancePlan findBySn(String string) {
-		return GroupInsurancePlan.dao.findFirst("select * from crm_group_insurance_plan   where sn = ? ",string);
+		return GroupInsurancePlan.dao.findFirst("select * from crm_group_insurance_plan   where sn = ?  and is_del = 0 ",string);
 	}
 
 }

@@ -686,7 +686,7 @@
 			var guarantee;
 			$.ajax({
 				type: 'GET',
-				url: "/admin/groupInsurance/findGuaranteeSchemes",
+				url: "/admin/groupInsurance/findGuaranteeSchemesByEmp",
 				data: {
 					orderId: hiddenOrderId
 				},
@@ -928,7 +928,7 @@
 	    	//查询保障方案
 			$.ajax({
 				type: 'GET',
-				url: "/admin/groupInsurance/findGuaranteeSchemes",
+				url: "/admin/groupInsurance/findGuaranteeSchemesByEmp",
 				data: {
 					orderId: hiddenOrderId
 				},
@@ -1170,7 +1170,7 @@
 			var hiddenOrderId = #(orderId);
 			$.ajax({
 				type: 'GET',
-				url: "/admin/groupInsurance/findGuaranteeSchemes",
+				url: "/admin/groupInsurance/findGuaranteeSchemesByEmp",
 				data: {
 					orderId: hiddenOrderId
 				},

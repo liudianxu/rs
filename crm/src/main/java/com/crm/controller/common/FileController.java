@@ -44,7 +44,8 @@ public class FileController extends Controller {
 	            
 	            String path = UUID.randomUUID()+ "." + FilenameUtils.getExtension(file.getOriginalFileName());
 	            //文件重命名
-	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator") +path));
+	            System.out.println(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path);
+	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path));
 	            Map<String ,String> map = new HashMap<String, String>();
 	           //文件路径
 	            map.put("filePath", "/upload/"+DateUtil.getDate("yyyyMM")+"/"+path);
@@ -64,7 +65,7 @@ public class FileController extends Controller {
 	            
 	            String path = UUID.randomUUID()+ "." + FilenameUtils.getExtension(file.getOriginalFileName());
 	            //文件重命名
-	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator") +path));
+	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path));
 	            Map<String ,String> map = new HashMap<String, String>();
 	           //文件路径
 	            map.put("filePath", "/upload/"+DateUtil.getDate("yyyyMM")+"/"+path);
@@ -89,7 +90,7 @@ public class FileController extends Controller {
 	            
 	            String path = UUID.randomUUID()+ "." + FilenameUtils.getExtension(file.getOriginalFileName());
 	            //文件重命名
-	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator") +path));
+	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path));
 	            Map<String ,String> map = new HashMap<String, String>();
 	           //文件路径
 	            map.put("src", "/upload/"+DateUtil.getDate("yyyyMM")+"/"+path);
@@ -108,7 +109,7 @@ public class FileController extends Controller {
             
             String path = UUID.randomUUID()+ "." + FilenameUtils.getExtension(file.getOriginalFileName());
             //文件重命名
-            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator") +path));
+            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path));
             Map<String ,String> map = new HashMap<String, String>();
            //文件路径
             map.put("src", "/upload/"+DateUtil.getDate("yyyyMM")+"/"+path);

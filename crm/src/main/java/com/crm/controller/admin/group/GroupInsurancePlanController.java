@@ -18,6 +18,7 @@ import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePlan;
 import com.crm.model.group.Guarantee;
 import com.crm.service.group.GroupInsuranceGuaranteeService;
+import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.util.Constant;
 import com.crm.web.bean.BaseResponse;
@@ -29,6 +30,8 @@ public class GroupInsurancePlanController extends BaseController {
 	private GroupInsuranceGuaranteeService groupInsuranceGuaranteeService;
 	@Inject
 	private GroupInsurancePersonService groupInsurancePersonService;
+	@Inject
+	private GroupInsuranceOrderService orderService;
 	/**
 	 * 列表分页查询
 	 */
@@ -70,6 +73,30 @@ public class GroupInsurancePlanController extends BaseController {
 		render("add.html");
 	}
 	
+	  public void delete() {
+			BaseResponse response = new BaseResponse();
+			Long id = getParaToLong("id");
+			if(id == null) {
+				response.setCode(Constant.RESPONSE_CODE_FAIL);
+				response.setMessage("删除失败！");
+				renderJson(response);
+				return;
+			}
+			if(orderService.queryByPland(id).size()>0) {
+				response.setCode(Constant.RESPONSE_CODE_FAIL);
+				response.setMessage("删除失败！该计划已存在保单！");
+				renderJson(response);
+				return;
+			}
+			GroupInsurancePlan plan =GroupInsurancePlan.dao.findById(id);
+			plan.set("is_del", 1);
+			if(plan.update()) {
+				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+				response.setMessage("删除成功");
+			}
+			
+			renderJson(response);
+		}
 	
 	public void edit() {
 		Long id = getParaToLong("id");
@@ -78,7 +105,7 @@ public class GroupInsurancePlanController extends BaseController {
 		int size = 0;
 
 		Map<Long,List<Guarantee>> guaranteeMap = new HashMap<>();
-		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByOrderId(id);
+		List<GroupInsuranceGuarantee> groupInsuranceGuarantees = groupInsuranceGuaranteeService.findByPlanId(id);
 		List<BigDecimal> premiums =new ArrayList<>();  
 		for (GroupInsuranceGuarantee groupInsuranceGuarantee : groupInsuranceGuarantees) {
         	  premiums.add(groupInsuranceGuarantee.getBigDecimal("premium"));
@@ -208,7 +235,7 @@ public class GroupInsurancePlanController extends BaseController {
 		}
 			}
 		else {
-			List<GroupInsuranceGuarantee> guarantees = groupInsuranceGuaranteeService.findByOrderId(planId);
+			List<GroupInsuranceGuarantee> guarantees = groupInsuranceGuaranteeService.findByPlanId(planId);
 			if(jsarr.size()==0) {
 				groupInsuranceGuaranteeService.deleteByPlanId(planId);
 			}
@@ -280,6 +307,7 @@ public class GroupInsurancePlanController extends BaseController {
 		data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 		data.put("msg", "保存成功");
 		data.put("planId", planId);
+		data.put("orderId", planId);
 		GroupInsurancePlan plan = GroupInsurancePlan.dao.findById(planId);
 		renderJson(data);
 	}

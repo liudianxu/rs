@@ -17,12 +17,15 @@ import com.crm.model.group.GroupInsuranceGuarantee;
  */
 public interface GroupInsuranceGuaranteeService {
 
-	List<GroupInsuranceGuarantee> findByOrderId(Long orderId);
+	List<GroupInsuranceGuarantee> findByPlanId(Long orderId);
 
 	void deleteByPlanId(Long hiddenOrderIdForGuarantee);
 
 	GroupInsuranceGuarantee findByOrderIdAndPlan(Long hiddenOrderIdForImport, String valueOf);
 
 	GroupInsuranceGuarantee findByEOrderIdAndPlan(Long long1, String string);
+
+	List<GroupInsuranceGuarantee> findByOrderId(Long orderId);
+
 
 }

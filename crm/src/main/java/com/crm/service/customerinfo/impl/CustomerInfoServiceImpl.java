@@ -12,6 +12,7 @@ import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
 import com.jfinal.plugin.activerecord.tx.Tx;
@@ -41,7 +42,7 @@ private GroupInfoService groupInfoService;
 		if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" and id in ("+customerIds+")");
 		}
-		sql.append(" order by create_time desc ");
+		sql.append(" and is_del=0 order by create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<CustomerInfo> customerInfos = CustomerInfo.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
@@ -81,7 +82,9 @@ private GroupInfoService groupInfoService;
 	 */
 	@Override
 	public boolean delete(Long id) {
-		return CustomerInfo.dao.deleteById(id);
+		CustomerInfo customerInfo = CustomerInfo.dao.findById(id);
+		customerInfo.set("is_del", 1);
+		return customerInfo.update();
 	}
 
 	/**
@@ -89,12 +92,12 @@ private GroupInfoService groupInfoService;
 	 */
 	@Override
 	public List<CustomerInfo> selectList() {
-		return CustomerInfo.dao.find("select * from crm_customer_info");
+		return CustomerInfo.dao.find("select * from crm_customer_info where is_del=0");
 	}
 
 	@Override
 	public List<CustomerInfo> findByGroupId(Long id) {
-		return CustomerInfo.dao.find("select * from crm_customer_info where group_id = ?",id);
+		return CustomerInfo.dao.find("select * from crm_customer_info where group_id = ? and is_del=0",id);
 	}
 
 	@Override
@@ -165,12 +168,12 @@ private GroupInfoService groupInfoService;
 
 	@Override
 	public CustomerInfo findByName(String string) {
-		return CustomerInfo.dao.findFirst("select * from crm_customer_info where customer_name =? ",string);
+		return CustomerInfo.dao.findFirst("select * from crm_customer_info where customer_name =?  and is_del=0",string);
 	}
 
 	@Override
 	public List<CustomerInfo> findByIds(String customerIds) {
-		return CustomerInfo.dao.find("select * from crm_customer_info where id in("+customerIds+")");
+		return CustomerInfo.dao.find("select * from crm_customer_info where id in("+customerIds+") and is_del=0");
 	}
 
 }

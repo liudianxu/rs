@@ -55,7 +55,7 @@ public class CoreConfig extends JFinalConfig {
 		me.setJsonFactory(MixedJsonFactory.me());
 		me.setInjectDependency(true);
 		//上传路径
-		me.setBaseUploadPath("upload/"+DateUtil.getDate("yyyyMM"));
+		me.setBaseUploadPath("upload/");
 		//映射接口实现
 		AopKit.mapping();
 	}

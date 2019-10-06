@@ -3,6 +3,7 @@ package com.crm.service.group;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
 import com.crm.component.DataGrid;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.jfinal.plugin.activerecord.Page;
@@ -110,4 +111,8 @@ public interface GroupInsuranceOrderService {
 	List<GroupInsuranceOrder> findByGroupId(Long long1,String type);
 
 	List<GroupInsuranceOrder> queryByCustomerId(Long customerId);
+
+	List<GroupInsuranceOrder> queryByGroupId(Long groupId);
+
+	List<GroupInsuranceOrder> queryByPland(Long id);
 }

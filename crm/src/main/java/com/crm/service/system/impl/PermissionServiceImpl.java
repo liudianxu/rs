@@ -77,7 +77,7 @@ public class PermissionServiceImpl implements PermissionService {
 	 */
 	public AuthTree<GroupInfo> selectGroupInfoAuthTree(Long roleId){
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from crm_group_info");
+		sql.append("select * from crm_group_info where is_del =0 ");
 		List<GroupInfo> groupInfos =  GroupInfo.dao.find(sql.toString());
 		
 		//已选权限
@@ -87,7 +87,7 @@ public class PermissionServiceImpl implements PermissionService {
 		} 
 		
 		StringBuffer customerSql = new StringBuffer();
-		customerSql.append("select * from crm_customer_info");
+		customerSql.append("select * from crm_customer_info where is_del =0");
 		List<CustomerInfo> customerInfos =  CustomerInfo.dao.find(customerSql.toString());
 		
 		// 为一级菜单设置子菜单，list是递归调用的

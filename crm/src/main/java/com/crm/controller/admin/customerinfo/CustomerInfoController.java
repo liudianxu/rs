@@ -24,13 +24,17 @@ import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Area;
 import com.crm.model.system.Permission;
+import com.crm.model.system.Role;
+import com.crm.model.system.RoleCustomers;
 import com.crm.model.system.User;
 import com.crm.poi.ImportExcelUtil;
 import com.crm.service.customerinfo.CustomerInfoService;
+import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.AreaService;
 import com.crm.service.system.PermissionService;
+import com.crm.service.system.RoleService;
 import com.crm.util.CommonUtils;
 import com.crm.util.Constant;
 import com.crm.util.DateUtil;
@@ -60,7 +64,10 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	private AreaService areaService;
 	@Inject
 	private PermissionService permissionService;
-    
+	@Inject
+	private GroupInsuranceOrderService orderService;
+	@Inject
+	private RoleService roleService;
      /**
       * 列表获取
      */
@@ -182,6 +189,11 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   			} else {
   				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
   				response.setMessage("添加成功！");
+  				List<Role> roles = roleService.selectRolesByUserId(admin.getLong("id"));
+  				RoleCustomers roleCustomer = new RoleCustomers();
+				roleCustomer.set("customerid", customerInfo.getLong("id"))
+				.set("roleid", roles.get(0).getLong("id"));
+				roleCustomer.save();
   			}
   			renderJson(response);
   		}
@@ -245,13 +257,18 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 				renderJson(response);
 				return;
 			}
-			
+			if(orderService.queryByCustomerId(id).size()>0) {
+				response.setCode(Constant.RESPONSE_CODE_FAIL);
+				response.setMessage("删除失败！该客户已存在保单！");
+				renderJson(response);
+				return;
+			}
 			if(!customerInfoService.delete(id)) {
 				response.setCode(Constant.RESPONSE_CODE_FAIL);
 				response.setMessage("删除失败！");
 			} else {
 				response.setCode(Constant.RESPONSE_CODE_SUCCESS);
-				response.setMessage("已删除！");
+				response.setMessage("删除成功");
 			}
 			
 			renderJson(response);
@@ -319,6 +336,13 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 	            data.put("message", "导入成功");
 	    	renderJson(data);
+  			User admin = adminLoginService.getLoginAdminWithSessionId(getCookie(Constant.COOKIE_SESSION_ID_NAME));
+	    	List<Role> roles = roleService.selectRolesByUserId(admin.getLong("id"));
+			RoleCustomers roleCustomer = new RoleCustomers();
+	     	roleCustomer.set("customerid", customerInfo.getLong("id"))
+		    .set("roleid", roles.get(0).getLong("id"));
+		   roleCustomer.save();
+		
 	    	return;
 		}
 	  }

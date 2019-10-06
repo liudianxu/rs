@@ -18,6 +18,7 @@ import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Area;
 import com.crm.model.system.User;
 import com.crm.poi.ImportExcelUtil;
+import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.crm.service.system.AdminLoginService;
 import com.crm.service.system.AreaService;
@@ -46,6 +47,8 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 	private AreaService areaService;
     @Inject
 	private PermissionService permissionService;
+	@Inject
+	private GroupInsuranceOrderService orderService;
     
      /**
       * 列表获取
@@ -216,7 +219,12 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 				renderJson(response);
 				return;
 			}
-			
+			if(orderService.queryByGroupId(id).size()>0) {
+				response.setCode(Constant.RESPONSE_CODE_FAIL);
+				response.setMessage("删除失败！该集团已存在保单！");
+				renderJson(response);
+				return;
+			}
 			if(!groupInfoService.delete(id)) {
 				response.setCode(Constant.RESPONSE_CODE_FAIL);
 				response.setMessage("删除失败！");

@@ -369,10 +369,10 @@
 						function(res) {
 							layer.msg(res.message);
 							if (res.code == 1) {
-								$("input[name='groupInsuranceOrder.id']").val(res.orderId);
-								$("input[name='hiddenOrderIdForGuarantee']").val(res.orderId);
-								$("input[name='hiddenOrderIdForGuarantee2']").val(res.orderId);
-								$("input[name='hiddenOrderIdForGuarantee5']").val(res.orderId);
+								$("input[name='groupInsuranceOrder.id']").val(res.data);
+								$("input[name='hiddenOrderIdForGuarantee']").val(res.data);
+								$("input[name='hiddenOrderIdForGuarantee2']").val(res.data);
+								$("input[name='hiddenOrderIdForGuarantee5']").val(res.data);
 							}
 						}, "json");
 
@@ -458,6 +458,8 @@
 					if ($('input[name=hiddenOrderIdForGuarantee]').val() == null ||
 						$('input[name=hiddenOrderIdForGuarantee]')
 						.val() == "") {
+						$('input[name=hiddenOrderIdForGuarantee]').val();
+						console.log($('input[name=hiddenOrderIdForGuarantee]').val());
 						layer.msg("请先保存基本信息！");
 						return false;
 					}

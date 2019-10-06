@@ -41,7 +41,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		DataGrid<GroupInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select DISTINCT g.* from crm_group_info g ");
-		sql.append("left join crm_customer_info c on c.group_id =g.id ");
+		sql.append("left join crm_customer_info c on c.group_id =g.id where 1=1 ");
 		if(StringUtils.isNotBlank(params.get("groupName"))){
 			sql.append(" and g.group_name like '%").append(params.get("groupName")).append("%' ");
 		}
@@ -49,9 +49,9 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 			sql.append(" and g.cert_no ="+params.get("certNo"));
 		}
 		if(StringUtils.isNotBlank(customerIds)){
-			sql.append(" where c.id in ("+customerIds+")");
+			sql.append(" and c.id in ("+customerIds+")");
 		}
-		sql.append("  order by g.create_time desc ");
+		sql.append(" and g.is_del=0 order by g.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<GroupInfo> groupInfos = GroupInfo.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
@@ -91,7 +91,9 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	 */
 	@Override
 	public boolean delete(Long id) {
-		return GroupInfo.dao.deleteById(id);
+		GroupInfo groupInfo = GroupInfo.dao.findById(id);
+		groupInfo.set("is_del", 1);
+		return groupInfo.update();
 	}
 
 	/**
@@ -99,12 +101,12 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	 */
 	@Override
 	public List<GroupInfo> selectList() {
-		return GroupInfo.dao.find("select * from crm_group_info");
+		return GroupInfo.dao.find("select * from crm_group_info where is_del=0 ");
 	}
 
 	@Override
 	public GroupInfo findByName(String string) {
-		return GroupInfo.dao.findFirst("select * from crm_group_info where group_name = ? ",string);
+		return GroupInfo.dao.findFirst("select * from crm_group_info where group_name = ? and is_del=0 ",string);
 	}
 
 	@Override
@@ -178,7 +180,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" where c.id in ("+customerIds+")");
 		}
-		sql.append(" order by g.create_time desc ");
+		sql.append(" and g.is_del=0  order by g.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		

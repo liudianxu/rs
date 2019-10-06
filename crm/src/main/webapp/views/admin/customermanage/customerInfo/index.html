@@ -96,7 +96,9 @@
 	      ,{field:'creator', title:'创建人'}
 	      ,{fixed: 'right', title:'操作',templet: function(d){
 	    	  var editBtn = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/customermanage/customerInfo/edit"))<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>#end#end';
-	    	 /*  var html;
+	    	  var html;
+   		      html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/customermanage/customerInfo/delete"))<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>#end#end';
+	    	  /*  var html;
 	    	  if(d.is_on_sale==0){
 	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-info layui-btn-xs" lay-event="put">上架</a>#end#end';
 	    	  }
@@ -104,7 +106,7 @@
 	    		   html = '#if(nodeUrl??)#if(nodeUrl.contains("/admin/brand/put"))<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="put">下架</a>#end#end';
 	    	  } */
 	         /*  return editBtn+html; */
-	    	  return editBtn;
+	    	  return editBtn+html;
 	      }
 	      }
 	    ]]
@@ -139,6 +141,21 @@
 	    	location.href="/admin/customermanage/customerInfo/edit?id="+data.id;
 	    	//siMenu("product/brand/edit",{id: data.id});
 	    }
+	    if(obj.event === 'delete'){
+	    	
+	        layer.confirm('真的要删除该条记录吗？', function(index){
+	        	 $.get('/admin/customermanage/customerInfo/delete', {id: data.id},
+	 	  				function(res) {
+	 	  					layer.msg(res.message);
+	 	  		    		if(res.code == 1) {
+	 	  		    			 setTimeout("location.href='/admin/customermanage/customerInfo/index'",500);
+	 	  		    		}
+	 	  				}, "json");
+		      });
+	        
+	    	 
+	    }
+	    
 	    /* if(obj.event === 'put'){
 	    	  $.get('/admin/customermanage/customerInfo/put', {id: data.id},
 	  				function(res) {

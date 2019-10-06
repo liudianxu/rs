@@ -20,7 +20,7 @@ import com.jfinal.plugin.activerecord.Db;
 public class GroupInsuranceGuaranteeServiceImpl implements GroupInsuranceGuaranteeService{
 
 	@Override
-	public List<GroupInsuranceGuarantee> findByOrderId(Long orderId) {
+	public List<GroupInsuranceGuarantee> findByPlanId(Long orderId) {
 		return GroupInsuranceGuarantee.dao.find("select * from crm_group_insurance_guarantee where plan_id=? ",orderId);
 	}
 
@@ -38,5 +38,11 @@ public class GroupInsuranceGuaranteeServiceImpl implements GroupInsuranceGuarant
 	public GroupInsuranceGuarantee findByEOrderIdAndPlan(Long long1, String string) {
 		return GroupInsuranceGuarantee.dao.findFirst("select * from crm_group_insurance_guarantee where order_id=? and name =? ",long1,string);
 	}
+
+	@Override
+	public List<GroupInsuranceGuarantee> findByOrderId(Long orderId) {
+		return GroupInsuranceGuarantee.dao.find("select * from crm_group_insurance_guarantee where order_id=? ",orderId);
+	}
+
 
 }

@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.crm.component.DataGrid;
 import com.crm.model.cuntomerinfo.CustomerInfo;
+import com.crm.model.system.Role;
+import com.crm.model.system.RoleCustomers;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.groupinfo.GroupInfoService;
 import com.jfinal.aop.Before;
@@ -164,6 +166,7 @@ private GroupInfoService groupInfoService;
 		    customerInfo.set("group_id",groupInfoService.findByName(lo.get(7).toString()).getLong("id"));
         }
         customerInfo.set("create_time", new Date()).save();
+        
 	}
 
 	@Override

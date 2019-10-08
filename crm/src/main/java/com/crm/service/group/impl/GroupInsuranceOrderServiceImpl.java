@@ -87,7 +87,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 		if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" and c.id in ("+customerIds+")");
 		}
-		sql.append(" order by o.create_time desc ");
+		sql.append(" and o.is_del=0 order by o.create_time desc ");
 		sqlPara.setSql(sql.toString());
 		page = GroupInsuranceOrder.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
 		dataGrid.setCount(page.getTotalRow());

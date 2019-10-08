@@ -37,9 +37,8 @@ public class GroupInsurancePersonServiceImpl implements GroupInsurancePersonServ
 
 	@Override
 	public boolean existsGuatantee(Long hiddenOrderIdForGuarantee) {
-		//GroupInsuranceCompany groupInsuranceCompany = GroupInsuranceCompany.dao.findFirst("select g.* from crm_group_insurance_guarantee g left join crm_group_insurance_orders o on o.id= g.order_id  where o.id = ? ",hiddenOrderIdForGuarantee);
-		//return groupInsuranceCompany==null?false:true;
-		return false;
+		GroupInsurancePerson person = GroupInsurancePerson.dao.findFirst("select g.* from crm_group_insurance_person g  where g.guarantee_id = ? ",hiddenOrderIdForGuarantee);
+		return person==null?true:false;
 	}
 
 	@Override

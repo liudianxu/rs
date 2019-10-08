@@ -44,6 +44,10 @@ public class FileController extends Controller {
 	            
 	            String path = UUID.randomUUID()+ "." + FilenameUtils.getExtension(file.getOriginalFileName());
 	            //文件重命名
+	            File file2 =new File(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM"));
+	            if(!file2.exists()) {
+	            	file2.mkdir();//创建文件夹
+	            }
 	            System.out.println(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path);
 	            getFile("file").getFile().renameTo(new File(file.getUploadPath()+System.getProperty("file.separator")+DateUtil.getDate("yyyyMM")+System.getProperty("file.separator") +path));
 	            Map<String ,String> map = new HashMap<String, String>();

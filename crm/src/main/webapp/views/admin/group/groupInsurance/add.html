@@ -1069,6 +1069,8 @@
 		wangedit(i);
 	}
 
+	
+	
 	var parameterss;
 	$guaranteeTable = $("#guaranteeTable");
 	var form;
@@ -1098,6 +1100,14 @@
 					,
 				format: 'yyyy-MM-dd',
 				trigger: 'click'
+					 ,done: function(value, date, endDate){
+						  var d = new Date(value);
+						         var year = d.getFullYear()+1;
+						         var month = d.getMonth()+1;
+						         var day = d.getDate()-1;
+						         var lastDate = year+"-"+month+"-"+day;
+						 $("#policy_expiration_date").val(lastDate);
+						  }
 			});
 
 			laydate.render({

@@ -3106,8 +3106,9 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void deleteOrder(Long id) {
 		Map<String, Object> data = new HashMap<>();
+		GroupInsuranceOrder groupInsuranceOrder = GroupInsuranceOrder.dao.findById(id);
 		try {
-		groupInsuranceOrderService.delete(id);
+			groupInsuranceOrder.set("is_del", 1).update();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -3166,7 +3167,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		if(guarantee!=null) {
 		BigDecimal premium = guarantee.getBigDecimal("premium");
 		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
-		person.set("premium", totelPre);
+		person.set("premium", premium.subtract(totelPre).multiply(new BigDecimal(-1)));
 		person.update();
 		}
 		   List<GroupInsurancePersonLog> logs = new ArrayList<>();

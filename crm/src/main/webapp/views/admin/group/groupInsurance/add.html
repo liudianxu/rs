@@ -681,6 +681,7 @@
 					<td>生效日期</td>
 					<td>终止日期</td>
 					<td>保单号</td>
+					<td>公司名称</td>
 				<!-- 	<td>操作</td> -->
 				</tr>
 			</thead>
@@ -1406,7 +1407,9 @@
 											"<input type='text' name='policy_expiration_date' timeFormat='yyyy-MM-dd' groupInsurancePersonPolicy_expiration_date id='' class='layui-input person_policy_expiration_date"+index+"' value='" + trim(person.policy_expiration_date) + "' />"+
 										"</td><td>"+
 											"<input type='text' name='policy_num' policy_num id='' value='" + trim(person.policy_num) + "' />"+
-										"</td></tr>";
+										"</td><td>"+
+										"<input type='text' name='company' company id='' value='" + trim(person.company) + "' />"+
+									"</td></tr>";
 										/* "<div class='btn ok'"  +
 											
 											" data-name='"+ trim(person.name) + "' data-gender='"+ trim(person.gender) + "' data-id_type='" + trim(person.id_type) + "' data-id_num='" + trim(person.id_num) + "' data-phone='" + trim(person.phone) + "' data-occupation_category='" + trim(person.occupation_category) + "' data-guarantee_id='" + trim(person.guarantee_id) + "' data-remark='" + trim(person.remark) + "' data-policy_effective_date='" + trim(person.policy_effective_date) + "' data-policy_expiration_date='" + trim(person.policy_expiration_date) + "' data-policy_num='" + trim(person.policy_num) + "' data-id='" + trim(person.id) + "'" +

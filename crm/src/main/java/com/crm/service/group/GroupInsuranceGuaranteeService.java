@@ -27,5 +27,7 @@ public interface GroupInsuranceGuaranteeService {
 
 	List<GroupInsuranceGuarantee> findByOrderId(Long orderId);
 
+	boolean existsGuatantee(Long planId);
+
 
 }

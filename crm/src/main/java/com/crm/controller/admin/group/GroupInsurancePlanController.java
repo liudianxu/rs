@@ -193,7 +193,7 @@ public class GroupInsurancePlanController extends BaseController {
 		if(jsarr!=null) {
 		Long planId = obj.getLong("hiddenPlanForGuarantee");
 		//保存之前先根据order_id，删除已有项目
-		if(!groupInsurancePersonService.existsGuatantee(planId)) {
+		if(groupInsuranceGuaranteeService.existsGuatantee(planId)) {
 			groupInsuranceGuaranteeService.deleteByPlanId(planId);
 			if(planId==null) {
 				data.put("code", Constant.RESPONSE_CODE_FAIL);
@@ -248,7 +248,8 @@ public class GroupInsurancePlanController extends BaseController {
 					if("".equals(plan.get(j))) {
 						continue;
 				    }
-					if(guarantees.get(j)==null) {
+					System.out.println(guarantees.size());
+					if(j>guarantees.size()||j==guarantees.size()) {
 						JSONArray newArays = new JSONArray();
 						GroupInsuranceGuarantee guarant = new GroupInsuranceGuarantee();
 						guarant.set("name",Constant.GUARANTEE_PLAN_NAME_PREFIX + (j + 1));
@@ -269,9 +270,10 @@ public class GroupInsurancePlanController extends BaseController {
 						pbjj.put("value", plan2.get(j));
 						newArays.add(pbjj);
 						}
-						if(newAray.size() == 0) {
+						if(newArays.size() == 0) {
 							continue;
 						}
+						guarant.set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));
 						guarant.set("create_time", new Date());
 						guarant.set("details", newArays.toString()).save();
 					}
@@ -296,6 +298,7 @@ public class GroupInsurancePlanController extends BaseController {
 					if(newAray.size() == 0) {
 						continue;
 					}
+					guarantees.get(j).set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));
 					guarantees.get(j).set("create_time", new Date());
 					guarantees.get(j).set("details", newAray.toString());
 					guarantees.get(j).update();

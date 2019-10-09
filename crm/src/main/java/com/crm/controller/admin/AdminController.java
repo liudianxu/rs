@@ -88,7 +88,9 @@ public class AdminController extends Controller {
 			 int num2=0;
 			 int personNum2=0;
 			 for (GroupInsuranceOrder order2 : order) {
+				 if(order2.get("premium")!=null) {
 				 amount2=amount2.add(order2.getBigDecimal("premium"));
+				 }
 				 if(order2.get("person_num")!=null) {
 				 num2=num2+order2.getInt("person_num");
 				 List<GroupInsurancePerson> persons = personService.findByOrderId(order2.getLong("id"));

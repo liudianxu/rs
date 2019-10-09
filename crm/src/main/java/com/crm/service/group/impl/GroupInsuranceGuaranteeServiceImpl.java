@@ -3,6 +3,7 @@ package com.crm.service.group.impl;
 import java.util.List;
 
 import com.crm.model.group.GroupInsuranceGuarantee;
+import com.crm.model.group.GroupInsurancePerson;
 import com.crm.service.group.GroupInsuranceGuaranteeService;
 import com.jfinal.plugin.activerecord.Db;
 
@@ -42,6 +43,12 @@ public class GroupInsuranceGuaranteeServiceImpl implements GroupInsuranceGuarant
 	@Override
 	public List<GroupInsuranceGuarantee> findByOrderId(Long orderId) {
 		return GroupInsuranceGuarantee.dao.find("select * from crm_group_insurance_guarantee where order_id=? ",orderId);
+	}
+
+	@Override
+	public boolean existsGuatantee(Long planId) {
+		GroupInsuranceGuarantee tee = GroupInsuranceGuarantee.dao.findFirst("select g.* from crm_group_insurance_guarantee g  where g.plan_id = ? ",planId);
+		return tee==null?true:false;
 	}
 
 

@@ -1090,7 +1090,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		else{
 			premium = guarantee.getBigDecimal("premium");
 		}
-		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 		person.set("premium", totelPre);
 		//更新
 		if(person.get("id")!=null) {
@@ -1457,7 +1457,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             person.set("policy_effective_date",lo.get(8).toString() + " 00:00:00");
             person.set("policy_expiration_date",lo.get(9).toString() + " 23:59:59");
             person.set("order_id",hiddenOrderIdForImport);
-            
+            person.set("company",String.valueOf(lo.get(13)));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         	person.set("policy_expiration_date", sdf.parse(person.get("policy_expiration_date")));
         	person.set("policy_effective_date", sdf.parse(person.get("policy_effective_date")));
@@ -1631,7 +1631,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                long[] getDate = DateUtil.getDatePoor(person.get("policy_expiration_date"),person.get("policy_effective_date")); 
 	        		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 	        		BigDecimal premium = guarantee.getBigDecimal("premium");
-	        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	        		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	        		person.set("premium", totelPre);
 	        		//person.put("guarantee_name", groupInsuranceGuarantee.get("name"));
 	        		GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();

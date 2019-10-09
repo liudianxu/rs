@@ -1330,7 +1330,7 @@
 										type: 'GET',
 										url: "/admin/groupInsurance/findGuaranteeSchemes",
 										data: {
-											orderId: hiddenOrderIdForImport
+											orderId: $("#planId").val()
 										},
 										async: false,
 										dataType: "json",
@@ -1452,6 +1452,7 @@
 								$("input[name='groupInsuranceOrder.id']").val(res.orderId);
 								$("input[name='hiddenOrderIdForGuarantee']").val(res.orderId);
 								$("input[name='hiddenOrderIdForGuarantee2']").val(res.orderId);
+								$("input[name='hiddenOrderIdForGuarantee3']").val(res.orderId);
 								$("input[name='hiddenOrderIdForGuarantee5']").val(res.orderId);
 							}
 						}, "json");
@@ -1679,7 +1680,7 @@
 			type: 'GET',
 			url: "findGuaranteeSchemes",
 			data: {
-				orderId: hiddenOrderId
+				orderId: $("#planId").val()
 			},
 			dataType: "json",
 			success: function(data) {
@@ -1864,7 +1865,7 @@
 			type: 'GET',
 			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
-				orderId: hiddenOrderId
+				orderId: $("#planId").val()
 			},
 			dataType: "json",
 			success: function(data) {
@@ -2106,7 +2107,7 @@
 			type: 'GET',
 			url: "/admin/groupInsurance/findGuaranteeSchemes",
 			data: {
-				orderId: hiddenOrderId
+				orderId: $("#planId").val()
 			},
 			dataType: "json",
 			success: function(data) {

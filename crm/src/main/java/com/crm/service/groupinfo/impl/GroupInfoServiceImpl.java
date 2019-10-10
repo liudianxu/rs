@@ -41,16 +41,17 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		DataGrid<GroupInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select DISTINCT g.* from crm_group_info g ");
-		sql.append("left join crm_customer_info c on c.group_id =g.id where 1=1 ");
+		sql.append("where 1=1 ");
+		//sql.append("left join crm_customer_info c on c.group_id =g.id where 1=1 ");
 		if(StringUtils.isNotBlank(params.get("groupName"))){
 			sql.append(" and g.group_name like '%").append(params.get("groupName")).append("%' ");
 		}
 		if(StringUtils.isNotBlank(params.get("certNo"))){
 			sql.append(" and g.cert_no ="+params.get("certNo"));
 		}
-		if(StringUtils.isNotBlank(customerIds)){
+	/*	if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" and c.id in ("+customerIds+")");
-		}
+		}*/
 		sql.append(" and g.is_del=0 order by g.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());

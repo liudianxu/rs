@@ -287,11 +287,11 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 	            }
 	            GroupInfo groupInfo = new GroupInfo();
 	            groupInfoService.setSaveInfo(groupInfo,lo);
-	            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
-	            data.put("message", "导入成功");
-	    	renderJson(data);
-	    	return;
 		}
+	        data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+    	renderJson(data);
+    	return;
 	  }
 	  
 	  

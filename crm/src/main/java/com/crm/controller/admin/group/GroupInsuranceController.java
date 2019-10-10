@@ -2044,7 +2044,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 	            		BigDecimal premium = guarantee.getBigDecimal("premium");
 	            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
-	            		person.set("premium", totelPre);
+	            		person.set("premium", premium.subtract(totelPre).multiply(new BigDecimal(-1)));
 	            		exitPersons.add(person);
 	            		 GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
 	                 		groupInsurancePersonLog
@@ -2124,7 +2124,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                     long[] getDate = DateUtil.getDatePoor(format.parse(exPerson.get("policy_expiration_date").toString()),format.parse(exPerson.get("policy_effective_date").toString())); 
 	             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 		             		BigDecimal premium = guarantee.getBigDecimal("premium");
-	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	             		exPerson.set("premium", totelPre);
 	                 }
 	                 
@@ -2253,8 +2253,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
             if(StringUtils.isBlank(String.valueOf(lo.get(1))) || StringUtils.isBlank(String.valueOf(lo.get(2))) 
             		|| StringUtils.isBlank(String.valueOf(lo.get(6)))
             		||StringUtils.isBlank(String.valueOf(lo.get(7)))
-            		||StringUtils.isBlank(String.valueOf(lo.get(8)))||
-            				StringUtils.isBlank(String.valueOf(lo.get(9)))) {
+            		||StringUtils.isBlank(String.valueOf(lo.get(8)))) {
             	continue;
             }
             String idNum = String.valueOf(lo.get(3));
@@ -2278,14 +2277,14 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
                      else {
                      	 person.put("oldPlanId",groupInsuranceGuarantee.get("id"));
                      }
-                     person.put("oldPlan",String.valueOf(lo.get(7)));
+                     person.put("oldPlan",String.valueOf(lo.get(6)));
                     
                      if(newGroupInsuranceGuarantee!=null) {
                      	 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
-                     	person.set("policy_effective_date", format.parse(String.valueOf(lo.get(9))));
+                     	person.set("policy_effective_date", format.parse(String.valueOf(lo.get(8))));
                           person.set("guarantee_id",newGroupInsuranceGuarantee.get("id"));
-                          person.set("remark",String.valueOf(lo.get(11)));
-                          Date policy_expiration_date = format.parse(String.valueOf(lo.get(9)));
+                          person.set("remark",String.valueOf(lo.get(10)));
+                          Date policy_expiration_date = format.parse(String.valueOf(lo.get(8)));
                           Date newDate = DateUtil.addDays(policy_expiration_date, 1);
                           person.set("policy_expiration_date", newDate);
                   		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 

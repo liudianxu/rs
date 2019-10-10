@@ -333,18 +333,18 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	            }
 	            CustomerInfo customerInfo = new CustomerInfo();
 	            customerInfoService.setSaveInfo(customerInfo,lo);
-	            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
-	            data.put("message", "导入成功");
-	    	renderJson(data);
   			User admin = adminLoginService.getLoginAdminWithSessionId(getCookie(Constant.COOKIE_SESSION_ID_NAME));
 	    	List<Role> roles = roleService.selectRolesByUserId(admin.getLong("id"));
 			RoleCustomers roleCustomer = new RoleCustomers();
 	     	roleCustomer.set("customerid", customerInfo.getLong("id"))
 		    .set("roleid", roles.get(0).getLong("id"));
 		   roleCustomer.save();
-		
-	    	return;
+	    	
 		}
+            data.put("code", Constant.RESPONSE_CODE_SUCCESS);
+            data.put("message", "导入成功");
+    	renderJson(data);
+    	return;
 	  }
 	  
 }

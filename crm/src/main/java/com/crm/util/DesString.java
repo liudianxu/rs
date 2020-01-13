@@ -44,5 +44,8 @@ public class DesString {
 		}
 		return result;
 	}
+	public static void main(String[] args) {
+		System.out.println(encrypt("liuailiu", "5df0232cade0ade515f758048a96a1f4"));
+	}
 
 }

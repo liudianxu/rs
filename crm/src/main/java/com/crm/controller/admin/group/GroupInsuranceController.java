@@ -2049,10 +2049,10 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            		 GroupInsurancePersonLog groupInsurancePersonLog = new GroupInsurancePersonLog();
 	                 		groupInsurancePersonLog
 	                 		.set("customer_id", order.getLong("insure_customer_id"))
-	                 		.set("policy_num", person.get("policy_num"))
+	                 		.set("policy_num", oldPerson.get("policy_num"))
 	                 		.set("status", 2)
 	                 		.set("name", person.get("name"))
-	                 		.set("order_id", person.getLong("order_id"))
+	                 		.set("order_id", oldPerson.getLong("order_id"))
 	                 		.set("person_id", person.getLong("id"))
 	                 		.set("job_type",person.get("job_type"))
 	                 		.set("change",person.get("premium"))
@@ -2092,7 +2092,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	     					exPerson.set("gender",Constant.MALE);
 	     				}
 	     				exPerson.set("id_num",String.valueOf(person.getStr("id_num")));
-	                 //person.set("occupation_category",String.valueOf(lo.get(6)));
+	     				exPerson.set("occupation_category","1");
 	                 //person.set("phone",String.valueOf(lo.get(10)));
 	     				exPerson.set("remark",String.valueOf(person.getStr("remark")));
 	     				exPerson.set("job_type",String.valueOf(person.getStr("job_type")));
@@ -2876,7 +2876,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	            		long[] getDate = DateUtil.getDatePoor(newDate, person.getDate("policy_effective_date")); 
 	            		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(person.getLong("guarantee_id"));
 	            		BigDecimal premium = guarantee.getBigDecimal("premium");
-	            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	            		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	            		person.set("premium", totelPre);
 	            		//person.update();
 	            		exPersons.add(person);
@@ -2979,7 +2979,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	                     long[] getDate = DateUtil.getDatePoor(exPerson.get("policy_expiration_date"),exPerson.get("policy_effective_date")); 
 	             		GroupInsuranceGuarantee guarantee = GroupInsuranceGuarantee.dao.findById(exPerson.getLong("guarantee_id"));
 		             		BigDecimal premium = guarantee.getBigDecimal("premium");
-	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3]+1)).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
+	             		BigDecimal totelPre = premium.multiply(new BigDecimal(getDate[3])).divide(new BigDecimal(365),2, BigDecimal.ROUND_HALF_UP);
 	             		exPerson.set("premium", totelPre);
 	              
 	         		

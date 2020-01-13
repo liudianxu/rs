@@ -213,9 +213,9 @@ public class GroupInsurancePlanController extends BaseController {
 				JSONObject job2 = jsarr.getJSONObject(m);
 				JSONArray plan2=job2.getJSONArray("plan");
 				JSONObject pbjj = new JSONObject();
-				if("".equals(plan2.get(j))) {
+				/*if("".equals(plan2.get(j))) {
 					continue;
-			    }
+			    }*/
 				pbjj.put("item", job2.get("item"));
 				pbjj.put("quota", job2.get("quota"));
 				pbjj.put("description", job2.get("description"));
@@ -227,7 +227,7 @@ public class GroupInsurancePlanController extends BaseController {
 				if(newAray.size() == 0) { 	
 					continue;
 				}
-				guarant.set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));
+				guarant.set("premium", "".equals(premiumJsarr.get(j))?null:premiumJsarr.get(j));
 				guarant.set("create_time", new Date());
 				guarant.set("details", newAray.toString()).save();
 			}
@@ -245,9 +245,9 @@ public class GroupInsurancePlanController extends BaseController {
 				for(int j=0;j<plan.size();j++){
 					JSONArray newAray = new JSONArray();
 					//GroupInsuranceGuarantee guarant = new GroupInsuranceGuarantee();
-					if("".equals(plan.get(j))) {
+					/*if("".equals(plan.get(j))) {
 						continue;
-				    }
+				    }*/
 					System.out.println(guarantees.size());
 					if(j>guarantees.size()||j==guarantees.size()) {
 						JSONArray newArays = new JSONArray();
@@ -258,9 +258,9 @@ public class GroupInsurancePlanController extends BaseController {
 						JSONObject job2 = jsarr.getJSONObject(m);
 						JSONArray plan2=job2.getJSONArray("plan");
 						JSONObject pbjj = new JSONObject();
-						if("".equals(plan2.get(j))) {
+						/*if("".equals(plan2.get(j))) {
 							continue;
-					    }
+					    }*/
 						pbjj.put("item", job2.get("item"));
 						pbjj.put("quota", job2.get("quota"));
 						pbjj.put("description", job2.get("description"));
@@ -273,7 +273,7 @@ public class GroupInsurancePlanController extends BaseController {
 						if(newArays.size() == 0) {
 							continue;
 						}
-						guarant.set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));
+						guarant.set("premium", "".equals(premiumJsarr.get(j))?null:premiumJsarr.get(j));
 						guarant.set("create_time", new Date());
 						guarant.set("details", newArays.toString()).save();
 					}
@@ -289,16 +289,16 @@ public class GroupInsurancePlanController extends BaseController {
 					pbjj.put("description", job2.get("description"));
 					pbjj.put("claimInfo", job2.get("claimInfo"));
 					pbjj.put("tip", job2.get("tip"));
-					if("".equals(plan2.get(j))) {
+					/*if("".equals(plan2.get(j))) {
 						continue;
-				    }
+				    }*/
 					pbjj.put("value", plan2.get(j));
 					newAray.add(pbjj);
 					}
 					if(newAray.size() == 0) {
 						continue;
 					}
-					guarantees.get(j).set("premium", "".equals(premiumJsarr.get(j))?0:premiumJsarr.get(j));
+					guarantees.get(j).set("premium", "".equals(premiumJsarr.get(j))?null:premiumJsarr.get(j));
 					guarantees.get(j).set("create_time", new Date());
 					guarantees.get(j).set("details", newAray.toString());
 					guarantees.get(j).update();

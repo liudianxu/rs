@@ -225,7 +225,7 @@ public class GroupInsuranceOrderServiceImpl implements GroupInsuranceOrderServic
 	
 	@Override
 	public List<GroupInsuranceOrder> queryByGroupId(Long groupId) {
-		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ? ",groupId);
+		return GroupInsuranceOrder.dao.find("select * from crm_group_insurance_orders where insure_group_id = ? and is_del=0 ",groupId);
 	}
 
 	@Override

@@ -75,7 +75,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 				}
 			}
 		}
-		renderJson(groupInfoService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1)));
+		renderJson(groupInfoService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):""));
 	}
 	
 	/**

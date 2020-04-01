@@ -82,7 +82,7 @@ public class EmployerInsuranceController extends BaseController<GroupInsuranceOr
 				}
 			}
 		}
-       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
+       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"");
        List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
        for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
     	   groupInsuranceOrder.put("person", groupInsuranceOrder.get("person_num")+"/"+groupInsuranceOrder.get("total_person_sum"));

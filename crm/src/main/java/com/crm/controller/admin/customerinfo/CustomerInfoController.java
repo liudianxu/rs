@@ -95,7 +95,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 			}
 		}
 		
-		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
+		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"");
 		List<CustomerInfo> customers = dataGrid.getData();
 		for (CustomerInfo customerInfo : customers) {
 			if(customerInfo.get("group_id")!=null){

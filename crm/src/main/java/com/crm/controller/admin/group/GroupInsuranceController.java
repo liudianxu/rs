@@ -136,7 +136,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 			}
 		}
 		
-       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1));
+       DataGrid<GroupInsuranceOrder> dataGrid = groupInsuranceOrderService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"");
        List<GroupInsuranceOrder> groupInsuranceOrders = dataGrid.getData();
        for (GroupInsuranceOrder groupInsuranceOrder : groupInsuranceOrders) {
     	   if(groupInsuranceOrder.getInt("insurance_type")==0) {
@@ -3300,7 +3300,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				}
 			}
 		}
-		DataGrid<GroupInsurancePersonLog> dataGrid = GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type,customerIds.substring(0,customerIds.length()-1),orderId);
+		DataGrid<GroupInsurancePersonLog> dataGrid = GroupInsurancePersonLog.selectPage(page,size,customerName,policyNum,name,createTime,policyEffectiveDate,insurance_type,customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"",orderId);
 		renderJson(dataGrid);
 	}
 	

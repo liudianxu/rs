@@ -67,7 +67,7 @@ public class GroupInsurancePersonController extends BaseController<GroupInsuranc
      				}
      			}
      		}
-	   renderJson(personService.selectPage(params, getPage(),customerIds.substring(0,customerIds.length()-1)));
+	   renderJson(personService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):""));
 	}
 	
 	public void add() {

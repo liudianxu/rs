@@ -237,7 +237,7 @@
 		</button>
        #end
        #end
-	  	<a class="layui-btn layui-btn-sm layui-btn-info"  href="../../excel/新增保单模板.xls">
+	  	<a class="layui-btn layui-btn-sm layui-btn-info"  href="/excel/新增保单模板.xls">
 								<i class="layui-icon"></i>导入模板
 							</a>
 </div>
@@ -249,10 +249,10 @@
 <script type="text/html" id="actionBar">
 #if(nodeUrl??)#if(nodeUrl.contains("/admin/groupInsurance/edit"))
 #[[
-{{#if(d.step_one==0||d.step_two==0||d.step_three==0||d.step_four==0||d.step_fifth==0){ }}
+{{#if(d.step_one==0||d.step_four==0||d.step_fifth==0){ }}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
 {{#  }  }}
-{{#if(d.step_one==1&&d.step_two==1&&d.step_three==1&&d.step_four==1&&d.step_fifth==1){ }}
+{{#if(d.step_one==1&&d.step_four==1&&d.step_fifth==1){ }}
 		<a class="layui-btn layui-btn-xs" lay-event="viewPerson">查看人员</a>
 <a class="layui-btn layui-btn-xs" lay-event="preveLog">保全记录</a>
 {{#  }  }}

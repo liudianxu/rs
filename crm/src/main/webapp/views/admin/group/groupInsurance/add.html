@@ -604,7 +604,7 @@
 							<select name='groupInsuranceOrder.user_id' lay-filter='aaa' lay-search lay-verify>
 								<option value=''>请选择</option>
 								#for(admin:admins)
-								<option value='#(admin.id)'>#(admin.name)</option>
+								<option value='#(admin.id)'>#(admin.username)</option>
 								#end
 							</select>
 						</div>
@@ -1517,7 +1517,7 @@
 
 			form.on('submit(submit4)',
 				function(data) {
-
+console.log("hiddenOrderIdForGuarantee3",$('input[name=hiddenOrderIdForGuarantee3]').val())
 					if ($('input[name=hiddenOrderIdForGuarantee3]').val() == null || $('input[name=hiddenOrderIdForGuarantee3]').val() ==
 						"") {
 						layer.msg("请先保存保障说明！");
@@ -1537,8 +1537,9 @@
 
 			form.on('submit(submit5)',
 				function(data) {
-					if ($('input[name=hiddenOrderIdForGuarantee]').val() == null ||
-						$('input[name=hiddenOrderIdForGuarantee]')
+				    console.log("hiddenOrderIdForGuarantee",$('input[name=hiddenOrderIdForGuarantee3]').val());
+					if ($('input[name=hiddenOrderIdForGuarantee3]').val() == null ||
+						$('input[name=hiddenOrderIdForGuarantee3]')
 						.val() == "") {
 						layer.msg("请先保存基本信息！");
 						return false;

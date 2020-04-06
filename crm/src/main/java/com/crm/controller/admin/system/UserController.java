@@ -13,6 +13,8 @@ import com.crm.model.system.Role;
 import com.crm.model.system.User;
 import com.crm.service.system.RoleService;
 import com.crm.service.system.UserService;
+import com.crm.util.Constant;
+import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.Kv;
@@ -100,5 +102,26 @@ public class UserController extends BaseController<User> {
 		}
 		
 		renderJson(service.resetPwd(id));
+	}
+	
+	/**
+	 * 删除
+	 */
+	public void delete() {
+		Long id = getParaToLong("id");
+		BaseResponse response = new BaseResponse();
+        try {
+		User.dao.deleteById(id);
+		response.setCode(Constant.RESPONSE_CODE_SUCCESS);
+		response.setMessage("删除成功");
+		renderJson(response);
+		return;
+        }
+        catch (Exception e) {
+        	response.setCode(Constant.RESPONSE_CODE_FAIL);
+    		response.setMessage("删除失败");
+    		renderJson(response);
+    		return;
+		}
 	}
 }

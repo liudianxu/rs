@@ -648,7 +648,7 @@
 							<select name='groupInsuranceOrder.user_id' lay-filter lay-search lay-verify>
 								<option value=''>请选择</option>
 								#for(admin:admins)
-								<option value='#(admin.id)' #if(order.user_id==admin.id)selected #end>#(admin.name)</option>
+								<option value='#(admin.id)' #if(order.user_id==admin.id)selected #end>#(admin.username)</option>
 								#end
 							</select>
 						</div>

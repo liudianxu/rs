@@ -3072,6 +3072,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 				order.set("status", 2).update();
 			}
 		 data.put("msg", "保存成功");
+		 data.put("orderId", order.getLong("id"));
 	     data.put("code", Constant.RESPONSE_CODE_SUCCESS);
 	     renderJson(data);
 	     return;

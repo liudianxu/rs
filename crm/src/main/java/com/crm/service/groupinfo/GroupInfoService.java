@@ -21,7 +21,7 @@ public interface GroupInfoService {
 	 * @param customerIds 
 	 * @return
 	 */
-	DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page, String customerIds);
+	DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page, String customerIds,Long adminId);
 	
 	/**
 	 * 新增
@@ -48,7 +48,7 @@ public interface GroupInfoService {
 	 * 获取集合
 	 * @return
 	 */
-	List<GroupInfo> selectList();
+	List<GroupInfo> selectList(Long adminId);
 
 	/**
 	 * 根据名称获取集团信息

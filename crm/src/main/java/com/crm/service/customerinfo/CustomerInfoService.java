@@ -21,7 +21,7 @@ public interface CustomerInfoService {
 	 * @param customerIds 
 	 * @return
 	 */
-	DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page, String customerIds);
+	DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page, String customerIds,Long adminId);
 	
 	/**
 	 * 新增
@@ -46,9 +46,10 @@ public interface CustomerInfoService {
 	
 	/**
 	 * 获取集合
+	 * @param adminId 
 	 * @return
 	 */
-	List<CustomerInfo> selectList();
+	List<CustomerInfo> selectList(Long adminId);
 
 	/**
 	 * 根据集团id获取单位

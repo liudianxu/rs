@@ -23,6 +23,8 @@ import com.crm.util.DateUtil;
 import com.crm.web.bean.BaseResponse;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.StrKit;
+
+import cn.hutool.http.HttpUtil;
 /**
  * 理赔管理信息控制类
  * @author chenglongw
@@ -62,7 +64,16 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 	 * 去添加页面
 	 */
 	public void add() {
-		List<CustomerInfo> customerInfos = customerInfoService.selectList();
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
+		List<CustomerInfo> customerInfos = customerInfoService.selectList(admin.getLong("id"));
 		setAttr("customerInfos", customerInfos);
 		render("add.html");
 	}
@@ -111,7 +122,16 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 			render("index.html");
 			return;
 		}
-		List<CustomerInfo> customerInfos = customerInfoService.selectList();
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
+		List<CustomerInfo> customerInfos = customerInfoService.selectList(admin.getLong("id"));
 		setAttr("customerInfos", customerInfos);
 		setAttr("claimReport", claimReport);
 		render("edit.html");
@@ -131,7 +151,16 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 			render("index.html");
 			return;
 		}
-		List<CustomerInfo> customerInfos = customerInfoService.selectList();
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
+		List<CustomerInfo> customerInfos = customerInfoService.selectList(admin.getLong("id"));
 		setAttr("customerInfos", customerInfos);
 		setAttr("claimReport", claimReport);
 		render("view.html");

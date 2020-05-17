@@ -79,23 +79,24 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		
 		String customerIds = "";
 		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
 		if (sessionId != null) {
-			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
 			if (admin == null) {
 				String loginIp = HttpUtil.getClientIP(this.getRequest());
 				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
 			}
-			if (admin != null) {
+			/*if (admin != null) {
 				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
 				if(CollectionUtil.isNotEmpty(customers)) {
 					for (CustomerInfo customerInfo : customers) {
 						customerIds += customerInfo.getLong("id")+",";
 					}
 				}
-			}
+			}*/
 		}
 		
-		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"");
+		DataGrid<CustomerInfo> dataGrid = customerInfoService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"",admin.getLong("id"));
 		List<CustomerInfo> customers = dataGrid.getData();
 		for (CustomerInfo customerInfo : customers) {
 			if(customerInfo.get("group_id")!=null){
@@ -111,7 +112,24 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	 * 去添加页面
 	 */
 	public void add() {
-		List<GroupInfo> groups = groupInfoService.selectList();
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			/*if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}*/
+		}
+		List<GroupInfo> groups = groupInfoService.selectList(admin.getLong("id"));
 		setAttr("groups", groups);
 		List<Area> roots = areaService.findRoots();
 		setAttr("roots", roots);
@@ -122,6 +140,15 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 	 * 去编辑页面
 	 */
 	public void edit() {
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
 		Long id = getParaToLong("id");
 		if(id==null) {
 			render("index.html");
@@ -153,7 +180,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
 		setAttr("area", area);
 		}
 		List<Area> roots = areaService.findRoots();
-		List<GroupInfo> groups = groupInfoService.selectList();
+		List<GroupInfo> groups = groupInfoService.selectList(admin.getLong("id"));
 		setAttr("groups", groups);
 		setAttr("roots", roots);
 		
@@ -183,6 +210,7 @@ public class CustomerInfoController extends BaseController<CustomerInfo> {
   				response.setMessage("添加失败！");
   			}
   			customerInfo.set("creator", admin.get("name"));
+  			customerInfo.set("user_id", admin.get("id"));
   			if(customerInfoService.add(customerInfo) == null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");

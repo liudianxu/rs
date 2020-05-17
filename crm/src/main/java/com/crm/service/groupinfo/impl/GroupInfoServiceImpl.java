@@ -12,10 +12,12 @@ import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.group.GroupInsuranceOrder;
 import com.crm.model.group.GroupInsurancePerson;
 import com.crm.model.groupinfo.GroupInfo;
+import com.crm.model.system.Role;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.group.GroupInsuranceOrderService;
 import com.crm.service.group.GroupInsurancePersonService;
 import com.crm.service.groupinfo.GroupInfoService;
+import com.crm.service.system.RoleService;
 import com.jfinal.aop.Inject;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
@@ -33,11 +35,13 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	private GroupInsurancePersonService personService;
 	@Inject
 	private CustomerInfoService cusService;
+	@Inject
+	private RoleService roleService;
 	/**
 	 * 分页列表
 	 */
 	@Override
-	public DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page,String customerIds) {
+	public DataGrid<GroupInfo> selectPage(Map<String, String> params, Page<GroupInfo> page,String customerIds,Long adminId) {
 		DataGrid<GroupInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select DISTINCT g.* from crm_group_info g ");
@@ -52,7 +56,18 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	/*	if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" and c.id in ("+customerIds+")");
 		}*/
-		sql.append(" and g.is_del=0 order by g.create_time desc ");
+		sql.append(" and g.is_del=0  ");
+		List<Role> roles = roleService.selectRolesByUserId(adminId);
+		Integer m=null;
+		for (Role role : roles) {
+			 if(role.getStr("name").contains("管理员")) {
+				 m=1;
+			 }
+		}
+		if(m==null) {
+			sql.append(" and g.user_id="+adminId+"");
+		}
+		sql.append(" order by g.create_time desc");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<GroupInfo> groupInfos = GroupInfo.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);
@@ -101,8 +116,19 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 	 * 获取集合
 	 */
 	@Override
-	public List<GroupInfo> selectList() {
-		return GroupInfo.dao.find("select * from crm_group_info where is_del=0 ");
+	public List<GroupInfo> selectList(Long adminId) {
+		String sql="select * from crm_group_info where is_del=0 ";
+		List<Role> roles = roleService.selectRolesByUserId(adminId);
+		Integer m=null;
+		for (Role role : roles) {
+			 if(role.getStr("name").contains("管理员")) {
+				 m=1;
+			 }
+		}
+		if(m==null) {
+			sql+="and user_id="+adminId+"";
+		}
+		return GroupInfo.dao.find(sql);
 	}
 
 	@Override

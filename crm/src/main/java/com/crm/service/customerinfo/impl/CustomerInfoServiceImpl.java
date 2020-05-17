@@ -12,6 +12,7 @@ import com.crm.model.system.Role;
 import com.crm.model.system.RoleCustomers;
 import com.crm.service.customerinfo.CustomerInfoService;
 import com.crm.service.groupinfo.GroupInfoService;
+import com.crm.service.system.RoleService;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
 import com.jfinal.plugin.activerecord.Db;
@@ -27,11 +28,13 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 public class CustomerInfoServiceImpl implements CustomerInfoService {
 @Inject
 private GroupInfoService groupInfoService;
+@Inject
+private RoleService roleService;
 	/**
 	 * 分页列表
 	 */
 	@Override
-	public DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page,String customerIds) {
+	public DataGrid<CustomerInfo> selectPage(Map<String, String> params, Page<CustomerInfo> page,String customerIds,Long adminId) {
 		DataGrid<CustomerInfo> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select * from crm_customer_info where 1=1 ");
@@ -43,6 +46,16 @@ private GroupInfoService groupInfoService;
 		}
 		if(StringUtils.isNotBlank(customerIds)){
 			sql.append(" and id in ("+customerIds+")");
+		}
+		List<Role> roles = roleService.selectRolesByUserId(adminId);
+		Integer m=null;
+		for (Role role : roles) {
+			 if(role.getStr("name").contains("管理员")) {
+				 m=1;
+			 }
+		}
+		if(m==null) {
+			sql.append(" and user_id ="+adminId+"");
 		}
 		sql.append(" and is_del=0 order by create_time desc ");
 		SqlPara sqlPara = new SqlPara();
@@ -93,8 +106,19 @@ private GroupInfoService groupInfoService;
 	 * 获取集合
 	 */
 	@Override
-	public List<CustomerInfo> selectList() {
-		return CustomerInfo.dao.find("select * from crm_customer_info where is_del=0");
+	public List<CustomerInfo> selectList(Long adminId) {
+		String sql="select * from crm_customer_info where is_del=0 ";
+		List<Role> roles = roleService.selectRolesByUserId(adminId);
+		Integer m=null;
+		for (Role role : roles) {
+			 if(role.getStr("name").contains("管理员")) {
+				 m=1;
+			 }
+		}
+		if(m==null) {
+			sql+="  and user_id="+adminId+"";
+		}
+		return CustomerInfo.dao.find(sql);
 	}
 
 	@Override

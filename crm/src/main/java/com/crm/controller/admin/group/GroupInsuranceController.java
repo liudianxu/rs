@@ -181,10 +181,19 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	 */
 	public void add() {
 		//获取品牌集合
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
 		setAttr("brands", brandService.selectList());
-		setAttr("groups", groupInfoService.selectList());
+		setAttr("groups", groupInfoService.selectList(admin.getLong("id")));
 		setAttr("admins", userService.selectList());
-		setAttr("customers", customerInfoService.selectList());
+		setAttr("customers", customerInfoService.selectList(admin.getLong("id")));
 		setAttr("plans", GroupInsurancePlan.findList());
 		render("add.html");
 	}
@@ -196,8 +205,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	public void edit() {
 		Long id = getParaToLong("id");
 		//获取品牌集合
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
 		setAttr("brands", brandService.selectList());
-		setAttr("groups", groupInfoService.selectList());
+		setAttr("groups", groupInfoService.selectList(admin.getLong("id")));
 		setAttr("admins", userService.selectList());
 		setAttr("plans", GroupInsurancePlan.findList());
 
@@ -210,7 +228,7 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		setAttr("customers", customers);
 		}
 		else {
-			setAttr("customers", customerInfoService.selectList());
+			setAttr("customers", customerInfoService.selectList(admin.getLong("id")));
 		}
 		//setAttr("company", company);
 		int size = 0;
@@ -274,8 +292,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 		Long id = getParaToLong("id");
 		setAttr("type", getPara("type"));
 		//获取品牌集合
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
 		setAttr("brands", brandService.selectList());
-		setAttr("groups", groupInfoService.selectList());
+		setAttr("groups", groupInfoService.selectList(admin.getLong("id")));
 		setAttr("admins", userService.selectList());
 		
 		GroupInsuranceOrder order = GroupInsuranceOrder.dao.findById(id);
@@ -346,8 +373,17 @@ public class GroupInsuranceController extends BaseController<GroupInsuranceOrder
 	public void view() {
 		//获取品牌集合
 		Long id = getParaToLong("id");
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+		}
 		setAttr("brands", brandService.selectList());
-		setAttr("groups", groupInfoService.selectList());
+		setAttr("groups", groupInfoService.selectList(admin.getLong("id")));
 		setAttr("admins", userService.selectList());
 		setAttr("type", getPara("type"));
 		setAttr("plans", GroupInsurancePlan.findList());

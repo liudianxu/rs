@@ -13,7 +13,11 @@ import com.crm.component.TreeGrid;
 import com.crm.model.cuntomerinfo.CustomerInfo;
 import com.crm.model.groupinfo.GroupInfo;
 import com.crm.model.system.Permission;
+import com.crm.model.system.Role;
+import com.crm.model.system.User;
 import com.crm.service.system.PermissionService;
+import com.crm.service.system.RoleService;
+import com.jfinal.aop.Inject;
 import com.jfinal.kit.Ret;
 import com.jfinal.plugin.activerecord.Db;
 
@@ -21,6 +25,8 @@ import cn.hutool.core.collection.CollectionUtil;
 
 public class PermissionServiceImpl implements PermissionService {
 
+	@Inject
+	private RoleService roleService;
 	@Override
 	public TreeGrid<Permission> selectPermissionTree(Map<String, String> params) {
 		TreeGrid<Permission> treeGrid = new TreeGrid<>();
@@ -317,11 +323,21 @@ public class PermissionServiceImpl implements PermissionService {
 	public List<CustomerInfo> findCustomerByUserId(Long userId) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select s.* from crm_customer_info s  ");
-		sb.append("left join sys_role_customer sp on sp.customerid = s.id ");
+		/*sb.append("left join sys_role_customer sp on sp.customerid = s.id ");
 		sb.append("left join sys_role sr on sr.id = sp.roleid ");
-		sb.append("left join sys_user_role sur on sur.roleid=sr.id ");
-		sb.append("where sur.userid = ? ");
+		sb.append("left join sys_user_role sur on sur.roleid=sr.id ");*/
+		List<Role> roles = roleService.selectRolesByUserId(userId);
+		Integer m=null;
+		for (Role role : roles) {
+			 if(role.getStr("name").contains("管理员")) {
+				 m=1;
+			 }
+		}
+		if(m==null) {
+		sb.append("where s.user_id = ? ");
 		return CustomerInfo.dao.find(sb.toString(), userId);
+		}
+		return CustomerInfo.dao.find(sb.toString());
 	}
 
 	@Override

@@ -60,8 +60,9 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 		params.put("certNo", getPara("certn_no"));
 		String customerIds = "";
 		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
 		if (sessionId != null) {
-			User admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
 			if (admin == null) {
 				String loginIp = HttpUtil.getClientIP(this.getRequest());
 				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
@@ -75,7 +76,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
 				}
 			}
 		}
-		renderJson(groupInfoService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):""));
+		renderJson(groupInfoService.selectPage(params, getPage(),customerIds.length()>1?customerIds.substring(0,customerIds.length()-1):"",admin.getLong("id")));
 	}
 	
 	/**
@@ -149,6 +150,7 @@ public class GroupInfoController extends BaseController<GroupInfo> {
   				response.setMessage("添加失败！");
   			}
   			groupInfo.set("creator", admin.get("name"));
+  			groupInfo.set("user_id", admin.get("id"));
   			if(groupInfoService.add(groupInfo) == null) {
   				response.setCode(Constant.RESPONSE_CODE_FAIL);
   				response.setMessage("添加失败！");

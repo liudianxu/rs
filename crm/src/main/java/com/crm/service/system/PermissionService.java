@@ -36,7 +36,7 @@ public interface PermissionService {
 	
 	List<CustomerInfo> findCustomerByUserId(Long long1);
 
-	List<Permission> findChildren(Long id);
+	List<Permission> findChildren(Long id,Long adminId);
 
 	Ret update(Permission permission);
 

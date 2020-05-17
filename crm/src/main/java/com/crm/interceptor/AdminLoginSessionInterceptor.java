@@ -40,7 +40,7 @@ public class AdminLoginSessionInterceptor implements Interceptor {
 				//功能权限
 				List<Permission> permissions = permissionService.findByUserId(admin.getLong("id"),1);
 				for (Permission permission : permissions) {
-					permission.setList(permissionService.findChildren(permission.getLong("id")));
+					permission.setList(permissionService.findChildren(permission.getLong("id"),admin.getLong("id")));
 				}
 				c.setAttr("permissions", permissions);
 				//节点权限

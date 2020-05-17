@@ -325,10 +325,15 @@ public class PermissionServiceImpl implements PermissionService {
 	}
 
 	@Override
-	public List<Permission> findChildren(Long id) {
+	public List<Permission> findChildren(Long id,Long adminId) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("select s.* from sys_permission s where s.pid=? and type=1  ");
-		return Permission.dao.find(sb.toString(), id);
+		sb.append("select DISTINCT s.* from sys_permission s  ");
+		sb.append("left join sys_role_permission sp on sp.permissionid = s.id ");
+		sb.append("left join sys_role sr on sr.id = sp.roleid ");
+		sb.append("left join sys_user_role sur on sur.roleid=sr.id ");
+		sb.append("where sur.userid = ? ");
+		sb.append("and s.pid=? and type=1 ");
+		return Permission.dao.find(sb.toString(), adminId,id);
 	}
 
 	@Override

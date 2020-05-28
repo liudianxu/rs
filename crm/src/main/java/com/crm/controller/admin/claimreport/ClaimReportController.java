@@ -49,12 +49,29 @@ public class ClaimReportController extends BaseController<ClaimReport> {
 	public void list() {
 		Map<String, String> params = new HashMap<>();
 		//查询参数
+		String sessionId = this.getCookie(Constant.COOKIE_SESSION_ID_NAME);
+		User admin=new User();
+		if (sessionId != null) {
+			 admin = adminLoginService.getLoginAdminWithSessionId(sessionId);
+			if (admin == null) {
+				String loginIp = HttpUtil.getClientIP(this.getRequest());
+				admin = adminLoginService.loginWithSessionId(sessionId, loginIp);
+			}
+			/*if (admin != null) {
+				List<CustomerInfo> customers = permissionService.findCustomerByUserId(admin.getLong("id"));
+				if(CollectionUtil.isNotEmpty(customers)) {
+					for (CustomerInfo customerInfo : customers) {
+						customerIds += customerInfo.getLong("id")+",";
+					}
+				}
+			}*/
+		}
 		params.put("customerName", getPara("customer_name"));
 		params.put("policyNum", getPara("policy_num"));
 		params.put("persionName", getPara("persion_name"));
 		params.put("certNo", getPara("cert_no"));
 		params.put("status", getPara("status"));
-		DataGrid<ClaimReport> dataGrid = claimReportService.selectPage(params, getPage());
+		DataGrid<ClaimReport> dataGrid = claimReportService.selectPage(params, getPage(),admin.getLong("id"));
 		List<ClaimReport> claimReports = dataGrid.getData();
 		dataGrid.setData(claimReports);
 		renderJson(dataGrid);
@@ -201,6 +218,7 @@ public class ClaimReportController extends BaseController<ClaimReport> {
  				response.setMessage("添加失败！");
  				renderJson(response);
  			}
+ 			claimReport.set("user_id", admin.getLong("id"));
  			claimReport.set("create_time", DateUtil.getDateTime(null));
  			claimReport.set("status", "0");
  			if(claimReportService.add(claimReport) == null) {

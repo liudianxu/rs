@@ -151,6 +151,10 @@
 				}
 			});
 			data.field.roleIds = listVal2;
+			if(listVal2.length==0){
+				layer.msg("请勾选角色")
+				return false;
+			}
 			var password = $("input[name='user.password']").val();
 			var rePassword = $("input[name='user.rePassword']").val();
 			if (password != rePassword) {

@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 		if(StringUtils.isNotBlank(params.get("username"))){
 			sql.append(" and a.username like '%").append(params.get("username")).append("%' ");
 		}
-		sql.append("order by a.create_time desc ");
+		sql.append("and username!='admin' order by a.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
 		sqlPara.setSql(sql.toString());
 		Page<User> brands = User.dao.paginate(page.getPageNumber(), page.getPageSize(), sqlPara);

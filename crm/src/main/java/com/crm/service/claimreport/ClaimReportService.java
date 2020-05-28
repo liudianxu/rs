@@ -18,9 +18,10 @@ public interface ClaimReportService {
 	 *  列表查询
 	 * @param params
 	 * @param page
+	 * @param long1 
 	 * @return
 	 */
-	DataGrid<ClaimReport> selectPage(Map<String, String> params, Page<ClaimReport> page);
+	DataGrid<ClaimReport> selectPage(Map<String, String> params, Page<ClaimReport> page, Long long1);
 	
 	/**
 	 * 新增

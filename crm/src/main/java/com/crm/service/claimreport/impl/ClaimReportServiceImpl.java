@@ -7,7 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.crm.component.DataGrid;
 import com.crm.model.claimreport.ClaimReport;
+import com.crm.model.system.Role;
 import com.crm.service.claimreport.ClaimReportService;
+import com.crm.service.system.RoleService;
+import com.jfinal.aop.Inject;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
 
@@ -17,12 +20,13 @@ import com.jfinal.plugin.activerecord.SqlPara;
  *
  */
 public class ClaimReportServiceImpl implements ClaimReportService {
-
+@Inject
+private RoleService roleService;
 	/**
 	 * 分页列表
 	 */
 	@Override
-	public DataGrid<ClaimReport> selectPage(Map<String, String> params, Page<ClaimReport> page) {
+	public DataGrid<ClaimReport> selectPage(Map<String, String> params, Page<ClaimReport> page,Long id) {
 		DataGrid<ClaimReport> datagrid = new DataGrid<>();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select r.*,c.customer_name as customerName from crm_claim_report r ");
@@ -42,6 +46,16 @@ public class ClaimReportServiceImpl implements ClaimReportService {
 		}
 		if(StringUtils.isNotBlank(params.get("status"))){
 			sql.append(" and r.status ="+params.get("status"));
+		}
+		List<Role> roles = roleService.selectRolesByUserId(id);
+		Integer m=null;
+		for (Role role : roles) {
+			 if(role.getStr("name").contains("管理员")) {
+				 m=1;
+			 }
+		}
+		if(m==null) {
+			sql.append(" and r.user_id ="+id+"");
 		}
 		sql.append(" order by r.create_time desc ");
 		SqlPara sqlPara = new SqlPara();
